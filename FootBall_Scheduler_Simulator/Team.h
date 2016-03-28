@@ -26,7 +26,7 @@ public:
 	const Team& operator-=(const Player* p)  { RemovePlayer(p);  return *this; }
 	const Team& operator+=(Trainer* t)       { AddTrainer(t);    return *this; }
 	const Team& operator-=(const Trainer* t) { RemoveTrainer(t); return *this; }
-	Player& operator[](int index);
+	Player&     operator[](int index);
 	// Methods
 	void               AddPlayer(Player* p);
 	void               RemovePlayer(const Player* p);

@@ -11,10 +11,10 @@ public:
 	Time(const Time& t);
 	// Operators
 	const Time& operator=(const Time& t);
-	Time operator+(const Time& t)         const;
-	Time operator+(int add)               const;
-	Time operator-(const Time& t)         const;
-	Time operator-(int remove)            const;
+	Time        operator+(const Time& t)         const;
+	Time        operator+(int add)               const;
+	Time        operator-(const Time& t)         const;
+	Time        operator-(int remove)            const;
 	const Time& operator+=(const Time& t);
 	const Time& operator-=(const Time& t);
 	
@@ -23,12 +23,12 @@ public:
 	const Time& operator--()    { *this = *this - 1; } // prefix
 	Time        operator--(int); // postfix
 
-	bool operator==(const Time& t)  const { return m_hour==t.m_hour && m_minute==t.m_minute;}
-	bool operator!=(const Time& t)  const { return !(*this == t);}
-	bool operator>(const Time& t)   const ;
-	bool operator>=(const Time& t)  const { return *this == t || *this > t;}
-	bool operator<(const Time& t)   const { return !(*this > t);}
-	bool operator<=(const Time& t)  const { return *this == t || !(*this > t);}
+	bool        operator==(const Time& t)  const { return m_hour==t.m_hour && m_minute==t.m_minute;}
+	bool        operator!=(const Time& t)  const { return !(*this == t);}
+	bool        operator>(const Time& t)   const ;
+	bool        operator>=(const Time& t)  const { return *this == t || *this > t;}
+	bool        operator<(const Time& t)   const { return !(*this > t);}
+	bool        operator<=(const Time& t)  const { return *this == t || !(*this > t);}
 	// Methods
 	int  GetMinute()                const { return m_minute; }
 	int  GetHour()                  const { return m_hour; }
@@ -50,10 +50,10 @@ public:
 	Date(const Date& d);
 	// Operators
 	const Date& operator=(const Date& t);
-	Date operator+(const Date& t)         const;
-	Date operator+(int add)               const;
-	Date operator-(const Date& t)         const;
-	Date operator-(int remove)            const;
+	Date        operator+(const Date& t)         const;
+	Date        operator+(int add)               const;
+	Date        operator-(const Date& t)         const;
+	Date        operator-(int remove)            const;
 	const Date& operator+=(const Date& t);
 	const Date& operator-=(const Date& t);
 	
@@ -62,12 +62,12 @@ public:
 	const Date& operator--()    { *this = *this - 1; } // prefix
 	Date        operator--(int); // postfix
 
-	bool operator==(const Date& t)  const { return m_date==t.m_date && m_month==t.m_month && m_year==t.m_year;}
-	bool operator!=(const Date& t)  const { return !(*this == t);}
-	bool operator>(const Date& t)   const ;
-	bool operator>=(const Date& t)  const { return *this == t || *this > t;}
-	bool operator<(const Date& t)   const { return !(*this > t);}
-	bool operator<=(const Date& t)  const { return *this == t || !(*this > t);}
+	bool        operator==(const Date& t)  const { return m_date==t.m_date && m_month==t.m_month && m_year==t.m_year;}
+	bool        operator!=(const Date& t)  const { return !(*this == t);}
+	bool        operator>(const Date& t)   const ;
+	bool        operator>=(const Date& t)  const { return *this == t || *this > t;}
+	bool        operator<(const Date& t)   const { return !(*this > t);}
+	bool        operator<=(const Date& t)  const { return *this == t || !(*this > t);}
 	// Methods
 	int GetDate()                   const { return m_date; }
 	int GetMonth()                  const { return m_month; }
@@ -94,14 +94,14 @@ public:
 	TimeAndDate(const TimeAndDate& tad);
 	// Operators
 	const TimeAndDate& operator=(const TimeAndDate& t);
-	TimeAndDate operator+(const TimeAndDate& t)          const;
-	TimeAndDate operator+(const Time& t)                 const;
-	TimeAndDate operator+(const Date& t)                 const;
-	TimeAndDate operator+(int add)                       const;
-	TimeAndDate operator-(const TimeAndDate& t)          const;
-	TimeAndDate operator-(const Time& t)                 const;
-	TimeAndDate operator-(const Date& t)                 const;
-	TimeAndDate operator-(int remove)                    const;
+	TimeAndDate        operator+(const TimeAndDate& t)          const;
+	TimeAndDate        operator+(const Time& t)                 const;
+	TimeAndDate        operator+(const Date& t)                 const;
+	TimeAndDate        operator+(int add)                       const;
+	TimeAndDate        operator-(const TimeAndDate& t)          const;
+	TimeAndDate        operator-(const Time& t)                 const;
+	TimeAndDate        operator-(const Date& t)                 const;
+	TimeAndDate        operator-(int remove)                    const;
 	const TimeAndDate& operator+=(const TimeAndDate& t);
 	const TimeAndDate& operator-=(const TimeAndDate& t);
 	
@@ -110,12 +110,12 @@ public:
 	const TimeAndDate& operator--()                           { *this = *this - 1; } // prefix
 	TimeAndDate        operator--(int);                       // postfix
 
-	bool operator==(const TimeAndDate& t)  const { return m_time==t.m_time && m_date==t.m_date;}
-	bool operator!=(const TimeAndDate& t)  const { return !(*this == t);}
-	bool operator>(const TimeAndDate& t)   const ;
-	bool operator>=(const TimeAndDate& t)  const { return *this == t || *this > t;}
-	bool operator<(const TimeAndDate& t)   const { return !(*this > t);}
-	bool operator<=(const TimeAndDate& t)  const { return *this == t || !(*this > t);}
+	bool               operator==(const TimeAndDate& t)  const { return m_time==t.m_time && m_date==t.m_date;}
+	bool               operator!=(const TimeAndDate& t)  const { return !(*this == t);}
+	bool               operator>(const TimeAndDate& t)   const ;
+	bool               operator>=(const TimeAndDate& t)  const { return *this == t || *this > t;}
+	bool               operator<(const TimeAndDate& t)   const { return !(*this > t);}
+	bool               operator<=(const TimeAndDate& t)  const { return *this == t || !(*this > t);}
 	// Methods
 
 	// Method Overrides

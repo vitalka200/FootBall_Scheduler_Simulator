@@ -30,13 +30,14 @@ class GameManager
 {
 public:
 	// c-tors, d-tors
-	GameManager();
-	~GameManager() { delete[] games; delete[] teams; delete[] stadiums;}
+	GameManager() : m_games(NULL), m_teams(NULL), m_stadiums(NULL) { }
+	~GameManager() { delete []m_games; delete []m_teams; delete []m_stadiums;}
+
 	// Operators
 	const GameManager& operator+=(const Game& g)            { AddGame(g);    return *this; }
 	const GameManager& operator-=(const Game& g)            { RemoveGame(g); return *this; }
-	const GameList operator[](const Date& d)          const;
-	const GameList operator[](const TimeAndDate& tad) const;
+	const GameList     operator[](const Date& d)          const;
+	const GameList     operator[](const TimeAndDate& tad) const;
 
 
 	// Methods
@@ -64,9 +65,13 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const GameManager& gm);
 
 private:
-	Game* games;
-	Team* teams;
-	Stadium* stadiums;
+	GameManager(const GameManager& gm) { }
+	const GameManager& operator=(const GameManager& gm) { }
+
+	Game* m_games;
+	Team* m_teams;
+	Stadium* m_stadiums;
+
 };
 
 #endif
