@@ -18,6 +18,7 @@ public:
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const CardType& ct)
 	{os << Referee::CardNames[ct]; return os;}
+	friend std::ostream& operator<<(std::ostream& os, const Referee& r);
 private:
 };
 const char* Referee::CardNames[] = {"Yellow", "Red"};

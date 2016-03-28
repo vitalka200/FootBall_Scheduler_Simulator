@@ -21,14 +21,17 @@ public:
 	// c-tors, d-tors
 	Player(const char* name, const char* f_name, long id, int pnum, Team* team, PlayerLevel pl = LOW) 
 	    : Person(name, f_name, id) {SetPNum(pnum); SetTeam(team); SetLevel(pl);}
-	Player(const Player& pl);
+	Player(const Player& p)
+		: Person(p.m_name, p.m_fname, p.m_id)                         { m_allowed_moves.moves = NULL; *this = p; }
+	~Player()                                                         {if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves;}
+	const Player& operator=(const Player& p);
 	// Methods
-	void                   SetPNum(int num)                     {m_pnum = num;}
-	void                   SetTeam(Team* team)                  {m_team = team;}
-	void                   SetLevel(PlayerLevel& pl)            {m_plevel = pl;}
-	int                    GetPNum()                      const {return m_pnum;}
-	PlayerLevel            GetPLevel()                    const {return m_plevel;}
-	virtual PlayerMovement MakeMove();
+	void                         SetPNum(int num)                     {m_pnum = num;}
+	void                         SetTeam(Team* team)                  {m_team = team;}
+	void                         SetLevel(PlayerLevel pl)             {m_plevel = pl;}
+	const int                    GetPNum()                      const {return m_pnum;}
+	const PlayerLevel            GetPLevel()                    const {return m_plevel;}
+	virtual const PlayerMovement MakeMove() =0;
 
 
 	// Methods overrides
@@ -36,6 +39,7 @@ public:
 	{os << Player::MovementsNames[pm]; return os;}
 	friend std::ostream& operator<<(std::ostream& os, const PlayerLevel& pl)
 	{os << Player::LevelNames[pl]; return os;}
+	friend std::ostream& operator<<(std::ostream& os, const Player& p);
 
 protected:
 	Team*        m_team;

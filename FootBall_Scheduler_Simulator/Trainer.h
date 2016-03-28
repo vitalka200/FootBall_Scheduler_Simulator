@@ -11,8 +11,7 @@ public:
 	static const char* TrainerDecisionNames[];
 	// c-tors, d-tors
 	Trainer(const char* name, const char* f_name, long id) 
-		: Person(name, f_name, id) {}
-	Trainer(const Trainer& t);
+		: Person(name, f_name, id) { }
 	// Operators
 
 	// Methods
@@ -20,9 +19,10 @@ public:
 	// Methods overrides
 	friend std::ostream& operator<<(std::ostream& os, const TrainerDecision& td)
 	{os << Trainer::TrainerDecisionNames[td]; return os;}
+	friend std::ostream& operator<<(std::ostream& os, const Trainer& t);
 
 private:
-
+	
 };
 const char* Trainer::TrainerDecisionNames[] = {"Change Player", "Move Player"};
 
