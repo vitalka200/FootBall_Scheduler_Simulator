@@ -14,7 +14,7 @@ public:
 	Referee(const char* name, const char* f_name, long id) 
 		: Person(name, f_name, id) { }
 	
-	~Referee()			{delete name;}
+	~Referee()			{delete []name;}
 	// Operators
 	
 	// Methods
