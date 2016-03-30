@@ -16,6 +16,8 @@ public:
 	int                     yellowCards;
 	int                     redCards;
 	int                     moves_number;
+	int 			numOfPasses;
+	int			numOfGoal;
 	~PlayerStats()          {delete []moves;}
 private:
 };
@@ -69,6 +71,7 @@ public:
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Game& g);
 private:
+	Team	      winner;		//easier when the game is over to print the winner of the game.
 	Team*         m_teams;
 	Referee*      m_referees;
 	int           m_maxFans;
