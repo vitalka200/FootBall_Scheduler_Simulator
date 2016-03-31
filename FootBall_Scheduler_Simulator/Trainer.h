@@ -13,7 +13,6 @@ public:
 	// c-tors, d-tors
 	Trainer(const char* name, const char* f_name, long id) 
 		: Person(name, f_name, id) { }
-	~Trainer()			{delete []name;}
 	
 	// Operators
 	const Trainer operator+=()	{MakeDecision();}
