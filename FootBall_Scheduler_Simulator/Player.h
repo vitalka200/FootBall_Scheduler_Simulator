@@ -34,6 +34,13 @@ public:
 	virtual const PlayerMovement MakeMove() =0;
 
 
+	const Player& operator=(const Player& p);
+	const Player& operator+=(Player::PlayerMovement* t);              
+	const Player& operator-=(Player::PlayerMovement* t);
+	const Player& operator>=(Defender* t);
+	const Player& operator>=(Player* t)
+	
+	
 	// Methods overrides
 	friend std::ostream& operator<<(std::ostream& os, const PlayerMovement& pm)
 	{os << Player::MovementsNames[pm]; return os;}
