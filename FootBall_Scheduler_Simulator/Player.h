@@ -38,8 +38,8 @@ public:
 	const Player& operator+=(Player::PlayerMovement* t);              
 	const Player& operator-=(Player::PlayerMovement* t);
 	const Player& operator>=(Defender* t);
-	const Player& operator>=(Player* t)
-	
+	const Player& operator>=(Player* t);
+	const Player& operator==(Player* t);
 	
 	// Methods overrides
 	friend std::ostream& operator<<(std::ostream& os, const PlayerMovement& pm)
