@@ -11,7 +11,7 @@ public:
 	Defender(const char* name, const char* f_name, long id, size_t pnum, Team* team, PlayerLevel pl = LOW) 
 		: Player(name, f_name, id, pnum, team, pl) { }
 	// Operators
-	const Defender& operator>=(Player& other);
+	
 	// Methods
 	
 	// Method Overrides
