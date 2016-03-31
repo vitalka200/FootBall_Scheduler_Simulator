@@ -13,7 +13,7 @@ public:
 	// Operators
 	const Defender& operator>=(Player& other);
 	// Methods
-	CatchBall();
+	
 	// Method Overrides
 	const PlayerMovement MakeMove();
 	friend std::ostream& operator<<(std::ostream& os, const Defender& def);
