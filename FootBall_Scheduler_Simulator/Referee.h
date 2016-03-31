@@ -17,8 +17,7 @@ public:
 	// Operators
 	
 	// Methods
-	GiveCardAccordigntoAction(Player::Action Act)	{}    //Needed?
-	GiveCardonRandom()				{}
+	CardType MakeDecision();
 	
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const CardType& ct)
