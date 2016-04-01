@@ -9,16 +9,16 @@ class Goalkeeper : Player
 public:
 	// c-tors, d-tors
 	Goalkeeper(const char* name, const char* f_name, long id, int pnum, Team* team, PlayerLevel pl = LOW) 
-		: Player(name, f_name, id, pnum, team, pl) { }
+		: Player(name, f_name, id, pnum, team, pl) { CreateAllowedMoves(); }
 	// Operators
 
 	// Methods
 
 	// Method Overrides
-	const PlayerMovement MakeMove();
-	friend std::ostream& operator<<(std::ostream& os, const Goalkeeper& g);
+	virtual const PlayerMovement  MakeMove();
+	friend std::ostream&          operator<<(std::ostream& os, const Goalkeeper& g);
 private:
-
+	virtual void                  CreateAllowedMoves();
 };
 
 
