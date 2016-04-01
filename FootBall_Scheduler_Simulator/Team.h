@@ -6,7 +6,25 @@
 // Forward declaration
 class  Player;
 class  Trainer;
-struct PlayerStats;
+
+class  PlayerStats
+{
+public:
+	Player*                 pl;
+	Player::PlayerMovement* moves;
+	int                     yellowCards;
+	int                     redCards;
+	int                     moves_number;
+	int                     numOfPasses;
+	int                     numOfGoal;
+
+	PlayerStats() : moves(NULL) { }
+	~PlayerStats()              {delete []moves;}
+private:
+	// Disable copy and equality
+	PlayerStats(const PlayerStats& ps);
+	const PlayerStats& operator=(const PlayerStats& ps);
+};
 
 class Team
 {
@@ -40,9 +58,9 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Team& t);
 
 private:
-	Player*  m_players;
-	Trainer* m_trainers;
-	char* m_name;
+	Player*      m_players;
+	Trainer*     m_trainers;
+	char*        m_name;
 	PlayerStats* m_playerStats;
 };
 
