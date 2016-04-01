@@ -16,8 +16,8 @@ public:
 	// Operators
 
 	// Methods
-	void  SetTeam(Team* team) { m_team = team; }
-	const Team* GetTeam()     { return m_team; }
+	void         SetTeam(Team* team) { m_team = team; }
+	const Team*  GetTeam()           { return m_team; }
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Fan& f);
 private:
