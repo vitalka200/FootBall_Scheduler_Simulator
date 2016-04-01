@@ -12,7 +12,6 @@ public:
 	Person(const Person& p)
 		: m_name(NULL), m_fname(NULL)  { *this = p; }
 	virtual ~Person()                  { delete []m_name; delete []m_fname; }
-	const Person&  operator=(const Person& p);
 	// Methods
 	const char*    GetName()     const { return m_name; }
 	const char*    GetFName()    const { return m_fname; }
@@ -21,6 +20,9 @@ public:
 	void  SetName(const char* name)    { delete []m_name; m_name = strdup(name); }
 	void  SetFName(const char* f_name) { delete []m_fname; m_fname = strdup(f_name); }
 	void  SetId(long id)               { id = m_id; }
+
+	// Operators
+	const Person& operator=(const Person& p);
 
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Person& p);
