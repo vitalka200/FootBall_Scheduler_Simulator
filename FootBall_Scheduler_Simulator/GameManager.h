@@ -20,7 +20,7 @@
 // Other includes
 #include "TimeAndDate.h"
 
-class GameList
+struct GameList
 {
 	Game* games;
 	int   count;
@@ -68,8 +68,9 @@ private:
 	GameManager(const GameManager& gm) { }
 	const GameManager& operator=(const GameManager& gm) { }
 
-	Game* m_games;
-	Team* m_teams;
+	Game*    m_games;
+	Team*    m_teams;
+	Referee* m_referees;
 	Stadium* m_stadiums;
 
 };
