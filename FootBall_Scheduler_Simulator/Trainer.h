@@ -3,23 +3,19 @@
 
 #include <iostream>
 #include "Person.h"
-#include "Team"
 class Trainer: Person
 {
 public:
 	enum TrainerDecision {CHANGE_PLAYER, MOVE_PLAYER};
 	static const char* TrainerDecisionNames[];
-	Team	m_team;
 	// c-tors, d-tors
 	Trainer(const char* name, const char* f_name, long id) 
 		: Person(name, f_name, id) { }
 	
 	// Operators
-	const Trainer operator+=()	{MakeDecision();}
 	
 	// Methods
 	TrainerDecision MakeDecision();
-	addTeam(Team& team);
 	
 	
 	// Methods overrides
