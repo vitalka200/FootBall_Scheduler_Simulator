@@ -26,9 +26,9 @@ public:
 	bool        operator==(const Time& t)  const { return m_hour==t.m_hour && m_minute==t.m_minute;}
 	bool        operator!=(const Time& t)  const { return !(*this == t);}
 	bool        operator>(const Time& t)   const ;
-	bool        operator>=(const Time& t)  const { return *this == t || *this > t;}
-	bool        operator<(const Time& t)   const { return !(*this > t);}
-	bool        operator<=(const Time& t)  const { return *this == t || !(*this > t);}
+	bool        operator>=(const Time& t)  const { return (*this == t) || (*this > t);}
+	bool        operator<(const Time& t)   const { return (*this != t) && !(*this > t);}
+	bool        operator<=(const Time& t)  const { return (*this == t) || (*this < t);}
 	// Methods
 	int  GetMinute()                const { return m_minute; }
 	int  GetHour()                  const { return m_hour; }
@@ -57,17 +57,17 @@ public:
 	const Date& operator+=(const Date& t);
 	const Date& operator-=(const Date& t);
 	
-	const Date& operator++()    { *this = *this + 1; } // prefix
+	const Date& operator++()    { *this = *this + 1; return *this; } // prefix
 	Date        operator++(int); // postfix
-	const Date& operator--()    { *this = *this - 1; } // prefix
+	const Date& operator--()    { *this = *this - 1; return *this; } // prefix
 	Date        operator--(int); // postfix
 
 	bool        operator==(const Date& t)  const { return m_date==t.m_date && m_month==t.m_month && m_year==t.m_year;}
 	bool        operator!=(const Date& t)  const { return !(*this == t);}
 	bool        operator>(const Date& t)   const ;
-	bool        operator>=(const Date& t)  const { return *this == t || *this > t;}
-	bool        operator<(const Date& t)   const { return !(*this > t);}
-	bool        operator<=(const Date& t)  const { return *this == t || !(*this > t);}
+	bool        operator>=(const Date& t)  const { return (*this == t) || (*this > t);}
+	bool        operator<(const Date& t)   const { return (*this != t) && !(*this > t);}
+	bool        operator<=(const Date& t)  const { return (*this == t) || !(*this > t);}
 	// Methods
 	int GetDate()                   const { return m_date; }
 	int GetMonth()                  const { return m_month; }
@@ -105,19 +105,20 @@ public:
 	const TimeAndDate& operator+=(const TimeAndDate& t);
 	const TimeAndDate& operator-=(const TimeAndDate& t);
 	
-	const TimeAndDate& operator++()                           { *this = *this + 1; } // prefix
+	const TimeAndDate& operator++()                           { *this = *this + 1; return *this; } // prefix
 	TimeAndDate        operator++(int);                       // postfix
-	const TimeAndDate& operator--()                           { *this = *this - 1; } // prefix
+	const TimeAndDate& operator--()                           { *this = *this - 1; return *this; } // prefix
 	TimeAndDate        operator--(int);                       // postfix
 
 	bool               operator==(const TimeAndDate& t)  const { return m_time==t.m_time && m_date==t.m_date;}
 	bool               operator!=(const TimeAndDate& t)  const { return !(*this == t);}
 	bool               operator>(const TimeAndDate& t)   const ;
-	bool               operator>=(const TimeAndDate& t)  const { return *this == t || *this > t;}
-	bool               operator<(const TimeAndDate& t)   const { return !(*this > t);}
-	bool               operator<=(const TimeAndDate& t)  const { return *this == t || !(*this > t);}
+	bool               operator>=(const TimeAndDate& t)  const { return (*this == t) || (*this > t);}
+	bool               operator<(const TimeAndDate& t)   const { return (*this != t) && !(*this > t);}
+	bool               operator<=(const TimeAndDate& t)  const { return (*this == t) || !(*this > t);}
 	// Methods
-
+	const Time&        GetTime()                         const { return m_time; }
+	const Date&        GetDate()                         const { return m_date; }
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const TimeAndDate& tad)
 	{ os << tad.m_time << " " << tad.m_date; return os;}
@@ -125,6 +126,5 @@ private:
 	Time m_time;
 	Date m_date;
 };
-
 
 #endif
