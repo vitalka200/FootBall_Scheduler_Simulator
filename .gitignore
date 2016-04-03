@@ -23,6 +23,8 @@ Thumbs.db
 *.sbr
 *.sdf
 *.opensdf
+*.VC.opendb
+*.VC.db
 ipch
 obj/
 [Rr]elease*/
