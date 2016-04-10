@@ -31,7 +31,7 @@ public:
 	void                         SetLevel(PlayerLevel pl)             {m_plevel = pl;}
 	int                          GetPNum()                      const {return m_pnum;}
 	const PlayerLevel            GetPLevel()                    const {return m_plevel;}
-	virtual const PlayerMovement MakeMove() =0;
+	virtual const PlayerMovement MakeMove(bool hasBall)                =0;
 
 	// Operators
 	const Player& operator=(const Player& p);
@@ -49,7 +49,8 @@ public:
 	{os << Player::MovementsNames[pm]; return os;}
 	friend std::ostream& operator<<(std::ostream& os, const PlayerLevel& pl)
 	{os << Player::LevelNames[pl]; return os;}
-	friend std::ostream& operator<<(std::ostream& os, const Player& p);
+	friend std::ostream& operator<<(std::ostream& os, const Player& p)
+	{ p.show(os); return os; }
 
 protected:
 	Team*        m_team;
@@ -58,7 +59,9 @@ protected:
 	AllowedMoves m_allowed_moves;
 
 	// Methods
-	virtual void CreateAllowedMoves() =0;
+	virtual void CreateAllowedMoves()         =0;
+	virtual void show(std::ostream& os) const =0;
+
 };
 const char* Player::LevelNames[]     = {"Low", "Medium", "High"};
 const char* Player::MovementsNames[] = {"Steal Ball", "Pass Ball", "Catch Ball", "Make Goal", "Tackle ball", "Run To Open Space", "Make Foul"};
