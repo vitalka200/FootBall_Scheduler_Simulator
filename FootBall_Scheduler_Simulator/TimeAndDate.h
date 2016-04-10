@@ -30,10 +30,10 @@ public:
 	bool        operator<(const Time& t)   const { return (*this != t) && !(*this > t);}
 	bool        operator<=(const Time& t)  const { return (*this == t) || (*this < t);}
 	// Methods
-	int  GetMinute()                const { return m_minute; }
-	int  GetHour()                  const { return m_hour; }
-	void SetMinute(int minute);
-	void SetHour(int hour);
+	int         GetMinute()                const { return m_minute; }
+	int         GetHour()                  const { return m_hour; }
+	void        SetMinute(int minute);
+	void        SetHour(int hour);
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Time& t)
 	{ os << "Time: '" << t.GetHour() << ":" << t.GetMinute() << "'" ; return os;}
@@ -69,12 +69,12 @@ public:
 	bool        operator<(const Date& t)   const { return (*this != t) && !(*this > t);}
 	bool        operator<=(const Date& t)  const { return (*this == t) || !(*this > t);}
 	// Methods
-	int GetDate()                   const { return m_date; }
-	int GetMonth()                  const { return m_month; }
-	int GetYear()                   const { return m_year; }
-	void SetYear(int year);
-	void SetDate(int date);
-	void SetMonth(int month);
+	int        GetDate()                   const { return m_date; }
+	int        GetMonth()                  const { return m_month; }
+	int        GetYear()                   const { return m_year; }
+	void       SetYear(int year);
+	void       SetDate(int date);
+	void       SetMonth(int month);
 
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Date& d)

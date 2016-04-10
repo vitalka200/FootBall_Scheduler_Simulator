@@ -48,7 +48,7 @@ public:
 	void        SetName(const char* name)                          { delete []m_name; m_name = strdup(name); }
 	void        SetMaxFans(int maxFans)                            { m_maxFans = maxFans; }
 	const char* GetName()                                    const { return m_name; }
-	const int   GetMaxFans()                                 const { return m_maxFans; }
+	int         GetMaxFans()                                 const { return m_maxFans; }
 	Game*       GetGameByTimeAndDate(const TimeAndDate& tad) const ;
 	Game*       GetGamesByDate(const Date& d)                const ;
 	void        AddGame(Game* g);
@@ -60,6 +60,7 @@ public:
 private:
 	char* m_name;
 	int   m_maxFans;
+
 	
 	GamesByTimeDateNode* m_gameList;
 };

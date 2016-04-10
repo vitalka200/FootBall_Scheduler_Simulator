@@ -15,7 +15,7 @@ public:
 	// Methods
 	const char*    GetName()     const { return m_name; }
 	const char*    GetFName()    const { return m_fname; }
-	const long     GetId()       const { return m_id; }
+	long           GetId()       const { return m_id; }
 
 	void  SetName(const char* name)    { delete []m_name; m_name = strdup(name); }
 	void  SetFName(const char* f_name) { delete []m_fname; m_fname = strdup(f_name); }
