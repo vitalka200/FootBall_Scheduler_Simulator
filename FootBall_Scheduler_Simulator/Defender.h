@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Player.h"
 
-class Defender : Player
+class Defender : public Player
 {
 public:
 	// c-tors, d-tors

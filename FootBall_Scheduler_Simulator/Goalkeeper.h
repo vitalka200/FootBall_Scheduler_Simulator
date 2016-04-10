@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Player.h"
 
-class Goalkeeper : Player
+class Goalkeeper : public Player
 {
 public:
 	// c-tors, d-tors

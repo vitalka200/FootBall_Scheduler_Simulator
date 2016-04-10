@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "Person.h"
-class Trainer: Person
+class Trainer: public Person
 {
 public:
 	enum TrainerDecision {CHANGE_PLAYER, MOVE_PLAYER};

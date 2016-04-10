@@ -6,11 +6,12 @@
 
 // Forward declaration
 class Team;
-class Player : Person
+
+class Player : public Person
 {
 public:
 	// Structs
-	static enum PlayerMovement {STEAL_BALL, PASS_BALL, CATCH_BALL, MAKE_GOAL, TACKLE_BALL};
+	static enum PlayerMovement {STEAL_BALL, PASS_BALL, CATCH_BALL, MAKE_GOAL, TACKLE_BALL, RUN_TO_OPEN_SPACE, MAKE_FOUL};
 	static const char* MovementsNames[];
 
 	enum PlayerLevel {LOW, MEDIUM, HIGH};
@@ -28,7 +29,7 @@ public:
 	void                         SetPNum(int num)                     {m_pnum = num;}
 	void                         SetTeam(Team* team)                  {m_team = team;}
 	void                         SetLevel(PlayerLevel pl)             {m_plevel = pl;}
-	const int                    GetPNum()                      const {return m_pnum;}
+	int                          GetPNum()                      const {return m_pnum;}
 	const PlayerLevel            GetPLevel()                    const {return m_plevel;}
 	virtual const PlayerMovement MakeMove() =0;
 
@@ -60,6 +61,6 @@ protected:
 	virtual void CreateAllowedMoves() =0;
 };
 const char* Player::LevelNames[]     = {"Low", "Medium", "High"};
-const char* Player::MovementsNames[] = {"Steal Ball", "Pass Ball", "Catch Ball", "Make Goal", "Tackle ball"};
+const char* Player::MovementsNames[] = {"Steal Ball", "Pass Ball", "Catch Ball", "Make Goal", "Tackle ball", "Run To Open Space", "Make Foul"};
 
 #endif

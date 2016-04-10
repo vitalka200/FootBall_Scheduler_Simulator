@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Player.h"
 
-class Forwarder : Player
+class Forwarder : public Player
 {
 public:
 	// c-tors, d-tors
