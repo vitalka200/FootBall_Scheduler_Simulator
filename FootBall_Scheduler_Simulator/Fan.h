@@ -7,7 +7,7 @@
 // Forward declaration
 class Team;
 
-class Fan : Person
+class Fan : public Person
 {
 public:
 	// c-tors, d-tors
@@ -17,6 +17,7 @@ public:
 
 	// Methods
 	void         SetTeam(Team* team) { m_team = team; }
+	void         Cheer();
 	const Team*  GetTeam()           { return m_team; }
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Fan& f);
