@@ -60,9 +60,9 @@ public:
 private:
 	char* m_name;
 	int   m_maxFans;
-
 	
 	GamesByTimeDateNode* m_gameList;
+
 };
 
 

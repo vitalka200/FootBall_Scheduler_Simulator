@@ -15,10 +15,12 @@ public:
 	// Methods
 
 	// Method Overrides
-	virtual const PlayerMovement  MakeMove();
-	friend std::ostream&          operator<<(std::ostream& os, const Goalkeeper& g);
+	virtual const PlayerMovement  MakeMove(bool hasBall);
+
 private:
 	virtual void                  CreateAllowedMoves();
+	virtual void                  show(std::ostream& os)  const;
+
 };
 
 
