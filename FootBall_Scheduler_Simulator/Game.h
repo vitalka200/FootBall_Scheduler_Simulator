@@ -23,7 +23,8 @@ public:
 	Game(const Game& g)
 		: m_teams(NULL), m_referees(NULL),
 		  m_timeAndDate(NULL), m_fans(NULL)         { *this = g; }
-	~Game()                                         { delete []m_playerStats; delete []m_referees; }
+	~Game()                                         { delete []m_playerStats; delete []m_referees;
+                                                      delete []m_fans; }
 	// Operators
 	bool        operator==(const Game& g)     const ;
 	const Game& operator=(const Game& g);
@@ -36,21 +37,15 @@ public:
 	const Game& operator+=(Fan* fan)                { AddFan(fan);        return *this; }
 	const Game& operator-=(const Fan* fan)          { RemoveFan(fan);     return *this; }
 
-	const Game& operator<<(const Time& t)           { AddTime(t);             return *this; }
-	const Game& operator>>(const Time& t)           { RemoveTime(t);          return *this; }
-	const Game& operator<<(const Date& d)           { AddDate(d);             return *this; }
-	const Game& operator>>(const Date& d)           { RemoveDate(d);          return *this; }
-	const Game& operator<<(const TimeAndDate& tad)  { AddTimeAndDate(tad);    return *this; }
-	const Game& operator>>(const TimeAndDate& tad)  { RemoveTimeAndDate(tad); return *this; }
 
 	// Methods
-	int                GetMaxFans()                   const { return m_maxFans; }
-	const Fan*         GetFans()                      const { return m_fans; }
-	int                GetRefereesCount()             const { return m_refereesCount; }
-	const Referee*     GetReferees()                  const { return m_referees; }
-	const PlayerStats* GetGameStats()                 const { return m_playerStats; }
-	const Team*        GetWinner()                    const ;
-	const TimeAndDate* GetTimeAndDate()               const { return m_timeAndDate; }
+	int                GetMaxFans()           const { return m_maxFans; }
+	const Fan*         GetFans()              const { return m_fans; }
+	int                GetRefereesCount()     const { return m_refereesCount; }
+	const Referee*     GetReferees()          const { return m_referees; }
+	const PlayerStats* GetGameStats()         const { return m_playerStats; }
+	const Team*        GetWinner()            const ;
+	const TimeAndDate* GetTimeAndDate()       const { return m_timeAndDate; }
 
 	void       StartGame()                    const;
 
@@ -62,14 +57,6 @@ public:
 	void       RemoveTrainer(const Trainer* t);
 	void       AddFan(Fan* fan);
 	void       RemoveFan(const Fan* fan);
-
-
-	void       AddTime(const Time& t);
-	void       RemoveTime(const Time& t);
-	void       AddDate(const Date& d);
-	void       RemoveDate(const Date& d);
-	void       AddTimeAndDate(const TimeAndDate& tad);
-	void       RemoveTimeAndDate(const TimeAndDate& tad);
 
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Game& g);
