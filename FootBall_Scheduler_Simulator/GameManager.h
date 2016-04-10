@@ -65,6 +65,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const GameManager& gm);
 
 private:
+	// Disable copy and assigment
 	GameManager(const GameManager& gm) { }
 	const GameManager& operator=(const GameManager& gm) { }
 
@@ -72,6 +73,9 @@ private:
 	Team*    m_teams;
 	Referee* m_referees;
 	Stadium* m_stadiums;
+
+	// Methods
+	void SellTickets(const Game* game, Fan* fan);
 
 };
 
