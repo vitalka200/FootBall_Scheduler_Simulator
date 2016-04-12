@@ -24,7 +24,7 @@ public:
 	    : Person(name, f_name, id) { SetPNum(pnum); SetTeam(team); SetLevel(pl); }
 	Player(const Player& p)
 		: Person(p.m_name, p.m_fname, p.m_id)                         { m_allowed_moves.moves = NULL; *this = p; }
-	~Player()                                                         {if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves;}
+	virtual ~Player()                                                 {if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves;}
 	// Methods
 	void                         SetPNum(int num)                     {m_pnum = num;}
 	void                         SetTeam(Team* team)                  {m_team = team;}
