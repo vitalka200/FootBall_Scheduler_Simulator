@@ -91,7 +91,18 @@
     <ClInclude Include="Trainer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Defender.cpp" />
+    <ClCompile Include="Fan.cpp" />
+    <ClCompile Include="Forwarder.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Goalkeeper.cpp" />
     <ClCompile Include="MainApp.cpp" />
+    <ClCompile Include="Person.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Referee.cpp" />
+    <ClCompile Include="Team.cpp" />
+    <ClCompile Include="TimeAndDate.cpp" />
+    <ClCompile Include="Trainer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
