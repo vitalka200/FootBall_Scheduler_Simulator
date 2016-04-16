@@ -12,28 +12,30 @@ enum   PlayerMovement;
 
 class  PlayerStats
 {
+friend class Team;
 public:
-	PlayerStats(Player* pl)
+	PlayerStats(Player* pl = NULL)
 		: m_pl(NULL), m_moves(NULL)                   { m_redCards = 0; m_yellowCards = 0;
 	                                                    m_numOfGoal = 0; m_movesNumber = 0;
 														m_pl = pl; }
+	PlayerStats(const PlayerStats& ps)                { *this = ps; }
+	const PlayerStats& operator=(const PlayerStats& ps);
+
 	~PlayerStats()                                    { delete []m_moves; }
 	// Methods
 	void AddMove(const PlayerMovement* move)  ;
-	void AddCard(const CardType* card)       { (*card) ? m_redCards++: m_yellowCards++; }
+	void AddCard(const CardType* card)                { (*card) ? m_redCards++: m_yellowCards++; }
 	void AddGoals()                                   { m_numOfGoal++; }
 
-	int  GetYellowCards()                       const { return m_yellowCards; }
-	int  GetRedCards()                          const { return m_redCards; }
-	int  GetGoals()                             const { return m_numOfGoal; }
+	int                   GetYellowCards()      const { return m_yellowCards; }
+	int                   GetRedCards()         const { return m_redCards; }
+	int                   GetGoals()            const { return m_numOfGoal; }
+	const PlayerMovement* GetMoves()            const { return m_moves; }
+	const Player*         GetPlayer()           const { return m_pl; }
 private:
-	// Disable copy and equality
-	PlayerStats(const PlayerStats& ps) { }
-	const PlayerStats& operator=(const PlayerStats& ps) { }
-
 	// Data Members
 	Player*                 m_pl;
-	PlayerMovement* m_moves;
+	PlayerMovement*         m_moves;
 	int                     m_yellowCards;
 	int                     m_redCards;
 	int                     m_numOfGoal;
@@ -62,7 +64,7 @@ public:
 	// Change mode of team: Attacking or Defending
 	const Team&   operator++()                 { m_isAttacking = !m_isAttacking;    return *this; }
 
-	Player* operator[](int index);
+	Player*       operator[](int index);
 	// Methods
 	void               AddPlayer(Player* p);
 	void               RemovePlayer(const Player* p);
@@ -70,10 +72,13 @@ public:
 	void               AddTrainer(Trainer* t);
 	void               RemoveTrainer(const Trainer* t);
 	int                GetRefereeNum()                  const { return m_numOfTrainers; }
-	const PlayerStats* GetStats()                       const { return m_playerStats;};
+	const PlayerStats* GetStats()                       const { return m_playerStats;}
+	PlayerStats*       GetPlayerStats(const Player* p)  const ;
 	void               SetName(const char* name)              { delete []m_name; m_name = strdup(name); }
 	const char*        GetName()                        const { return m_name; }
 	bool               IsAttacking()                    const { return m_isAttacking; }
+
+	void               AddPlayerStat(const Player* p, const PlayerMovement* move, bool isActualGoal = false);
 
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Team& t)

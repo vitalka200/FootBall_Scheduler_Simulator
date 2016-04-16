@@ -27,12 +27,14 @@ public:
 		: Person(p.m_name, p.m_fname, p.m_id)                         { m_allowed_moves.moves = NULL; *this = p; }
 	virtual ~Player()                                                 {if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves;}
 	// Methods
-	void                         SetPNum(int num)                     {m_pnum = num;}
-	void                         SetTeam(Team* team)                  {m_team = team;}
-	void                         SetLevel(PlayerLevel pl)             {m_plevel = pl;}
-	int                          GetPNum()                      const {return m_pnum;}
-	const PlayerLevel            GetPLevel()                    const {return m_plevel;}
+	void                         SetPNum(int num)                     { m_pnum = num; }
+	void                         SetTeam(Team* team)                  { m_team = team; }
+	void                         SetLevel(PlayerLevel pl)             { m_plevel = pl; }
+	int                          GetPNum()                      const { return m_pnum; }
+	const PlayerLevel            GetPLevel()                    const { return m_plevel; }
+	const Team*                  GetTeam()                      const { return m_team; }
 	virtual const PlayerMovement MakeMove(bool hasBall)                =0;
+	bool                         IsEqual(const Player* p)       const ;
 
 	// Operators
 	bool          operator==(const Player& p)                  { return m_plevel == p.m_plevel; }
@@ -41,7 +43,7 @@ public:
 	bool          operator>=(const Player& p)                  { return (*this == p) || (*this > p); }
 	bool          operator<(const Player& p)                   { return m_plevel < p.m_plevel;  }
 	bool          operator<=(const Player& p)                  { return (*this == p) || (*this < p); }
-	
+
 	// Methods overrides
 	friend std::ostream& operator<<(std::ostream& os, const PlayerMovement& pm)
 	{os << Player::MovementsNames[pm]; return os;}
