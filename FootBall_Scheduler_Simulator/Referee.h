@@ -4,10 +4,11 @@
 #include <iostream>
 #include "Person.h"
 
+enum CardType { YELLOW, RED };
+
 class Referee : public Person
 {
 public:
-	enum CardType {YELLOW, RED};
 	static const char* CardNames[];
 	// c-tors, d-tors
 	
@@ -22,9 +23,9 @@ public:
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const CardType& ct)
 	{os << Referee::CardNames[ct]; return os;}
-	friend std::ostream& operator<<(std::ostream& os, const Referee& r);
+	friend std::ostream& operator<<(std::ostream& os, const Referee& r)
+	{ os << (Person)r; return os; }
 private:
 };
-const char* Referee::CardNames[] = {"Yellow", "Red"};
 
 #endif

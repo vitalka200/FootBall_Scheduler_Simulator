@@ -17,7 +17,7 @@ public:
 	const char*    GetFName()    const { return m_fname; }
 	long           GetId()       const { return m_id; }
 
-	void  SetName(const char* name)    { delete []m_name; m_name = strdup(name); }
+	void  SetName(const char* name)    { delete []m_name;  m_name = strdup(name); }
 	void  SetFName(const char* f_name) { delete []m_fname; m_fname = strdup(f_name); }
 	void  SetId(long id)               { id = m_id; }
 
@@ -25,7 +25,8 @@ public:
 	const Person& operator=(const Person& p);
 
 	// Method Overrides
-	friend std::ostream& operator<<(std::ostream& os, const Person& p);
+	friend std::ostream& operator<<(std::ostream& os, const Person& p)
+	{ os << "Name: " << p.GetName() << "FName: " << p.GetFName(); return os; }
 
 protected:
 	char* m_name;

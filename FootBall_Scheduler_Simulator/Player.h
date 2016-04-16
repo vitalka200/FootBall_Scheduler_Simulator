@@ -7,17 +7,18 @@
 // Forward declaration
 class Team;
 
+enum PlayerMovement { STEAL_BALL, PASS_BALL, CATCH_BALL, MAKE_GOAL, TACKLE_BALL, RUN_TO_OPEN_SPACE, MAKE_FOUL };
+enum PlayerLevel    { LOW, MEDIUM, HIGH };
+
 class Player : public Person
 {
 public:
 	// Structs
-	static enum PlayerMovement {STEAL_BALL, PASS_BALL, CATCH_BALL, MAKE_GOAL, TACKLE_BALL, RUN_TO_OPEN_SPACE, MAKE_FOUL};
 	static const char* MovementsNames[];
 
-	enum PlayerLevel {LOW, MEDIUM, HIGH};
 	static const char* LevelNames[];
 
-	struct AllowedMoves {PlayerMovement* moves;int numberOfMoves;};
+	struct AllowedMoves { PlayerMovement* moves;int numberOfMoves; };
 
 	// c-tors, d-tors
 	Player(const char* name, const char* f_name, long id, int pnum, Team* team, PlayerLevel pl = LOW) 
@@ -34,9 +35,6 @@ public:
 	virtual const PlayerMovement MakeMove(bool hasBall)                =0;
 
 	// Operators
-	const Player& operator=(const Player& p);
-	const Player& operator+=(const PlayerMovement& pm);              
-	const Player& operator-=(const PlayerMovement& pm);
 	bool          operator==(const Player& p)                  { return m_plevel == p.m_plevel; }
 	bool          operator!=(const Player& p)                  { return !(*this == p); }
 	bool          operator>(const Player& p)                   { return m_plevel > p.m_plevel; }
@@ -50,7 +48,10 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const PlayerLevel& pl)
 	{os << Player::LevelNames[pl]; return os;}
 	friend std::ostream& operator<<(std::ostream& os, const Player& p)
-	{ p.show(os); return os; }
+	{ 
+		os << "PNum: " << p.GetPNum() << "Name: " << p.GetName() << "FName: " << p.GetFName() << "Level: " << p.GetPLevel();
+		p.show(os); return os;
+	}
 
 protected:
 	Team*        m_team;
@@ -63,7 +64,5 @@ protected:
 	virtual void show(std::ostream& os) const =0;
 
 };
-const char* Player::LevelNames[]     = {"Low", "Medium", "High"};
-const char* Player::MovementsNames[] = {"Steal Ball", "Pass Ball", "Catch Ball", "Make Goal", "Tackle ball", "Run To Open Space", "Make Foul"};
 
 #endif

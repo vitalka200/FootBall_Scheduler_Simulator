@@ -20,7 +20,9 @@ public:
 	void         Cheer();
 	const Team*  GetTeam()           { return m_team; }
 	// Method Overrides
-	friend std::ostream& operator<<(std::ostream& os, const Fan& f);
+	friend std::ostream& operator<<(std::ostream& os, const Fan& f)
+	{ os << (Person)f; return os; }
+
 private:
 	Team* m_team;
 
