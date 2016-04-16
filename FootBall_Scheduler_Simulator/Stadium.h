@@ -15,8 +15,8 @@ public:
 		: m_date(NULL), m_times(NULL), m_games(NULL)      { m_date = new Date(date);}
 	~GamesByTimeDateNode()                                { delete []m_date; }
 	//Methods
-	void         AddGame(Game* g);
-	void         RemoveGame(const Game* g);
+	bool         AddGame(Game* g);
+	bool         RemoveGame(const Game* g);
 	const Date*  GetDate()                          const { return m_date; }
 	// operators
 	const GamesByTimeDateNode& operator+=(Game* g)        { AddGame(g);    return *this; }
@@ -51,9 +51,9 @@ public:
 	int         GetMaxFans()                                 const { return m_maxFans; }
 	Game*       GetGameByTimeAndDate(const TimeAndDate& tad) const ;
 	Game*       GetGamesByDate(const Date& d)                const ;
-	void        AddGame(Game* g);
-	void        RemoveGame(Game* g);
-	void        MoveGameTime(Game* g, const TimeAndDate& newTad);
+	bool        AddGame(Game* g);
+	bool        RemoveGame(Game* g);
+	bool        MoveGameTime(Game* g, const TimeAndDate& newTad);
 	
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Stadium& s);
