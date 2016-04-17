@@ -35,10 +35,10 @@ public:
 	// Operators
 	bool        operator==(const Game& g)     const ;
 	const Game& operator=(const Game& g);
-	const Game& operator+=(const Referee* ref)      { AddReferee(ref);    return *this; }
-	const Game& operator-=(const Referee* ref)      { RemoveReferee(ref); return *this; }
-	const Game& operator+=(const Fan* fan)          { AddFan(fan);        return *this; }
-	const Game& operator-=(const Fan* fan)          { RemoveFan(fan);     return *this; }
+	const Game& operator+=(const Referee& ref)      { AddReferee(ref);    return *this; }
+	const Game& operator-=(const Referee& ref)      { RemoveReferee(ref); return *this; }
+	const Game& operator+=(const Fan& fan)          { AddFan(fan);        return *this; }
+	const Game& operator-=(const Fan& fan)          { RemoveFan(fan);     return *this; }
 
 
 	// Methods
@@ -56,10 +56,10 @@ public:
 
 	void       StartGame()                    const;
 
-	void       AddReferee(const Referee* ref);
-	void       RemoveReferee(const Referee* ref);
-	void       AddFan(const Fan* fan);
-	void       RemoveFan(const Fan* fan);
+	void       AddReferee(const Referee& ref);
+	void       RemoveReferee(const Referee& ref);
+	void       AddFan(const Fan& fan);
+	void       RemoveFan(const Fan& fan);
 	void       SetTime(const TimeAndDate& tad);
 
 	// Method Overrides

@@ -100,31 +100,31 @@ int Game::GetTotalPlayers() const
 	return m_teams[0].GetPlayerNum() + m_teams[1].GetPlayerNum();
 }
 
-void Game::AddReferee(const Referee* ref)
+void Game::AddReferee(const Referee& ref)
 {
 	Referee* newList = new Referee[m_refereesCount + 1];
 	for (int i = 0; i < m_refereesCount; i++)
-	{ newList[i] = Referee(m_referees[i]); }
-	newList[m_refereesCount] = Referee(*ref);
+	{ newList[i] = m_referees[i]; }
+	newList[m_refereesCount] = ref;
 	delete[] m_referees; m_referees = newList;
 	m_refereesCount++;
 }
 
-void Game::RemoveReferee(const Referee* ref)
+void Game::RemoveReferee(const Referee& ref)
 {
 	Referee* newList = new Referee[m_refereesCount-1];
 	int idxToRemove = -1;
 	for (int i = 0; i < m_refereesCount; i++)
 	{
-		if (m_referees[i] == (*(ref)))
+		if (m_referees[i] == ref)
 		{ idxToRemove = i; }
 	}
 	if (idxToRemove >= 0)
 	{
 		for (int i = 0; i < idxToRemove; i++)
-		{ newList[i] = Referee(m_referees[i]);}
+		{ newList[i] = m_referees[i];}
 		for (int i = idxToRemove+1; i < m_refereesCount; i++)
-		{ newList[i] = Referee(m_referees[i]); }
+		{ newList[i] = m_referees[i]; }
 		delete []m_referees; m_referees = newList;
 		m_refereesCount--;
 	}
@@ -132,30 +132,30 @@ void Game::RemoveReferee(const Referee* ref)
 	{ delete []newList; }
 }
 
-void Game::AddFan(const Fan* fan)
+void Game::AddFan(const Fan& fan)
 {
 	Fan* newList = new Fan[m_actualFans+1];
 	for (int i = 0; i < m_actualFans; i++)
-	{ newList[i] = Fan(m_fans[i]); }
-	newList[m_actualFans] = Fan(*(fan));
+	{ newList[i] = m_fans[i]; }
+	newList[m_actualFans] = fan;
 	delete []m_fans; m_actualFans++;
 }
 
-void Game::RemoveFan(const Fan* fan)
+void Game::RemoveFan(const Fan& fan)
 {
 	Fan* newList = new Fan[m_actualFans-1];
 	int idxToRemove = -1;
 	for (int i = 0; i < m_actualFans; i++)
 	{
-		if (m_fans[i] == (*(fan)))
+		if (m_fans[i] == fan)
 		{ idxToRemove = i; }
 	}
 	if (idxToRemove >= 0)
 	{
 		for (int i = 0; i < idxToRemove; i++)
-		{ newList[i] = Fan(m_fans[i]);}
+		{ newList[i] = m_fans[i];}
 		for (int i = idxToRemove+1; i < m_actualFans; i++)
-		{ newList[i] = Fan(m_fans[i]); }
+		{ newList[i] = m_fans[i]; }
 		delete []m_fans; m_fans = newList;
 		m_actualFans--;
 	}
