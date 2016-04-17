@@ -10,54 +10,55 @@ class Player;
 class PlayerStats;
 class Trainer;
 class Fan;
+class GamesByTimeDateNode;
 
 class Game
 {
+friend class GamesByTimeDateNode;
 public:
+	// Constants
+	static const Time MAX_GAME_LEN;
+
 	// c-tors, d-tors
 	Game(Team* team, const TimeAndDate& tad, int maxFans)
-		: m_teams(NULL), m_referees(NULL), 
+		: m_teams(NULL), m_referees(NULL), m_actualFans(0),
 		m_maxFans(maxFans), m_timeAndDate(NULL),
-	    m_fans(NULL)                                { m_refereesCount = 0; SetTimeAndDate(tad);
+	    m_fans(NULL)                                { m_refereesCount = 0; SetTimeAndDate(&tad);
 	                                                  m_gameScore[0] = -1; m_gameScore[1] = -1; }
 	Game(const Game& g)
 		: m_teams(NULL), m_referees(NULL),
-		  m_timeAndDate(NULL), m_fans(NULL)         { *this = g; }
-	~Game()                                         { delete []m_playerStats; 
-	                                                  delete []m_fans; delete m_timeAndDate; }
+		  m_timeAndDate(NULL), m_fans(NULL),
+		  m_actualFans(0)                           { *this = g; }
+	~Game();
 	// Operators
 	bool        operator==(const Game& g)     const ;
 	const Game& operator=(const Game& g);
-	const Game& operator+=(Team* t)                 { AddTeam(t);         return *this; }
-	const Game& operator-=(const Team* t)           { RemoveTeam(t);      return *this; }
-	const Game& operator+=(Trainer* t)              { AddTrainer(t);      return *this; }
-	const Game& operator-=(const Trainer* t)        { RemoveTrainer(t);   return *this; }
-	const Game& operator+=(Referee* ref)            { AddReferee(ref);    return *this; }
+	const Game& operator+=(const Referee* ref)      { AddReferee(ref);    return *this; }
 	const Game& operator-=(const Referee* ref)      { RemoveReferee(ref); return *this; }
-	const Game& operator+=(Fan* fan)                { AddFan(fan);        return *this; }
+	const Game& operator+=(const Fan* fan)          { AddFan(fan);        return *this; }
 	const Game& operator-=(const Fan* fan)          { RemoveFan(fan);     return *this; }
 
 
 	// Methods
-	int                GetMaxFans()           const { return m_maxFans; }
-	const Fan*         GetFans()              const { return m_fans; }
-	int                GetRefereesCount()     const { return m_refereesCount; }
-	const Referee*     GetReferees()          const { return m_referees; }
-	const PlayerStats* GetGameStats()         const { return m_playerStats; }
-	const Team*        GetWinner()            const ;
-	const TimeAndDate* GetTimeAndDate()       const { return m_timeAndDate; }
-	const int*         GetGameScore()         const { return m_gameScore; }
+	int                 GetMaxFans()           const { return m_maxFans; }
+	int                 GetActualFans()        const { return m_actualFans; }
+	const Fan*          GetFans()              const { return m_fans; }
+	int                 GetRefereesCount()     const { return m_refereesCount; }
+	const Referee*      GetReferees()          const { return m_referees; }
+	PlayerStats**       GetGameStats()         const { return m_playerStats; }
+	const Team*         GetTeams()             const { return m_teams; }
+	const Team*         GetWinner()            const ;
+	const TimeAndDate*  GetTimeAndDate()       const { return m_timeAndDate; }
+	const int*          GetGameScore()         const { return m_gameScore; }
+	int                 GetTotalPlayers()      const ;
 
 	void       StartGame()                    const;
 
-	void       AddTeam(Team* t);
-	void       RemoveTeam(const Team* t);	
-	void       AddReferee(Referee* ref);
+	void       AddReferee(const Referee* ref);
 	void       RemoveReferee(const Referee* ref);
-	void       AddTrainer(Trainer* t);
-	void       RemoveTrainer(const Trainer* t);
-	void       AddFan(Fan* fan);
+	void       AddFan(const Fan* fan);
 	void       RemoveFan(const Fan* fan);
+	void       SetTime(const TimeAndDate& tad);
 
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Game& g);
@@ -67,11 +68,24 @@ private:
 	Referee*      m_referees;
 	int           m_refereesCount;
 	int           m_maxFans;
-	PlayerStats*  m_playerStats;
+	int           m_actualFans;
+	PlayerStats** m_playerStats;
 	TimeAndDate*  m_timeAndDate;
 	Fan*          m_fans;
 
-	void SetTimeAndDate(const TimeAndDate& tad);
+	// Methods
+	void SetTimeAndDate(const TimeAndDate* tad);
+	void SetPlayerStats(PlayerStats** ps, int count);
+	void SetFans(const Fan* fans, int count);
+	void SetReferees(const Referee* referees, int count);
+	void SetTeams(const Team* teams);
+	void DeletePlayerStats(PlayerStats** pStats);
+
+	// Methods available to friend classes or disabled
+	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0),
+		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL)
+	{ m_refereesCount = 0; m_gameScore[0] = -1; m_gameScore[1] = -1; }
+
 };
 
 #endif
