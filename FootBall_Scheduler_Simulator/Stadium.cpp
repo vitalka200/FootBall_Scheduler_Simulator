@@ -120,7 +120,7 @@ const Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
 
 const GameList Stadium::GetGamesByDate(const Date& d) const
 {
-	GameList gl = GameList();
+	GameList gl;
 
 	for (int i = 0; i < m_numOfNodes; i++)
 	{
