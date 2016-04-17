@@ -10,16 +10,18 @@ class Player;
 class PlayerStats;
 class Trainer;
 class Fan;
-class GamesByTimeDateNode;
 
 class Game
 {
-friend class GamesByTimeDateNode;
 public:
 	// Constants
 	static const Time MAX_GAME_LEN;
 
 	// c-tors, d-tors
+	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0),
+		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL)
+	{ m_refereesCount = 0; m_gameScore[0] = -1; m_gameScore[1] = -1; }
+
 	Game(Team* team, const TimeAndDate& tad, int maxFans)
 		: m_teams(NULL), m_referees(NULL), m_actualFans(0),
 		m_maxFans(maxFans), m_timeAndDate(NULL),
@@ -80,11 +82,6 @@ private:
 	void SetReferees(const Referee* referees, int count);
 	void SetTeams(const Team* teams);
 	void DeletePlayerStats(PlayerStats** pStats);
-
-	// Methods available to friend classes or disabled
-	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0),
-		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL)
-	{ m_refereesCount = 0; m_gameScore[0] = -1; m_gameScore[1] = -1; }
 
 };
 
