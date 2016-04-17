@@ -25,7 +25,7 @@ class GameManager
 {
 public:
 	// c-tors, d-tors
-	GameManager() : m_games(NULL), m_teams(NULL), m_stadiums(NULL) { }
+	GameManager() : m_games(NULL), m_teams(NULL), m_stadiums(NULL)  {}
 	~GameManager() { delete []m_games; delete []m_teams; delete []m_stadiums;}
 
 	// Operators
@@ -39,7 +39,6 @@ public:
 	void NewGame();
 	void CancelGame();
 	void StartGame();
-	void SendInvitations();
 	void GetGameLog();
 	void GetMonthSummary();
 	void GetTeamSummary();
@@ -65,9 +64,13 @@ private:
 	const GameManager& operator=(const GameManager& gm) { }
 
 	Game*    m_games;
+	int		 m_gamesLength;
 	Team*    m_teams;
+	int		 m_teamsLength;
 	Referee* m_referees;
+	int		 m_RefereesLength;
 	Stadium* m_stadiums;
+	int		 m_stadiumsLength;
 
 	// Methods
 	void SellTickets(const Game* game, Fan* fan);
