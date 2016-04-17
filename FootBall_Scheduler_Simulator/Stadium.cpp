@@ -212,3 +212,9 @@ void Stadium::SetGameList(const GamesByTimeDateNode* list, int count)
 	{ m_gameList[i] = list[i]; }
 }
 
+std::ostream & operator<<(std::ostream & os, const GamesByTimeDateNode & node)
+{
+	for (int i = 0; i < node.m_numOfGames; i++)
+	{ os << node.m_games[i] << std::endl; }
+	return os;
+}

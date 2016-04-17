@@ -29,6 +29,8 @@ public:
 	const GamesByTimeDateNode& operator+=(Game* g)        { AddGame(g);    return *this; }
 	const GamesByTimeDateNode& operator-=(const Game* g)  { RemoveGame(g); return *this; }
 
+	friend std::ostream& operator<<(std::ostream& os, const GamesByTimeDateNode& node);
+
 private:
 	Date*  m_date;
 	Game*  m_games;
