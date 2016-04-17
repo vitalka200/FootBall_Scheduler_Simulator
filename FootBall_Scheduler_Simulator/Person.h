@@ -23,6 +23,7 @@ public:
 
 	// Operators
 	const Person& operator=(const Person& p);
+	bool          operator==(const Person& p) const;
 
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Person& p)

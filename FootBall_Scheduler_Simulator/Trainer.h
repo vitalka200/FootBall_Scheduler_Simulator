@@ -11,7 +11,7 @@ class Trainer: public Person
 public:
 	static const char* TrainerDecisionNames[];
 	// c-tors, d-tors
-	Trainer(const char* name, const char* f_name, long id) 
+	Trainer(const char* name = " ", const char* f_name = " ", long id = -1) 
 		: Person(name, f_name, id) { }
 	
 	// Operators

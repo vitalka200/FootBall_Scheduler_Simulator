@@ -12,6 +12,7 @@ enum PlayerLevel    { LOW, MEDIUM, HIGH };
 
 class Player : public Person
 {
+friend class Team;
 public:
 	// Structs
 	static const char* MovementsNames[];

@@ -6,10 +6,8 @@ const char* Player::MovementsNames[] = { "Steal Ball", "Pass Ball", "Catch Ball"
 bool Player::IsEqual(const Player* p) const
 {
 	return (
-		this->GetId() == p->GetId() &&
+		Person::operator == (*(p)) &&
 		this->GetPLevel() == p->GetPLevel() &&
-		strcmp(this->GetName(), p->GetName()) == 0 &&
-		strcmp(this->GetFName(), p->GetFName()) == 0 &&
 		this->GetTeam() == p->GetTeam()
 		);
 }

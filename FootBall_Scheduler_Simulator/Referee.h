@@ -12,7 +12,7 @@ public:
 	static const char* CardNames[];
 	// c-tors, d-tors
 	
-	Referee(const char* name, const char* f_name, long id) 
+	Referee(const char* name = " ", const char* f_name = " ", long id = -1) 
 		: Person(name, f_name, id) { }
 	
 	// Operators

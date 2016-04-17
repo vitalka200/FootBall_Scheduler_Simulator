@@ -11,7 +11,7 @@ class Fan : public Person
 {
 public:
 	// c-tors, d-tors
-	Fan(const char* name, const char* f_name, long id, Team* team) 
+	Fan(const char* name = " ", const char* f_name = " ", long id = -1, Team* team = NULL) 
 	    : Person(name, f_name, id), m_team(NULL) {SetTeam(team);}
 	// Operators
 
