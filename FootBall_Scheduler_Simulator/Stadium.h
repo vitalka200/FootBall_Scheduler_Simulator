@@ -10,59 +10,82 @@ class Date;
 
 class GamesByTimeDateNode
 {
+friend class Stadium;
 public:
-	GamesByTimeDateNode(const Date& date)
-		: m_date(NULL), m_times(NULL), m_games(NULL)      { m_date = new Date(date);}
-	~GamesByTimeDateNode()                                { delete []m_date; }
+	GamesByTimeDateNode(const Date& date);
+	~GamesByTimeDateNode()                                { delete m_date; delete []m_games; }
+	GamesByTimeDateNode(const GamesByTimeDateNode& gt)
+	    : m_date(NULL), m_games(NULL)                     { *this = gt; }
+
+	const GamesByTimeDateNode& operator=(const GamesByTimeDateNode& gt);
+
 	//Methods
-	bool         AddGame(Game* g);
+	bool         AddGame(const Game* g);
 	bool         RemoveGame(const Game* g);
 	const Date*  GetDate()                          const { return m_date; }
+	int          GetGamesCount()                    const { return m_numOfGames; }
 	// operators
 	const GamesByTimeDateNode& operator+=(Game* g)        { AddGame(g);    return *this; }
 	const GamesByTimeDateNode& operator-=(const Game* g)  { RemoveGame(g); return *this; }
+
 private:
 	Date*  m_date;
-	Time*  m_times;
 	Game*  m_games;
+	int    m_numOfGames;
 
-	// Disable copy and assigment
-	GamesByTimeDateNode(const GamesByTimeDateNode& gt);
-	const GamesByTimeDateNode& operator=(const GamesByTimeDateNode& gt);
+	// Methods
+	void SetGames(const Game* games, int count);
 
+	// Hidden default c-tor. available only for Stadium
+	GamesByTimeDateNode() : m_date(NULL),  m_games(NULL) { }
+	void SetDate(const Date* d);
+};
+
+struct GameList
+{
+	const Game* games;
+	int   count;
 };
 
 class Stadium
 {
 public:
 	// c-tors, d-tors
-	Stadium(const char* name, int maxFans)
+	Stadium(const char* name = " ", int maxFans = 0)
 		: m_name(NULL),  m_maxFans(maxFans),
-		  m_gameList(NULL)                     { SetName(name); };
+		  m_gameList(NULL), m_numOfNodes(0)    { SetName(name); };
 	Stadium(const Stadium& s)
-		: m_name(NULL), m_gameList(NULL)       { *this = s; }
+		: m_name(NULL), m_gameList(NULL),
+          m_numOfNodes(0)                      { *this = s; }
 	~Stadium()                                 { delete []m_name; delete[] m_gameList; }
 	// Operators
 	const Stadium& operator=(const Stadium& s);
 	// Methods
-	void        SetName(const char* name)                          { delete []m_name; m_name = strdup(name); }
-	void        SetMaxFans(int maxFans)                            { m_maxFans = maxFans; }
-	const char* GetName()                                    const { return m_name; }
-	int         GetMaxFans()                                 const { return m_maxFans; }
-	Game*       GetGameByTimeAndDate(const TimeAndDate& tad) const ;
-	Game*       GetGamesByDate(const Date& d)                const ;
-	bool        AddGame(Game* g);
-	bool        RemoveGame(Game* g);
-	bool        MoveGameTime(Game* g, const TimeAndDate& newTad);
+	void           SetName(const char* name)                          { delete []m_name; m_name = strdup(name); }
+	void           SetMaxFans(int maxFans)                            { m_maxFans = maxFans; }
+	const char*    GetName()                                    const { return m_name; }
+	int            GetMaxFans()                                 const { return m_maxFans; }
+	const Game*    GetGameByTimeAndDate(const TimeAndDate& tad) const ;
+	const GameList GetGamesByDate(const Date& d)                const ;
+	bool           AddGame(const Game* g);
+	bool           RemoveGame(const Game* g);
+	bool           MoveGameTime(const Game* g, const TimeAndDate& newTad);
 	
 	// Method overrides
-	friend std::ostream& operator<<(std::ostream& os, const Stadium& s);
+	friend std::ostream& operator<<(std::ostream& os, const Stadium& s)
+	{ 
+		os << "Stadium Name: " << s.GetName() << " Max Fans: " << s.GetMaxFans(); 
+		return os;
+	}
 private:
 	char* m_name;
 	int   m_maxFans;
 	
 	GamesByTimeDateNode* m_gameList;
+	int                  m_numOfNodes;
 
+	// Methods
+	void            SetGameList(const GamesByTimeDateNode* list, int count);
 };
 
 

@@ -20,11 +20,6 @@
 // Other includes
 #include "TimeAndDate.h"
 
-struct GameList
-{
-	Game* games;
-	int   count;
-};
 
 class GameManager
 {
