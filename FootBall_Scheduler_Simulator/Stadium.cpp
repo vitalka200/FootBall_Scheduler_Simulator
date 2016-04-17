@@ -39,7 +39,7 @@ bool GamesByTimeDateNode::AddGame(const Game* g)
 			newGamesSchedule[i] = *g; m_numOfGames++;
 			// Copy leftovers if any
 			for (int j = i+1; j < m_numOfGames; j++)
-			{ newGamesSchedule[j] = m_games[j]; }
+			{ newGamesSchedule[j-1] = m_games[j]; }
 			// Release unneeded memory and assign new shedule
 			delete []m_games; m_games = newGamesSchedule;
 			return true;
@@ -66,7 +66,7 @@ bool GamesByTimeDateNode::RemoveGame(const Game* g)
 			for (int j = 0; j < i; j++)
 			{ newGamesSchedule[j] = m_games[j]; }
 			for (int j = i+1; j < m_numOfGames; j++)
-			{ newGamesSchedule[j] = m_games[j]; }
+			{ newGamesSchedule[j-1] = m_games[j]; }
 			m_numOfGames--;
 			// Release unneeded memory and assign new shedule
 			delete []m_games; m_games = newGamesSchedule;
@@ -159,7 +159,7 @@ bool Stadium::AddGame(const Game* g)
 			m_numOfNodes++;
 			// copy rest of array
 			for (int j = i+1; j < m_numOfNodes; j++)
-			{ new_gameList[j] = m_gameList[j]; }
+			{ new_gameList[j-1] = m_gameList[j]; }
 			// Assign new list and free old memory
 			delete []m_gameList; m_gameList = new_gameList;
 			return true;

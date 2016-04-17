@@ -69,7 +69,7 @@ void Team::RemovePlayer(const Player* p)
 		PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers-1];
 
 		for (int i = playerPosition; i < m_numOfPlayers; i++)
-		{ newPList[i]  = m_players[i]; newPSList[i] = m_playerStats[i];	}
+		{ newPList[i-1]  = m_players[i]; newPSList[i] = m_playerStats[i];	}
 		// Release memeory and assign new arrays
 		DeletePlayers(m_players); DeletePlayerStats(m_playerStats);
 		delete []m_players;       delete []m_playerStats;
@@ -105,7 +105,7 @@ void Team::RemoveTrainer(const Trainer* t)
 		for (int i = 0; i < idxToRemove; i++)
 		{ newList[i] = Trainer(m_trainers[i]);}
 		for (int i = idxToRemove+1; i < m_numOfTrainers; i++)
-		{ newList[i] = Trainer(m_trainers[i]); }
+		{ newList[i-1] = Trainer(m_trainers[i]); }
 		delete []m_trainers; m_trainers = newList;
 		m_numOfTrainers--;
 	}

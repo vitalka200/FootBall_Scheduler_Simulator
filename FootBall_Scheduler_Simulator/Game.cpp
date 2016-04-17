@@ -124,7 +124,7 @@ void Game::RemoveReferee(const Referee& ref)
 		for (int i = 0; i < idxToRemove; i++)
 		{ newList[i] = m_referees[i];}
 		for (int i = idxToRemove+1; i < m_refereesCount; i++)
-		{ newList[i] = m_referees[i]; }
+		{ newList[i-1] = m_referees[i]; }
 		delete []m_referees; m_referees = newList;
 		m_refereesCount--;
 	}
@@ -155,7 +155,7 @@ void Game::RemoveFan(const Fan& fan)
 		for (int i = 0; i < idxToRemove; i++)
 		{ newList[i] = m_fans[i];}
 		for (int i = idxToRemove+1; i < m_actualFans; i++)
-		{ newList[i] = m_fans[i]; }
+		{ newList[i-1] = m_fans[i]; }
 		delete []m_fans; m_fans = newList;
 		m_actualFans--;
 	}
