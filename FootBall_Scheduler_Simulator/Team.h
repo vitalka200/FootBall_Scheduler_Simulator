@@ -14,7 +14,7 @@ class  PlayerStats
 {
 friend class Team;
 public:
-	PlayerStats(Player* pl = NULL)
+	PlayerStats(Player* pl)
 		: m_pl(NULL), m_moves(NULL)                   { m_redCards = 0; m_yellowCards = 0;
 	                                                    m_numOfGoal = 0; m_movesNumber = 0;
 														m_pl = pl; }
@@ -46,13 +46,15 @@ class Team
 {
 public:
 	// c-tors, d-tors
-	Team(const char* name)
+	Team(const char* name = " ")
 		: m_name(NULL), m_trainers(NULL),
 		m_players(NULL), m_playerStats(NULL)   { SetName(name); m_numOfPlayers = 0; 
 	                                             m_numOfTrainers = 0; m_isAttacking = false; }
+	// Disable Copy and assigment
+	Team(const Team& t)                        { *this = t; }
+	const Team& Team::operator=(const Team& t);
 
-	~Team()                                    { delete []m_name;     delete []m_players;
-                                                 delete []m_trainers; delete []m_playerStats;}
+	~Team();
 	// Operators
 	const Team&   operator+=(Player* p)        { AddPlayer(p);     return *this; }
 	const Team&   operator-=(const Player* p)  { RemovePlayer(p);  return *this; }
@@ -66,19 +68,18 @@ public:
 
 	Player*       operator[](int index);
 	// Methods
-	void               AddPlayer(Player* p);
-	void               RemovePlayer(const Player* p);
-	int                GetPlayerNum()                   const { return m_numOfPlayers; }
-	void               AddTrainer(Trainer* t);
-	void               RemoveTrainer(const Trainer* t);
-	int                GetRefereeNum()                  const { return m_numOfTrainers; }
-	const PlayerStats* GetStats()                       const { return m_playerStats;}
-	PlayerStats*       GetPlayerStats(const Player* p)  const ;
-	void               SetName(const char* name)              { delete []m_name; m_name = strdup(name); }
-	const char*        GetName()                        const { return m_name; }
-	bool               IsAttacking()                    const { return m_isAttacking; }
+	void                AddPlayer(Player* p);
+	void                RemovePlayer(const Player* p);
+	int                 GetPlayerNum()                   const { return m_numOfPlayers; }
+	void                AddTrainer(Trainer* t);
+	void                RemoveTrainer(const Trainer* t);
+	int                 GetRefereeNum()                  const { return m_numOfTrainers; }
+	PlayerStats**       GetStats()                       const { return m_playerStats;}
+	PlayerStats*        GetPlayerStats(const Player* p)  const ;
+	const char*         GetName()                        const { return m_name; }
+	bool                IsAttacking()                    const { return m_isAttacking; }
 
-	void               AddPlayerStat(const Player* p, const PlayerMovement* move, bool isActualGoal = false);
+	void                AddPlayerStat(const Player* p, const PlayerMovement* move, bool isActualGoal = false);
 
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Team& t)
@@ -88,18 +89,22 @@ public:
 	}
 
 private:
-	// Disable Copy and assigment
-	Team(const Team& t) { }
-	const Team& Team::operator=(const Team& t) { }
-
 	// Members
-	Player*      m_players;
-	int          m_numOfPlayers;
-	Trainer*     m_trainers;
-	int          m_numOfTrainers;
-	char*        m_name;
-	PlayerStats* m_playerStats;
-	bool         m_isAttacking;
+	Player**      m_players;
+	int           m_numOfPlayers;
+	Trainer*      m_trainers;
+	int           m_numOfTrainers;
+	char*         m_name;
+	PlayerStats** m_playerStats;
+	bool          m_isAttacking;
+
+	// Methods
+	void SetName(const char* name)                       { delete m_name; m_name = strdup(name); }
+	void SetPlayers(Player** players, int count);
+	void SetTrainers(const Trainer* trainers, int count);
+	void SetPlayerStats(PlayerStats** ps, int count);
+	void DeletePlayers(Player** players);
+	void DeletePlayerStats(PlayerStats** pStats);
 };
 
 #endif
