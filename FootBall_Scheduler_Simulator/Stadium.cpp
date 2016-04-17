@@ -108,14 +108,12 @@ const Stadium & Stadium::operator=(const Stadium& s)
 
 const Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
 {
-	GameList gl = GameList();
-	gl.count = 0; gl.games = NULL;
+	const GameList* glByDate = &(GetGamesByDate(tad.GetDate()));
 
-	GameList glByDate = GetGamesByDate(tad.GetDate());
-	for (int i = 0; i < glByDate.count; i++)
+	for (int i = 0; i < glByDate->count; i++)
 	{
-		if (*(glByDate.games[i].GetTimeAndDate()) == tad)
-		{ return &(glByDate.games[i]); }
+		if (*(glByDate->games[i].GetTimeAndDate()) == tad)
+		{ return &(glByDate->games[i]); }
 	}
 	return NULL;
 }
@@ -123,14 +121,17 @@ const Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
 const GameList Stadium::GetGamesByDate(const Date& d) const
 {
 	GameList gl = GameList();
-	gl.count = 0; gl.games = NULL;
 
 	for (int i = 0; i < m_numOfNodes; i++)
 	{
 		if (d == *(m_gameList[i].GetDate()))
 		{
-			gl.games = m_gameList[i].m_games;
+			gl.games = new Game[m_gameList[i].m_numOfGames];
 			gl.count = m_gameList[i].m_numOfGames;
+
+			for (int j = 0; j < m_gameList[i].m_numOfGames; j++)
+			{ gl.games[j] =  m_gameList[i].m_games[j]; }
+
 			return gl;
 		}
 	}

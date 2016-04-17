@@ -7,6 +7,7 @@ class Game;
 class TimeAndDate;
 class Time;
 class Date;
+class GameManager;
 
 class GamesByTimeDateNode
 {
@@ -41,14 +42,18 @@ private:
 	void SetDate(const Date* d);
 };
 
-struct GameList
+class GameList
 {
-	const Game* games;
+public:
+	Game* games;
 	int   count;
+	GameList() : games(NULL), count(0) { }
+	~GameList()                        { delete []games; }
 };
 
 class Stadium
 {
+friend class GameManager;
 public:
 	// c-tors, d-tors
 	Stadium(const char* name = " ", int maxFans = 0)
