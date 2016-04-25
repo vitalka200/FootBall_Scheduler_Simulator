@@ -52,17 +52,17 @@ void GameManager::CancelGame(){
 	cin >> game_date;
 
 	cout << "please choose a game :: \n";
-	for (int i = 0; i < gamesList[game_date].m_numOfGames; i++)
-	{cout << i << " - " << gamesList[game_date].m_games[i] << "\n";}
+	for (int i = 0; i < gamesList[game_date].GetGamesCount(); i++)
+	{cout << i << " - " << gamesList[game_date].GetGameById(i) << "\n";}
 	
 	cin >> game_num;
-	m_stadiums[stadium_num].RemoveGame(&(gamesList[game_date].m_games[game_num]));
+	m_stadiums[stadium_num].RemoveGame(&(gamesList[game_date].GetGameById(game_num)));
 }
 
 void GameManager::SellTickets(){
 	int sold = 0, pick;
 	srand(time(NULL));
-	for (int i = 0; i < m_games[m_gamesLength - 1].GetMaxFans; i++)
+	for (int i = 0; i < m_games[m_gamesLength - 1].GetMaxFans(); i++)
 	{
 		pick = rand()%2;
 		if (pick)

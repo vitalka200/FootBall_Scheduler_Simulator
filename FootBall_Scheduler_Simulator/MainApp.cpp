@@ -15,7 +15,6 @@ void main()
 	gm->ManageGameSchedule();
 
 	gm->SellTickets();
-	gm->SendInvitations();
 
 	gm->StartGame();
 	gm->GetStats();

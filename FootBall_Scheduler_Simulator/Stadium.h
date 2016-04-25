@@ -25,6 +25,7 @@ public:
 	bool         RemoveGame(const Game* g);
 	const Date*  GetDate()                          const { return m_date; }
 	int          GetGamesCount()                    const { return m_numOfGames; }
+	const Game&  GetGameById(int idx)               const { return m_games[idx]; }
 	// operators
 	const GamesByTimeDateNode& operator+=(Game* g)        { AddGame(g);    return *this; }
 	const GamesByTimeDateNode& operator-=(const Game* g)  { RemoveGame(g); return *this; }

@@ -95,6 +95,7 @@
     <ClCompile Include="Fan.cpp" />
     <ClCompile Include="Forwarder.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Goalkeeper.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="Person.cpp" />
