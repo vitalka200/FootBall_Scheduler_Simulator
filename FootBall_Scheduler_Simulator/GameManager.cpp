@@ -1,3 +1,4 @@
+
 #include "GameManager.h"
 #include <iostream>
 #include <fstream>
@@ -17,7 +18,7 @@ void PrintArray(int length, T* arr)
 {
 	for (int i = 0; i < length; i++)
 	{
-		cout << i << ")" << arr[i] << endl;
+		cout << i+1 << ")" << arr[i] << endl;
 	}
 }
 
@@ -149,7 +150,7 @@ void GameManager::ManageTrainers() {
 
 void GameManager::ManageReferees() {
 	int numberOfReferees, choice;
-	cout << endl << "Would you like to add or remove Referee ?  1 - add, 2- remove";
+	cout << endl << "Would you like to add or remove Referee ?  1 - add, 2- remove \n";
 	scan<int>(&choice);
 	if (choice == 1) {
 		cout << "Please enter number of Referees : " << endl;
@@ -276,16 +277,17 @@ void GameManager::ManageTeams() {
 void GameManager::ManageGames() {
 	char yn = 'Y';
 	int c = 1;
-	while (true)
+	while (1)
 	{
-		cout << endl << "Please enter Choice :\n 1-Add Game , 2-Cancel Game else-exit";
+		cout << endl << "Please enter Choice :\n 1-Add Game , 2-Cancel Game else-exit \n";
 		scan<int>(&c);
 		if (c != 1 && c != 2)
+			break;
 			switch (c)
-			{
+		{
 			case 1:
 				while (yn == 'Y') {
-					cout << endl << "Would you like to add a new Game? : Y -yes,N-no";
+					cout << endl << "Would you like to add a new Game? : Y -yes,N-no \n";
 					scan<char>(&yn);
 					if (yn == 'Y') {
 						NewGame();
@@ -294,14 +296,14 @@ void GameManager::ManageGames() {
 				break;
 			case 2:
 				while (yn == 'Y') {
-					cout << endl << "Would you like to Cancel Game? : Y -yes,N-no";
+					cout << endl << "Would you like to Cancel Game? : Y -yes,N-no \n";
 					scan<char>(&yn);
 					if (yn == 'Y') {
 						CancelGame();
 					}
 				}
 				break;
-			}
+		}
 	}
 
 }
@@ -310,7 +312,7 @@ void GameManager::ManageStadiums()
 {
 	int Stdm, Cs;
 	cout << "Managing stadiums" << endl;
-	cout << "What would you like to do ? 1 - Delete 2 - Update 3 - Add";
+	cout << "What would you like to do ? 1 - Delete, 2 - Update, 3 - Add \n";
 	scan<int>(&Cs);
 
 	if (Cs != 3)
@@ -335,7 +337,7 @@ void GameManager::ManageStadiums()
 		else
 		{
 			int UpD;
-			cout << "Choose value to be updated :  1- Name 2- Max fans";
+			cout << "Choose value to be updated :  1- Name, 2- Max fans \n";
 			scan<int>(&UpD);
 			cout << "Enter new value";
 			if (UpD == 1)
@@ -382,16 +384,21 @@ void GameManager::NewGame() {
 	PrintArray<Team>(m_teamsLength, m_teams);
 	cout << endl << "Please enter Team number 1 id :- ";
 	scan<int>(&t1);
+	t1--;
 	cout << endl << "Please enter Team number 2 id :- ";
 	scan<int>(&t2);
+	t2--;
 	teams[0] = m_teams[t1];
 	teams[1] = m_teams[t2];
-	cout << endl << "enter date :  day month year :: ";
+	cout << endl << "enter date : " << "\n day: "; 
 	scan<int>(&day);
+	cout << "\nmonth : ";
 	scan<int>(&month);
+	cout << "\nyear : ";
 	scan<int>(&year);
-	cout << endl << "enter time :  hours minutes :: ";
+	cout << endl << "enter time :"<<  "\nhours : ";
 	scan<int>(&hours);
+	cout << "\nminutes :";
 	scan<int>(&minutes);
 	cout << endl << "Please enter number of maximum fans : ";
 	scan<int>(&maxFans);
@@ -405,9 +412,10 @@ void GameManager::NewGame() {
 		new_games[i] = m_games[i];
 	}
 	new_games[m_gamesLength] = *g;
+	m_games = new_games;
 	m_gamesLength++;
-	delete[]teams;
-	AddGame(*g);
+	//delete[]teams;
+	//AddGame(*g);
 }
 
 
@@ -454,10 +462,21 @@ void GameManager::GetMonthSummary()
 	scan<int>(&month);
 	Date d = Date(year, month);
 	GameList list = (*this)[d];
-	cout << "The Month summary : \n";
-	for (int i = 0; i < list.count; i++) {
-		cout << list.games[i] << "winner : " << list.games[i].GetWinner();
+	if (!list.count)
+		cout << "There are not games in that month.";
+	else
+	{
+		cout << "The Month summary: \n";
+		for (int i = 0; i < list.count; i++) {
+			cout << list.games[i] << "winner";
+			if (list.games[i].GetWinner())
+				cout << list.games[i].GetWinner() << endl;
+			else
+				cout << "Not yet determined" << endl;
+		}
 	}
+
+
 }
 
 void GameManager::GetTeamSummary()
@@ -477,7 +496,7 @@ void GameManager::ManagePlayers()
 	cout << "Choose team number -->" << endl;
 	PrintArray<Team>(m_teamsLength, m_teams);
 	scan<int>(&Tm);
-	cout << m_teams[Tm] << '\n' << "What would you like to do ? 1-delete 2- update 3- add";
+	cout << m_teams[Tm] << '\n' << "What would you like to do ? 1-delete 2- update 3- add \n";
 	scan<int>(&Cs);
 	switch (Cs)
 	{
@@ -560,8 +579,8 @@ void GameManager::GetStats() {
 	for (int i = 0; i < m_teamsLength; i++)
 	{
 		cout << m_teams[i];
-		int wins = 0;
-		for (int num = 0; num < m_gamesLength; num++) {
+		int wins =0;
+		for (int num = 0; num < m_gamesLength; num++){
 			if ((m_games[i].GetWinner()) == &m_teams[i])
 				wins++;
 		}
