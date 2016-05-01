@@ -4,6 +4,7 @@ const Person& Person::operator=(const Person& p)
 {
 	if (this != &p)
 	{
+		SetId(p.GetId());
 		SetName(p.GetName());
 		SetFName(p.GetName());
 	}

@@ -164,7 +164,6 @@ void Game::StartGame()
 	for (Time i; i < MAX_GAME_LEN; i++)
 	{
 
-
 		for (int i = 0; i < m_teams[0].GetPlayerNum(); i++)
 		{
 			Player* p1 = m_teams[0][i];

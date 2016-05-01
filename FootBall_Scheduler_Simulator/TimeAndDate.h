@@ -21,6 +21,7 @@ public:
 	Time        operator++(int); // postfix
 	const Time& operator--()    { *this = *this - 1; return *this; } // prefix
 	Time        operator--(int); // postfix
+	Time        operator/(int value);
 
 	bool        operator==(const Time& t)  const { return m_hour==t.m_hour && m_minute==t.m_minute;}
 	bool        operator!=(const Time& t)  const { return !(*this == t);}

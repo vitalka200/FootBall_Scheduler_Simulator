@@ -49,6 +49,14 @@ Time Time::operator--(int)
 	return t;
 }
 
+Time Time::operator/(int value)
+{
+	if (value == 0) { return Time(); }
+	Time newTime(m_hour/value, (m_hour%value)*60/value);
+	newTime += Time(0, m_minute / value);
+	return newTime;
+}
+
 bool Time::operator>(const Time& t) const
 {
 	return (this->m_hour > t.m_hour) || 

@@ -21,4 +21,5 @@ void main()
 	gm->GetMonthSummary();
 
 	delete gm;
+	system("pause");
 }
