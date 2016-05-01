@@ -171,7 +171,7 @@ void GameManager::ManageReferees() {
 			scan<long>(&id);
 			m_newReferees[i] = Referee(name, f_name, id);
 		}
-		delete []m_referees;
+		delete[]m_referees;
 		m_referees = m_newReferees;
 		m_refereesLength += numberOfReferees;
 	}
@@ -281,27 +281,27 @@ void GameManager::ManageGames() {
 		cout << endl << "Please enter Choice :\n 1-Add Game , 2-Cancel Game else-exit";
 		scan<int>(&c);
 		if (c != 1 && c != 2)
-		switch (c)
-		{
-		case 1:
-			while (yn == 'Y') {
-				cout << endl << "Would you like to add a new Game? : Y -yes,N-no";
-				scan<char>(&yn);
-				if (yn == 'Y') {
-					NewGame();
+			switch (c)
+			{
+			case 1:
+				while (yn == 'Y') {
+					cout << endl << "Would you like to add a new Game? : Y -yes,N-no";
+					scan<char>(&yn);
+					if (yn == 'Y') {
+						NewGame();
+					}
 				}
-			}
-			break;
-		case 2:
-			while (yn == 'Y') {
-				cout << endl << "Would you like to Cancel Game? : Y -yes,N-no";
-				scan<char>(&yn);
-				if (yn == 'Y') {
-					CancelGame();
+				break;
+			case 2:
+				while (yn == 'Y') {
+					cout << endl << "Would you like to Cancel Game? : Y -yes,N-no";
+					scan<char>(&yn);
+					if (yn == 'Y') {
+						CancelGame();
+					}
 				}
+				break;
 			}
-			break;
-		}
 	}
 
 }
@@ -368,7 +368,7 @@ void GameManager::ManageStadiums()
 			newM_Stadium[i] = m_stadiums[i];
 		}
 		newM_Stadium[m_stadiumsLength] = s;
-		delete []m_stadiums;
+		delete[]m_stadiums;
 		m_stadiums = newM_Stadium;
 		m_stadiumsLength++;
 	}
@@ -406,7 +406,7 @@ void GameManager::NewGame() {
 	}
 	new_games[m_gamesLength] = *g;
 	m_gamesLength++;
-	delete []teams;
+	delete[]teams;
 	AddGame(*g);
 }
 
