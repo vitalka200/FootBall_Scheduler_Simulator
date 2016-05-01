@@ -20,7 +20,7 @@ const Time Game::MAX_GAME_LEN = Time(2, 0);
 
 Game::~Game()
 {
-	delete[]m_fans; delete m_timeAndDate;
+	delete[]m_fans; delete m_timeAndDate; delete []m_referees; delete []m_teams;
 	DeletePlayerStats(m_playerStats); delete []m_playerStats;
 }
 
@@ -37,26 +37,25 @@ const Game& Game::operator=(const Game& g)
 		m_gameScore[0]  = g.m_gameScore[0]; 
 		m_gameScore[1]  = g.m_gameScore[1];
 		m_maxFans       = g.m_maxFans;
+		m_actualFans    = g.m_actualFans;
 
 		SetTeams(g.m_teams);
 		SetReferees(g.m_referees, g.m_refereesCount);
 		SetTimeAndDate(g.GetTimeAndDate());
-		SetPlayerStats(g.GetGameStats(), GetActualFans());
+		SetPlayerStats(g.GetGameStats(), g.m_actualFans);
 		SetFans(g.GetFans(), g.m_actualFans);
 	}
 	return *this;
 }
 
-PlayerStats* Game::GetPlayerStats(const Player * p)
+PlayerStats* Game::GetPlayerStats(const Player* p)
 {
 	PlayerStats* ps = NULL;
 	int totalPlayers = GetTotalPlayers();
 	for (int i = 0; i < totalPlayers; i++)
 	{
 		if (m_playerStats[i]->GetPlayer()->IsEqual(p))
-		{
-			ps = m_playerStats[i];
-		}
+		{ ps = m_playerStats[i]; }
 	}
 	return ps;
 }
@@ -71,11 +70,10 @@ void Game::SetPlayerStats(PlayerStats** ps, int count)
 {
 	DeletePlayerStats(m_playerStats); delete[]m_playerStats;
 
-	int totalPlayers = GetTotalPlayers();
-	m_playerStats    = new PlayerStats*[totalPlayers];
+	m_playerStats    = new PlayerStats*[count];
 
-	for (int i = 0; i < totalPlayers; i++)
-	{ m_playerStats[i] = new PlayerStats(*(ps[i])); }
+	for (int i = 0; i < count; i++)
+	{ m_playerStats[i] = ps[i]; }
 }
 
 void Game::SetFans(const Fan* fans, int count)
@@ -83,6 +81,8 @@ void Game::SetFans(const Fan* fans, int count)
 	delete []m_fans;
 	m_actualFans = count;
 	m_fans       = new Fan[m_actualFans];
+	for (int i = 0; i < m_actualFans; i++)
+	{ m_fans[i] = fans[i]; }
 }
 
 void Game::SetReferees(const Referee* referees, int count)
@@ -91,7 +91,7 @@ void Game::SetReferees(const Referee* referees, int count)
 	m_referees      = new Referee[count];
 	m_refereesCount = count;
 	for (int i = 0; i < count; i++)
-	{ m_referees[i] = Referee(referees[i]); }
+	{ m_referees[i] = referees[i]; }
 }
 
 void Game::SetTeams(const Team* teams)
@@ -101,7 +101,7 @@ void Game::SetTeams(const Team* teams)
 	m_teams[0] = teams[0];
 	m_teams[1] = teams[1];
 	delete []m_playerStats;
-	int totalPlayers = GetTotalPlayers();
+	int totalPlayers = m_teams[0].GetPlayerNum() + m_teams[1].GetPlayerNum();
 	int counter;
 	m_playerStats = new PlayerStats*[totalPlayers];
 	
@@ -354,7 +354,7 @@ void Game::AddReferee(const Referee& ref)
 	for (int i = 0; i < m_refereesCount; i++)
 	{ newList[i] = m_referees[i]; }
 	newList[m_refereesCount] = ref;
-	delete[] m_referees; m_referees = newList;
+	delete []m_referees; m_referees = newList;
 	m_refereesCount++;
 }
 
@@ -386,7 +386,8 @@ void Game::AddFan(const Fan& fan)
 	for (int i = 0; i < m_actualFans; i++)
 	{ newList[i] = m_fans[i]; }
 	newList[m_actualFans] = fan;
-	delete []m_fans; m_actualFans++;
+	delete []m_fans; m_fans = newList;
+	m_actualFans++;
 }
 
 void Game::RemoveFan(const Fan& fan)
@@ -413,7 +414,7 @@ void Game::RemoveFan(const Fan& fan)
 
 void Game::SetTime(const TimeAndDate& tad)
 {
-	delete []m_timeAndDate;
+	delete m_timeAndDate;
 	m_timeAndDate = new TimeAndDate(tad);
 }
 

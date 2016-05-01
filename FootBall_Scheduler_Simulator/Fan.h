@@ -21,7 +21,7 @@ public:
 	const Team*  GetTeam()           { return m_team; }
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Fan& f)
-	{ os << (Person)f; return os; }
+	{ os << "Fan " << (Person)f; return os; }
 
 private:
 	Team* m_team;

@@ -94,7 +94,7 @@ void GamesByTimeDateNode::SetDate(const Date* d)
 }
 
 
-const Stadium & Stadium::operator=(const Stadium& s)
+const Stadium& Stadium::operator=(const Stadium& s)
 {
 	if (this != &s)
 	{
