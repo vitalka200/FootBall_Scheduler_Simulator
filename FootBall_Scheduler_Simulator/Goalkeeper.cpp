@@ -1,21 +1,30 @@
 #include "Goalkeeper.h"
 
+#include <time.h>
+#include <stdlib.h>
+
 const PlayerMovement Goalkeeper::MakeMove(bool hasBall)
 {
-	return PlayerMovement::CATCH_BALL;
+	srand(time(NULL));
+
+	return m_allowed_moves.moves[rand() % m_allowed_moves.numberOfMoves];
 }
 
 void Goalkeeper::CreateAllowedMoves()
 {
-	m_allowed_moves.numberOfMoves = 3;
+	m_allowed_moves.numberOfMoves = (m_plevel + 1)*CATCH_BALL + (m_plevel + 1)*PASS_BALL + (m_plevel + 1)*TACKLE_BALL;
 	m_allowed_moves.moves = new PlayerMovement[m_allowed_moves.numberOfMoves];
 
-	m_allowed_moves.moves[0] = PlayerMovement::CATCH_BALL;
-	m_allowed_moves.moves[1] = PlayerMovement::PASS_BALL;
-	m_allowed_moves.moves[2] = PlayerMovement::TACKLE_BALL;
+	int i = 0;
+	for (; i < (m_plevel + 1)*CATCH_BALL; i++)
+	{ m_allowed_moves.moves[i] = PlayerMovement::CATCH_BALL; }
+	for (; i < (m_plevel + 1)*PASS_BALL; i++)
+	{ m_allowed_moves.moves[i] = PlayerMovement::PASS_BALL; }
+	for (; i < (m_plevel + 1)*TACKLE_BALL; i++)
+	{ m_allowed_moves.moves[i] = PlayerMovement::TACKLE_BALL; }
 }
 
 void Goalkeeper::show(std::ostream & os) const
 {
-	os << std::endl << "Type: Defender";
+	os << std::endl << " Type: Defender";
 }

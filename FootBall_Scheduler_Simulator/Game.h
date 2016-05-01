@@ -19,18 +19,18 @@ public:
 
 	// c-tors, d-tors
 	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0),
-		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL)
-	{ m_refereesCount = 0; m_gameScore[0] = -1; m_gameScore[1] = -1; }
+		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL), m_playerStats(NULL)
+	{ m_refereesCount = 0; m_gameScore[0] = 0; m_gameScore[1] = 0; }
 
 	Game(const Team* teams, const TimeAndDate& tad, int maxFans)
 		: m_teams(NULL), m_referees(NULL), m_actualFans(0),
 		  m_maxFans(maxFans), m_timeAndDate(NULL),
-	      m_fans(NULL)                                { m_refereesCount = 0; SetTimeAndDate(&tad); SetTeams(teams);
-	                                                    m_gameScore[0] = -1; m_gameScore[1] = -1; }
+	      m_fans(NULL), m_playerStats(NULL)           { m_refereesCount = 0; SetTimeAndDate(&tad); SetTeams(teams);
+	                                                    m_gameScore[0] = 0; m_gameScore[1] = 0; }
 	Game(const Game& g)
 		: m_teams(NULL), m_referees(NULL),
 		  m_timeAndDate(NULL), m_fans(NULL),
-		  m_actualFans(0)                           { *this = g; }
+		  m_actualFans(0), m_playerStats(NULL)        { *this = g; }
 	~Game();
 	// Operators
 	bool        operator==(const Game& g)     const ;

@@ -44,13 +44,22 @@ void Team::AddPlayer(Player* p)
 	PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers+1];
 
 	for (int i = 0; i < m_numOfPlayers; i++)
-	{ newPList[i] = m_players[i]; newPSList[i] = m_playerStats[i]; }
+	{ 
+		newPList[i] = m_players[i];
+		newPSList[i] = m_playerStats[i];
+	    if (typeid(*(newPSList[i])) == typeid(Goalkeeper))
+	    { m_goalkeeper = newPList[i]; m_goalkeeperNum = i;}
+	}
 
 	newPList[m_numOfPlayers] = p;
 	newPSList[m_numOfPlayers] = new PlayerStats(p);
 
 	if (typeid(*p) == typeid(Goalkeeper))
 	{ m_goalkeeper = p; m_goalkeeperNum = m_numOfPlayers;}
+
+	delete []m_players; delete []m_playerStats;
+	m_players = newPList;
+	m_playerStats = newPSList;
 
 	m_numOfPlayers++;
 }
@@ -148,12 +157,12 @@ void Team::SetPlayers(Player** players, int count)
 
 	for (int i = 0; i < count; i++)
 	{
-		if (typeid(*m_players[i]) == typeid(Defender))
-		{ m_players[i] = new Defender(*dynamic_cast<Defender*>(m_players[i])); }
-		else if (typeid(*m_players[i]) == typeid(Forwarder))
-		{ m_players[i] = new Forwarder(*dynamic_cast<Forwarder*>(m_players[i])); }
-		else if (typeid(*m_players[i]) == typeid(Goalkeeper))
-		{ m_players[i] = new Goalkeeper(*dynamic_cast<Goalkeeper*>(m_players[i])); }
+		if (typeid(*players[i]) == typeid(Defender))
+		{ m_players[i] = new Defender(*dynamic_cast<Defender*>(players[i])); }
+		else if (typeid(*players[i]) == typeid(Forwarder))
+		{ m_players[i] = new Forwarder(*dynamic_cast<Forwarder*>(players[i])); }
+		else if (typeid(*players[i]) == typeid(Goalkeeper))
+		{ m_players[i] = new Goalkeeper(*dynamic_cast<Goalkeeper*>(players[i])); }
 	}
 }
 
@@ -178,14 +187,20 @@ void Team::SetPlayerStats(PlayerStats** ps, int count)
 
 void Team::DeletePlayers(Player** players)
 {
-	for (int i = 0; i < m_numOfPlayers; i++)
-	{ delete players[i]; }
+	if (players)
+	{
+		for (int i = 0; i < m_numOfPlayers; i++)
+		{ delete players[i]; }
+	}
 }
 
 void Team::DeletePlayerStats(PlayerStats** pStats)
 {
-	for (int i = 0; i < m_numOfPlayers; i++)
-	{ delete pStats[i]; }
+	if (pStats)
+	{
+		for (int i = 0; i < m_numOfPlayers; i++)
+		{ delete pStats[i]; }
+	}
 }
 
 const PlayerStats& PlayerStats::operator=(const PlayerStats& ps)

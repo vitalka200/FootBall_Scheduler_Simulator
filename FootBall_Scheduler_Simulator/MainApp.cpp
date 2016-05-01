@@ -5,7 +5,6 @@ using namespace std;
 
 void main()
 {
-	Game* g = new Game();
 	GameManager* gm = new GameManager();
 
 	gm->ManageTeams();

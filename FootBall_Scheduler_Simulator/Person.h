@@ -8,7 +8,7 @@ class Person
 public:
 	// c-tors, d-tors
 	Person(const char* name, const char* f_name, long id)
-		: m_name(NULL), m_fname(NULL)  {SetName(name); SetFName(f_name); SetId(id);}
+		: m_name(NULL), m_fname(NULL)  { SetName(name); SetFName(f_name); SetId(id); }
 	Person(const Person& p)
 		: m_name(NULL), m_fname(NULL)  { *this = p; }
 	virtual ~Person()                  { delete []m_name; delete []m_fname; }

@@ -114,9 +114,12 @@ void Game::SetTeams(const Team* teams)
 
 void Game::DeletePlayerStats(PlayerStats** pStats)
 {
-	int totalPlayers = GetTotalPlayers();
-	for (int i = 0; i < totalPlayers; i++)
-	{ delete pStats[i]; }
+	if (pStats)
+	{
+		int totalPlayers = GetTotalPlayers();
+		for (int i = 0; i < totalPlayers; i++)
+		{ delete pStats[i]; }
+	}
 }
 
 const Team* Game::GetWinner() const
@@ -176,7 +179,7 @@ void Game::StartGame()
 			if (typeid(*p1) == typeid(Goalkeeper) && p1HaveBall)
 			{
 				// we have ball and need to pass it
-				int playerNumToPass;
+				int playerNumToPass = 0;
 				while (playersMoved[playerNumToPass] != FREE_TO_GO && typeid(*p1) != typeid(Goalkeeper))
 				{ playerNumToPass = rand() % m_teams[0].GetPlayerNum(); }
 
@@ -297,7 +300,7 @@ void Game::StartGame()
 				if (*p1 > *gk)
 				{
 					m_teams[1].GetPlayerStats(gk)->AddMove(PlayerMovement::MISS_BALL);
-
+					m_gameScore[0]++;
 					gameStatsPlayer1->AddGoals();
 					teamStatsPlayer1->AddGoals();
 				}

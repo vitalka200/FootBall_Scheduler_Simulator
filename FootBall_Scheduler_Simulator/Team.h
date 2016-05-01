@@ -19,7 +19,8 @@ public:
 		: m_pl(NULL), m_moves(NULL)                   { m_redCards = 0; m_yellowCards = 0;
 	                                                    m_numOfGoal = 0; m_movesNumber = 0;
 														m_pl = pl; }
-	PlayerStats(const PlayerStats& ps)                { *this = ps; }
+	PlayerStats(const PlayerStats& ps)
+		: m_pl(NULL), m_moves(NULL)                   { *this = ps; }
 	const PlayerStats& operator=(const PlayerStats& ps);
 
 	~PlayerStats()                                    { delete []m_moves; }
@@ -53,7 +54,10 @@ public:
 		m_goalkeeper(NULL)                    { SetName(name); m_numOfPlayers = 0; m_goalkeeperNum = -1;
 	                                             m_numOfTrainers = 0; m_isAttacking = false; }
 	// Disable Copy and assigment
-	Team(const Team& t)                        { *this = t; }
+	Team(const Team& t)
+		: m_name(NULL), m_trainers(NULL),
+		m_players(NULL), m_playerStats(NULL),
+		m_goalkeeper(NULL)                    { *this = t; }
 	const Team& Team::operator=(const Team& t);
 
 	~Team();
@@ -88,7 +92,7 @@ public:
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Team& t)
 	{
-		os << "Name: " << t.GetName() << "PlayerNum: " << t.GetPlayerNum();
+		os << "Name: " << t.GetName() << " PlayerNum: " << t.GetPlayerNum();
 		return os;
 	}
 
