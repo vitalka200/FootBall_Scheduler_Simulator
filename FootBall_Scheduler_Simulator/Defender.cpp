@@ -26,5 +26,5 @@ void Defender::CreateAllowedMoves()
 
 void Defender::show(std::ostream & os) const
 {
-	os << std::endl << " Type: Forwarder";
+	os << " Type: Defender";
 }

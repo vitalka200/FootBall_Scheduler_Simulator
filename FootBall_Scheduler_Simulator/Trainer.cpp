@@ -3,7 +3,7 @@
 #include <time.h>
 
 
-const char* Trainer::TrainerDecisionNames[] = { "Change Player", "Move Player" };
+const char* Trainer::TrainerDecisionNames[] = { "No Decision", "Change Player" };
 
 TrainerDecision Trainer::MakeDecision(bool isTeamAttacking) const
 {

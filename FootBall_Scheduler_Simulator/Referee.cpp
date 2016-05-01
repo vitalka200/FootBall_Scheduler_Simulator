@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-const char* Referee::CardNames[] = { "Yellow", "Red" };
+const char* Referee::CardNames[] = { "No Card", "Yellow", "Red" };
 
 CardType Referee::MakeDecision()
 {

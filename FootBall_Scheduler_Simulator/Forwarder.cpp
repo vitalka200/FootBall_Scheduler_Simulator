@@ -29,6 +29,6 @@ void Forwarder::CreateAllowedMoves()
 
 void Forwarder::show(std::ostream & os) const
 {
-	os << std::endl << " Type: Forwarder";
+	os << " Type: Forwarder";
 }
 

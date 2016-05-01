@@ -26,5 +26,5 @@ void Goalkeeper::CreateAllowedMoves()
 
 void Goalkeeper::show(std::ostream & os) const
 {
-	os << std::endl << " Type: Defender";
+	os << " Type: Goalkeeper";
 }

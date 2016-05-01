@@ -23,9 +23,9 @@ public:
 
 	// c-tors, d-tors
 	Player(const char* name, const char* f_name, long id, Team* team, PlayerLevel pl = LOW) 
-	    : Person(name, f_name, id) { SetTeam(team); SetLevel(pl); }
+	    : Person(name, f_name, id), m_team(NULL)                      { SetTeam(team); SetLevel(pl); m_plevel = pl; }
 	Player(const Player& p)
-		: Person(p.m_name, p.m_fname, p.m_id)                         { m_allowed_moves.moves = NULL; *this = p; }
+		: Person(p.m_name, p.m_fname, p.m_id), m_team(NULL)           { m_allowed_moves.moves = NULL; m_plevel = p.m_plevel; Person::operator=(p); }
 	virtual ~Player()                                                 {if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves;}
 	// Methods
 	void                         SetTeam(Team* team)                  { m_team = team; }
@@ -50,7 +50,7 @@ public:
 	{os << Player::LevelNames[pl]; return os;}
 	friend std::ostream& operator<<(std::ostream& os, const Player& p)
 	{ 
-		os << "Name: " << p.GetName() << "FName: " << p.GetFName() << "Level: " << p.GetPLevel();
+		os << "Name: " << p.GetName() << " FName: " << p.GetFName() << " Level: " << Player::LevelNames[p.GetPLevel()];
 		p.show(os); return os;
 	}
 

@@ -6,7 +6,7 @@ const Person& Person::operator=(const Person& p)
 	{
 		SetId(p.GetId());
 		SetName(p.GetName());
-		SetFName(p.GetName());
+		SetFName(p.GetFName());
 	}
 	return *this;
 }
