@@ -7,5 +7,5 @@ const char* Referee::CardNames[] = { "Yellow", "Red" };
 CardType Referee::MakeDecision()
 {
 	srand(time(NULL));
-	return (CardType)(rand() % 2);
+	return (CardType)(rand() % 3);
 }
