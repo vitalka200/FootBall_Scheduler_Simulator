@@ -276,10 +276,11 @@ void GameManager::ManageTeams() {
 void GameManager::ManageGames() {
 	char yn = 'Y';
 	int c = 1;
-	while (c == 1 || c == 2)
+	while (true)
 	{
 		cout << endl << "Please enter Choice :\n 1-Add Game , 2-Cancel Game else-exit";
 		scan<int>(&c);
+		if (c != 1 && c != 2)
 		switch (c)
 		{
 		case 1:
@@ -541,8 +542,29 @@ void GameManager::StartGame() {
 
 }
 void GameManager::ManageGameSchedule() {
+	int c;
+	cout << "What Would you like to do ? 1 - view, 2- cancel Game. \n";
+	scan<int>(&c);
+	if (c == 1)
+	{
+		if (m_gamesLength>0)
+			PrintArray<Game>(m_gamesLength, m_games);
+	}
+	if (c == 2)
+	{
+		CancelGame();
+	}
 
 }
 void GameManager::GetStats() {
-
+	for (int i = 0; i < m_teamsLength; i++)
+	{
+		cout << m_teams[i];
+		int wins = 0;
+		for (int num = 0; num < m_gamesLength; num++) {
+			if ((m_games[i].GetWinner()) == &m_teams[i])
+				wins++;
+		}
+		cout << "Wins = " << wins << endl;
+	}
 }
