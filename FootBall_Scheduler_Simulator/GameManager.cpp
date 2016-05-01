@@ -183,7 +183,7 @@ void GameManager::ManageTeams(){
 void GameManager::ManageGames(){
 	char yn = 'Y';
 	int c = 1;
-	while (c == 1 | c == 2)
+	while (c == 1 || c == 2)
 	{
 		cout << "\nPlease enter Choice :\n 1-Add Game , 2-Cancel Game else-exit";
 		cin >> c;

@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Person.h"
 
-enum CardType { YELLOW, RED };
+enum CardType { NO_CARD, YELLOW, RED };
 
 class Referee : public Person
 {

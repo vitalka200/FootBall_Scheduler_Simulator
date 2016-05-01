@@ -54,7 +54,7 @@ public:
 	const int*          GetGameScore()         const { return m_gameScore; }
 	int                 GetTotalPlayers()      const ;
 
-	void       StartGame()                    const;
+	void       StartGame();
 
 	void       AddReferee(const Referee& ref);
 	void       RemoveReferee(const Referee& ref);
@@ -76,12 +76,13 @@ private:
 	Fan*          m_fans;
 
 	// Methods
-	void SetTimeAndDate(const TimeAndDate* tad);
-	void SetPlayerStats(PlayerStats** ps, int count);
-	void SetFans(const Fan* fans, int count);
-	void SetReferees(const Referee* referees, int count);
-	void SetTeams(const Team* teams);
-	void DeletePlayerStats(PlayerStats** pStats);
+	PlayerStats* GetPlayerStats(const Player* p);
+	void         SetTimeAndDate(const TimeAndDate* tad);
+	void         SetPlayerStats(PlayerStats** ps, int count);
+	void         SetFans(const Fan* fans, int count);
+	void         SetReferees(const Referee* referees, int count);
+	void         SetTeams(const Team* teams);
+	void         DeletePlayerStats(PlayerStats** pStats);
 
 };
 

@@ -7,7 +7,7 @@
 // Forward declaration
 class Team;
 
-enum PlayerMovement { STEAL_BALL, PASS_BALL, CATCH_BALL, MAKE_GOAL, TACKLE_BALL, RUN_TO_OPEN_SPACE, MAKE_FOUL };
+enum PlayerMovement { STEAL_BALL, PASS_BALL, CATCH_BALL, MISS_BALL, MAKE_GOAL, TACKLE_BALL, RUN_TO_OPEN_SPACE };
 enum PlayerLevel    { LOW, MEDIUM, HIGH };
 
 class Player : public Person
@@ -33,7 +33,7 @@ public:
 	void                         SetLevel(PlayerLevel pl)             { m_plevel = pl; }
 	int                          GetPNum()                      const { return m_pnum; }
 	const PlayerLevel            GetPLevel()                    const { return m_plevel; }
-	const Team*                  GetTeam()                      const { return m_team; }
+	Team*                        GetTeam()                      const { return m_team; }
 	virtual const PlayerMovement MakeMove(bool hasBall)                =0;
 	bool                         IsEqual(const Player* p)       const ;
 

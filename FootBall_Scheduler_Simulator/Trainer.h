@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Person.h"
 
-enum TrainerDecision { CHANGE_PLAYER, MOVE_PLAYER };
+enum TrainerDecision { NO_DECISION, CHANGE_PLAYER };
 
 class Trainer: public Person
 {
@@ -17,7 +17,7 @@ public:
 	// Operators
 	
 	// Methods
-	TrainerDecision MakeDecision();
+	TrainerDecision MakeDecision(bool isTeamAttacking) const;
 	
 	
 	// Methods overrides

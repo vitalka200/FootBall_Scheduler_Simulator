@@ -15,10 +15,13 @@ const Team& Team::operator=(const Team& t)
 		m_numOfPlayers  = t.m_numOfPlayers;
 		m_numOfTrainers = t.m_numOfTrainers;
 		m_isAttacking   = t.m_isAttacking;
+		m_goalkeeperNum = t.m_goalkeeperNum;
 		SetName(t.m_name);
 		SetPlayers(t.m_players, m_numOfPlayers);
 		SetTrainers(t.m_trainers, m_numOfTrainers);
 		SetPlayerStats(t.m_playerStats, m_numOfPlayers);
+		if (m_goalkeeperNum >= 0 )
+		{ m_goalkeeper = m_players[m_goalkeeperNum]; }
 	}
 	return *this;
 }
@@ -32,13 +35,7 @@ Team::~Team()
 
 Player* Team::operator[](int index)
 {
-	Player* p = NULL;
-	for (int i = 0; i < m_numOfPlayers; i++)
-	{
-		if (m_players[i]->GetId() == index)
-		{ p = m_players[i]; }
-	}
-	return p;
+	return m_players[index];
 }
 
 void Team::AddPlayer(Player* p)
@@ -51,6 +48,11 @@ void Team::AddPlayer(Player* p)
 
 	newPList[m_numOfPlayers] = p;
 	newPSList[m_numOfPlayers] = new PlayerStats(p);
+
+	if (typeid(*p) == typeid(Goalkeeper))
+	{ m_goalkeeper = p; m_goalkeeperNum = m_numOfPlayers;}
+
+	m_numOfPlayers++;
 }
 
 void Team::RemovePlayer(const Player* p)
@@ -77,6 +79,12 @@ void Team::RemovePlayer(const Player* p)
 		// Decrement counter
 		m_numOfPlayers--;
 	}
+
+	if (typeid(*p) == typeid(Goalkeeper))
+	{
+		m_goalkeeper = NULL; m_goalkeeperNum = -1;
+	}
+
 }
 
 void Team::AddTrainer(Trainer* t)
@@ -124,7 +132,7 @@ PlayerStats* Team::GetPlayerStats(const Player* p) const
 	return ps;
 }
 
-void Team::AddPlayerStat(const Player* p, const PlayerMovement* move, bool isActualGoal)
+void Team::AddPlayerStat(const Player* p, const PlayerMovement move, bool isActualGoal)
 {
 	PlayerStats* ps = GetPlayerStats(p);
 	ps->AddMove(move);
@@ -193,15 +201,21 @@ const PlayerStats& PlayerStats::operator=(const PlayerStats& ps)
 	return *this;
 }
 
-void PlayerStats::AddMove(const PlayerMovement* move)
+void PlayerStats::AddMove(const PlayerMovement move)
 {
 	PlayerMovement* newList = new PlayerMovement[m_movesNumber+1];
 
 	for (int i = 0; i < m_movesNumber; i++)
-	{ newList[i] = PlayerMovement(m_moves[i]); }
+	{ newList[i] = m_moves[i]; }
 
-	newList[m_movesNumber] = PlayerMovement(*move);
+	newList[m_movesNumber] = move;
 
 	delete []m_moves; m_moves = newList;
 	m_movesNumber++;
+}
+
+void PlayerStats::AddCard(const CardType card)
+{
+	if (card == CardType::RED) { m_redCards++; }
+	else if (card == CardType::YELLOW) { m_yellowCards++; }
 }
