@@ -6,7 +6,10 @@
 #include <time.h>
 #include <stdlib.h>
 
+#define NAME_LEN 20
+
 using namespace std;
+ifstream in("");
 
 
 /*
@@ -18,39 +21,43 @@ void PrintArray(int length, T* arr)
 {
 	for (int i = 0; i < length; i++)
 	{
-		cout << i+1 << ")" << arr[i] << endl;
+		std::cout << i + 1 << ")" << arr[i] << endl;
 	}
 }
 
-template<class S>
-void scan(S* Input) {
-	S var;
-	try
-	{
-		cin >> var;
-	}
-	catch (int e)
-	{
-		cout << endl << "\nAn exception occurred.Exception number : " << e << '\n';
-		exit(0);
-	}
-	*Input = var;
-}
 
-void scan_chars(char* input) {
-	cin >> input;
-}
-
-void GameManager::Redirect2File(char* inFileName, char* outFileName)
+void clearCin()
 {
-	std::ifstream in(inFileName);
-	std::streambuf *cinbuf = std::cin.rdbuf();
-	std::cin.rdbuf(in.rdbuf());
+	cin.clear(); while (cin.get() != '\n') { continue; }
+}
 
-	std::ofstream out(outFileName);
-	std::streambuf *coutbuf = std::cout.rdbuf();
-	std::cout.rdbuf(out.rdbuf());
+//try
+template<class T>
+void scan(T& input) {
+	while (true)
+	{
+		std::cin >> input;
+		if (cin.good())
+		{
+			cout << input << endl; break;
+		}
+		else
+		{
+			std::cout << endl << "Wrong input. Please reenter" << endl; clearCin();
+		}
+	}
+	clearCin();
+}
 
+
+
+
+void GameManager::Redirect2File(char* inFileName)
+{
+	in = ifstream(inFileName);
+	if (!in.good()) throw exception();
+	// actual redirect
+	cin.rdbuf(in.rdbuf());
 }
 
 void GameManager::Redirect2ios()
@@ -64,27 +71,34 @@ void GameManager::Redirect2ios()
 /*
 End
 */
-const GameList GameManager::operator[](const Date& d) const
+ GameList GameManager::operator[](const Date& d) const
 {
 	GameList res;
 	res.games = new Game[m_gamesLength];
-	res.count = m_gamesLength;
+	res.count = 0;
 	int length = 0;
 	for (int i = 0; i < m_stadiumsLength; i++) {
-		const GameList gameList = m_stadiums[i].GetGamesByDate(d);
-		for (int j = 0; j < gameList.count; j++)
+		const GameList *gameList = m_stadiums[i].GetGamesByDate(d);
+		for (int j = 0; j < gameList->count; j++)
 		{
-			res.games[res.count++] = gameList.games[j];
+			res.games[res.count++] = gameList->games[j];
+			length++;
 		}
 	}
-	return res;
+	GameList newRes;
+	newRes.count = length;
+	for (int i = 0; i < length; i++)
+	{
+		newRes.games[i] = res.games[i];
+	}
+	return newRes;
 }
 
 const GameList GameManager::operator[](const TimeAndDate& tad) const
 {
 	GameList res;
 	res.games = new Game[m_gamesLength];
-	res.count = m_gamesLength;
+	res.count = 0;
 	int length = 0;
 	for (int i = 0; i < m_stadiumsLength; i++) {
 		if (m_stadiums[i].GetGameByTimeAndDate(tad))
@@ -97,26 +111,26 @@ const GameList GameManager::operator[](const TimeAndDate& tad) const
 
 void GameManager::CancelGame() {
 	int stadium_num, game_num, game_date;
-	cout << "choose a stadium :: \n";
+	std::cout << "choose a stadium :: \n";
 	PrintArray<Stadium>(m_stadiumsLength, m_stadiums);
-	scan<int>(&stadium_num);
-
-	cout << "please choose a Date :: \n";
+	scan<int>(stadium_num);
+	stadium_num--;
+	std::cout << "please choose a Date :: \n";
 	GamesByTimeDateNode* gamesList = m_stadiums[stadium_num].m_gameList;
 	for (int i = 0; i < m_stadiums[stadium_num].m_numOfNodes; i++)
 	{
-		cout << i << " - " << gamesList[i].GetDate() << endl << "";
+		std::cout << i << " - " << gamesList[i].GetDate() << endl << "";
 	}
 
-	scan<int>(&game_date);
+	scan<int>(game_date);
 
-	cout << "please choose a game :: \n";
+	std::cout << "please choose a game :: \n";
 	for (int i = 0; i < gamesList[game_date].GetGamesCount(); i++)
 	{
-		cout << i << " - " << gamesList[game_date].GetGameById(i) << endl << "";
+		std::cout << i << " - " << gamesList[game_date].GetGameById(i) << endl << "";
 	}
 
-	scan<int>(&game_num);
+	scan<int>(game_num);
 	m_stadiums[stadium_num].RemoveGame(&(gamesList[game_date].GetGameById(game_num)));
 }
 
@@ -128,48 +142,48 @@ void GameManager::SellTickets() {
 		pick = rand() % 2;
 		if (pick)
 		{
-			m_games[m_gamesLength - 1] += Fan("name" + i);
+			m_games[m_gamesLength - 1] += Fan("name");
 		}
 	}
 }
 
 void GameManager::ManageTrainers() {
-	char name[20], f_name[20];
+	char name[NAME_LEN], f_name[NAME_LEN];
 	long id;
 	for (int i = 0; i<m_teamsLength; i++)
 	{
-		cout << endl << "team number " << i << ".\nenter Name :";
-		scan_chars(name);
-		cout << endl << "enter first Name :";
-		scan_chars(f_name);
-		cout << endl << "enter id :";
-		scan<long>(&id);
+		std::cout << endl << "team number " << i << ".\nenter Name :";
+		scan(name);
+		std::cout << endl << "enter first Name :";
+		scan(f_name);
+		std::cout << endl << "enter id :";
+		scan<long>(id);
 		m_teams[i] += (new Trainer(name, f_name, id));
 	}
 }
 
 void GameManager::ManageReferees() {
 	int numberOfReferees, choice;
-	cout << endl << "Would you like to add or remove Referee ?  1 - add, 2- remove \n";
-	scan<int>(&choice);
+	std::cout << endl << "Would you like to add or remove Referee ?  1 - add, 2- remove \n";
+	scan<int>(choice);
 	if (choice == 1) {
-		cout << "Please enter number of Referees : " << endl;
-		scan<int>(&numberOfReferees);
+		std::cout << "Please enter number of Referees : " << endl;
+		scan<int>(numberOfReferees);
 		Referee* m_newReferees = new Referee[m_refereesLength + numberOfReferees];
 		for (int i = 0; i < m_refereesLength; i++)
 		{
 			m_newReferees[i] = m_referees[i];
 		}
-		char name[20], f_name[20];
+		char name[NAME_LEN], f_name[NAME_LEN];
 		long id;
 		for (int i = m_refereesLength; i < numberOfReferees + m_refereesLength; i++)
 		{
-			cout << endl << "enter Name:";
-			scan_chars(name);
-			cout << endl << "enter first name :";
-			scan_chars(f_name);
-			cout << endl << "enter id: ";
-			scan<long>(&id);
+			std::cout << endl << "enter Name:";
+			scan(name);
+			std::cout << endl << "enter first name :";
+			scan(f_name);
+			std::cout << endl << "enter id: ";
+			scan<long>(id);
 			m_newReferees[i] = Referee(name, f_name, id);
 		}
 		delete[]m_referees;
@@ -179,8 +193,8 @@ void GameManager::ManageReferees() {
 	else {
 		int ref;
 		for (int i = 0; i < m_refereesLength; i++)
-			cout << i << "-" << m_referees[i] << endl;
-		scan<int>(&ref);
+			std::cout << i << "-" << m_referees[i] << endl;
+		scan<int>(ref);
 		Referee* new_referee = new Referee[m_refereesLength - 1];
 		for (int i = 0; i < ref; i++)
 		{
@@ -198,15 +212,14 @@ void GameManager::ManageReferees() {
 
 void GameManager::ManageTeams() {
 	int numberOfTeams, numberOfPlayers, level, type;
-	char name[20], f_name[20];
+	char name[NAME_LEN], f_name[NAME_LEN];
 	long id;
-	cout << "Would you like to add or move Team ? add - 1 , remove - 2 \n";
-	scan<int>(&type);
+	std::cout << "Would you like to add or move Team ? add - 1 , remove - 2 \n";
+	scan<int>(type);
 	if (type == 1) {
-		cout << "Please enter number of Teams : " << m_teamsLength << endl;
-		scan<int>(&numberOfTeams);
+		std::cout << "Please enter number of Teams : " << endl;
+		scan<int>(numberOfTeams);//call try
 		Team* m_NewTeams = new Team[numberOfTeams + m_teamsLength];
-		cout << numberOfTeams;
 
 		for (int i = m_teamsLength; i < m_teamsLength; i++)
 		{
@@ -215,24 +228,25 @@ void GameManager::ManageTeams() {
 
 		for (int i = m_teamsLength; i < numberOfTeams + m_teamsLength; i++)
 		{
-			cout << endl << "Team number : " << i + 1 << " \nenter Name:";
-			scan_chars(name);
-			cout << endl << "number of Players in the team :";
-			scan<int>(&numberOfPlayers);
+			std::cout << endl << "Team number : " << i + 1 << " \nenter Name:";
+			//std::cin >> name);
+			scan(name);
+			std::cout << endl << "number of Players in the team :";
+			scan<int>(numberOfPlayers);
 			Team t = Team(name);
 
 			for (int i = 0; i < numberOfPlayers; i++)
 			{
-				cout << endl << "type of Player :: 1-forwarder , 2- Defender,3-GoalKeeper\n";
-				scan<int>(&type);
-				cout << endl << "Player name: ";
-				scan_chars(name);
-				cout << endl << "Player first name : ";
-				scan_chars(f_name);
-				cout << endl << "Player id: ";
-				scan<long>(&id);
-				cout << endl << "Player Level 0-4, 0 if Default : ";
-				scan<int>(&level);
+				std::cout << endl << "type of Player :: 1-forwarder , 2- Defender,3-GoalKeeper\n";
+				scan<int>(type);
+				std::cout << endl << "Player name: ";
+				scan(name);
+				std::cout << endl << "Player first name : ";
+				scan(f_name);
+				std::cout << endl << "Player id: ";
+				scan<long>(id);
+				std::cout << endl << "Player Level 0-4, 0 if Default : ";
+				scan<int>(level);
 				switch (type)
 				{
 				case 1: t += new Forwarder(name, f_name, id, &m_teams[i], (PlayerLevel)level);		break;
@@ -242,12 +256,12 @@ void GameManager::ManageTeams() {
 					throw exception("\nthe values where invalid.\n");
 				}
 			}
-			cout << endl << "enter Trainer Name :";
-			scan_chars(name);
-			cout << endl << "enter Trainer first Name :";
-			scan_chars(f_name);
-			cout << endl << "enter Trainer id :";
-			scan<long>(&id);
+			std::cout << endl << "enter Trainer Name :";
+			scan(name);
+			std::cout << endl << "enter Trainer first Name :";
+			scan(f_name);
+			std::cout << endl << "enter Trainer id :";
+			scan<long>(id);
 			t += (new Trainer(name, f_name, id));
 			m_NewTeams[i] = t;
 		}
@@ -256,9 +270,10 @@ void GameManager::ManageTeams() {
 	}
 	else {
 		int team_num;
-		cout << "Please choose a team : \n";
+		std::cout << "Please choose a team : \n";
 		PrintArray<Team>(m_teamsLength, m_teams);
-		scan<int>(&team_num);
+		scan<int>(team_num);
+		team_num--;
 		Team * new_teams = new Team[m_teamsLength - 1];
 		for (int i = 0; i < team_num; i++)
 		{
@@ -279,30 +294,30 @@ void GameManager::ManageGames() {
 	int c = 1;
 	while (1)
 	{
-		cout << endl << "Please enter Choice :\n 1-Add Game , 2-Cancel Game else-exit \n";
-		scan<int>(&c);
+		std::cout << endl << "Please enter Choice :\n 1-Add Game , 2-Cancel Game else-exit \n";
+		scan<int>(c);
 		if (c != 1 && c != 2)
 			break;
-			switch (c)
+		switch (c)
 		{
-			case 1:
-				while (yn == 'Y') {
-					cout << endl << "Would you like to add a new Game? : Y -yes,N-no \n";
-					scan<char>(&yn);
-					if (yn == 'Y') {
-						NewGame();
-					}
+		case 1:
+			while (yn == 'Y') {
+				std::cout << endl << "Would you like to add a new Game? : Y -yes,N-no \n";
+				scan<char>(yn);
+				if (yn == 'Y') {
+					NewGame();
 				}
-				break;
-			case 2:
-				while (yn == 'Y') {
-					cout << endl << "Would you like to Cancel Game? : Y -yes,N-no \n";
-					scan<char>(&yn);
-					if (yn == 'Y') {
-						CancelGame();
-					}
+			}
+			break;
+		case 2:
+			while (yn == 'Y') {
+				std::cout << endl << "Would you like to Cancel Game? : Y -yes,N-no \n";
+				scan<char>(yn);
+				if (yn == 'Y') {
+					CancelGame();
 				}
-				break;
+			}
+			break;
 		}
 	}
 
@@ -311,15 +326,16 @@ void GameManager::ManageGames() {
 void GameManager::ManageStadiums()
 {
 	int Stdm, Cs;
-	cout << "Managing stadiums" << endl;
-	cout << "What would you like to do ? 1 - Delete, 2 - Update, 3 - Add \n";
-	scan<int>(&Cs);
+	std::cout << "Managing stadiums" << endl;
+	std::cout << "What would you like to do ? 1 - Delete, 2 - Update, 3 - Add \n";
+	scan<int>(Cs);
 
 	if (Cs != 3)
 	{
-		cout << "Enter stadium number from list --> \n\n";
+		std::cout << "Enter stadium number from list --> \n\n";
 		PrintArray<Stadium>(m_stadiumsLength, m_stadiums);
-		scan<int>(&Stdm);
+		scan<int>(Stdm);
+		Stdm--;
 		Stadium* m_Newstadium = new Stadium[m_stadiumsLength - 1];
 		if (Cs == 1)
 		{
@@ -337,19 +353,19 @@ void GameManager::ManageStadiums()
 		else
 		{
 			int UpD;
-			cout << "Choose value to be updated :  1- Name, 2- Max fans \n";
-			scan<int>(&UpD);
-			cout << "Enter new value";
+			std::cout << "Choose value to be updated :  1- Name, 2- Max fans \n";
+			scan<int>(UpD);
+			std::cout << "Enter new value";
 			if (UpD == 1)
 			{
-				char val[20];
-				scan_chars(val);
+				char val[NAME_LEN];
+				scan(val);
 				m_stadiums[Stdm].SetName(val);
 			}
 			if (UpD == 2)
 			{
 				int val;
-				scan<int>(&val);
+				scan<int>(val);
 				m_stadiums[Stdm].SetMaxFans(val);
 			}
 		}
@@ -357,13 +373,13 @@ void GameManager::ManageStadiums()
 	}
 	else
 	{
-		char name[20];
+		char name[NAME_LEN];
 		int Maxfans;
 		Stadium* newM_Stadium = new Stadium[m_stadiumsLength + 1];
-		cout << "Enter stadium Name : ";
-		scan_chars(name);
-		cout << endl << "Enter max fans : ";
-		scan<int>(&Maxfans);
+		std::cout << "Enter stadium Name : ";
+		scan(name);
+		std::cout << endl << "Enter max fans : ";
+		scan<int>(Maxfans);
 		Stadium s = Stadium(name, Maxfans);
 		for (int i = 0; i < m_stadiumsLength; i++)
 		{
@@ -380,28 +396,28 @@ void GameManager::NewGame() {
 	Game* g = NULL;
 	Team* teams = new Team[2];
 	int t1, t2, minutes, hours, day, month, year, maxFans;
-	cout << "Please choose teams : \n";
+	std::cout << "Please choose teams : \n";
 	PrintArray<Team>(m_teamsLength, m_teams);
-	cout << endl << "Please enter Team number 1 id :- ";
-	scan<int>(&t1);
+	std::cout << endl << "Please enter Team number 1 id :- ";
+	scan<int>(t1);
 	t1--;
-	cout << endl << "Please enter Team number 2 id :- ";
-	scan<int>(&t2);
+	std::cout << endl << "Please enter Team number 2 id :- ";
+	scan<int>(t2);
 	t2--;
 	teams[0] = m_teams[t1];
 	teams[1] = m_teams[t2];
-	cout << endl << "enter date : " << "\n day: "; 
-	scan<int>(&day);
-	cout << "\nmonth : ";
-	scan<int>(&month);
-	cout << "\nyear : ";
-	scan<int>(&year);
-	cout << endl << "enter time :"<<  "\nhours : ";
-	scan<int>(&hours);
-	cout << "\nminutes :";
-	scan<int>(&minutes);
-	cout << endl << "Please enter number of maximum fans : ";
-	scan<int>(&maxFans);
+	std::cout << endl << "enter date : " << "\n day: ";
+	scan<int>(day);
+	std::cout << "\nmonth : ";
+	scan<int>(month);
+	std::cout << "\nyear : ";
+	scan<int>(year);
+	std::cout << endl << "enter time :" << "\nhours : ";
+	scan<int>(hours);
+	std::cout << "\nminutes :";
+	scan<int>(minutes);
+	std::cout << endl << "Please enter number of maximum fans : ";
+	scan<int>(maxFans);
 	Date d = Date(day, month, year);
 	Time t = Time(hours, minutes);
 	TimeAndDate tad = TimeAndDate(t, d);
@@ -412,6 +428,7 @@ void GameManager::NewGame() {
 		new_games[i] = m_games[i];
 	}
 	new_games[m_gamesLength] = *g;
+	delete[]m_games;
 	m_games = new_games;
 	m_gamesLength++;
 	//delete[]teams;
@@ -448,31 +465,35 @@ void GameManager::RemoveGame(const Game& g)
 void GameManager::GetGameLog()
 {
 	for (int i = 0; i < m_gamesLength; i++)
-		cout << m_games[i] << endl;
+		std::cout << m_games[i] << endl;
 }
 
 
 void GameManager::GetMonthSummary()
 {
 	int year, month;
-	cout << "Enter Year :";
-	scan<int>(&year);
+	std::cout << "Enter Year :";
+	scan<int>(year);
 
-	cout << "Enter Month :";
-	scan<int>(&month);
+	std::cout << "Enter Month :";
+	scan<int>(month);
 	Date d = Date(year, month);
 	GameList list = (*this)[d];
-	if (!list.count)
-		cout << "There are not games in that month.";
+
+	PrintArray<Game>(list.count, list.games);
+	if (list.count==0)
+	{
+		cout << "There are no games this month!." << endl;
+	}
 	else
 	{
-		cout << "The Month summary: \n";
+		std::cout << "The Month summary: \n";
 		for (int i = 0; i < list.count; i++) {
-			cout << list.games[i] << "winner";
+			std::cout << list.games[i] << "winner";
 			if (list.games[i].GetWinner())
-				cout << list.games[i].GetWinner() << endl;
+				std::cout << list.games[i].GetWinner() << endl;
 			else
-				cout << "Not yet determined" << endl;
+				std::cout << "Not yet determined" << endl;
 		}
 	}
 
@@ -482,10 +503,11 @@ void GameManager::GetMonthSummary()
 void GameManager::GetTeamSummary()
 {
 	int Tm;
-	cout << "Choose team number -->" << endl;
+	std::cout << "Choose team number -->" << endl;
 	PrintArray<Team>(m_teamsLength, m_teams);
-	scan<int>(&Tm);
-	cout << m_teams[Tm] << endl;
+	scan<int>(Tm);
+	Tm--;
+	std::cout << m_teams[Tm] << endl;
 }
 
 void GameManager::ManagePlayers()
@@ -493,97 +515,124 @@ void GameManager::ManagePlayers()
 	int p, Cs;
 	//GetTeamSummary();
 	int Tm;
-	cout << "Choose team number -->" << endl;
+	std::cout << "Choose team number -->" << endl;
 	PrintArray<Team>(m_teamsLength, m_teams);
-	scan<int>(&Tm);
-	cout << m_teams[Tm] << '\n' << "What would you like to do ? 1-delete 2- update 3- add \n";
-	scan<int>(&Cs);
+	scan<int>(Tm);
+	Tm--;
+	std::cout << m_teams[Tm] << '\n' << "What would you like to do ? 1-delete 2- update 3- add \n";
+	scan<int>(Cs);
 	switch (Cs)
 	{
 	case 1:
-		cout << "Enter Player number in the Team";
-		scan<int>(&p);
+	{
+		std::cout << "Enter Player number in the Team";
+		scan<int>(p);
 		m_teams[Tm] -= m_teams[Tm][p];
 		break;
+	}
 	case 2:
+	{
 		int Cs2;
-		cout << "Enter Player number in the Team";
-		scan<int>(&p);
-		cout << endl << "What to update ? 1-name 2-strength";
-		scan<int>(&Cs2);
+		std::cout << "Enter Player number in the Team";
+		scan<int>(p);
+		std::cout << endl << "What to update ? 1-name 2-strength";
+		scan<int>(Cs2);
 		if (Cs2 == 1)
 		{
-			char name[20];
-			cout << "Enter value : ";
-			scan_chars(name);
+			char name[NAME_LEN];
+			std::cout << "Enter value : ";
+			scan(name);
 			m_teams[Tm][p]->SetName(name);
 		}
 		if (Cs2 == 2)
 		{
 			int S;
-			cout << "Enter value : ";
-			scan<int>(&S);
+			std::cout << "Enter value : ";
+			scan<int>(S);
 			m_teams[Tm][p]->SetLevel(PlayerLevel(S));
 		}
 		break;
+	}
 	case 3:
+	{
 		int type, id, level;
 		int pnum;
-		char name[20], f_name[20];
-		cout << endl << "type of Player :: 1-forwarder , 2- Defender,3-GoalKeeper";
-		scan<int>(&type);
-		cout << endl << "Player name: ";
-		scan_chars(name);
-		cout << endl << "Player first name : ";
-		scan_chars(f_name);
-		cout << endl << "Player id: ";
-		scan<int>(&id);
-		cout << endl << "Player number : ";
-		scan<int>(&pnum);
-		cout << endl << "Player Level 0-4, 0 if Default : ";
-		scan<int>(&level);
+		char name[NAME_LEN], f_name[NAME_LEN];
+		std::cout << endl << "type of Player :: 1-forwarder , 2- Defender,3-GoalKeeper";
+		scan<int>(type);
+		std::cout << endl << "Player name: ";
+		scan(name);
+		std::cout << endl << "Player first name : ";
+		scan(f_name);
+		std::cout << endl << "Player id: ";
+		scan<int>(id);
+		std::cout << endl << "Player number : ";
+		scan<int>(pnum);
+		std::cout << endl << "Player Level 0-4, 0 if Default : ";
+		scan<int>(level);
 
 		switch (type)
 		{
-		case 1: m_teams[Tm] += new Forwarder(name, f_name, id, &m_teams[Tm], (PlayerLevel)level);		break;
-		case 2: m_teams[Tm] += new Defender(name, f_name, id, &m_teams[Tm], (PlayerLevel)level);		break;
-		case 3: m_teams[Tm] += new Goalkeeper(name, f_name, id, &m_teams[Tm], (PlayerLevel)level);		break;
+		case 1: {m_teams[Tm] += new Forwarder(name, f_name, id, &m_teams[Tm], (PlayerLevel)level);		break; }
+		case 2: {m_teams[Tm] += new Defender(name, f_name, id, &m_teams[Tm], (PlayerLevel)level);		break; }
+		case 3: {m_teams[Tm] += new Goalkeeper(name, f_name, id, &m_teams[Tm], (PlayerLevel)level);		break; }
 		default:
 			throw exception("\nthe values where invalid.\n");
 		}
 		break;
+	}
 	default:
+	{	break; }
+	}
+}
+
+void GameManager::StartGame()
+{
+
+}
+void GameManager::ManageGameSchedule()
+{
+	int c;
+	bool caseWhile = true;
+	std::cout << "What Would you like to do ? 1 - view, 2- cancel Game. \n";
+	scan<int>(c);
+	switch (c)
+	{
+	case 1:
+	{
+		if (m_gamesLength > 0)
+		{
+			PrintArray<Game>(m_gamesLength, m_games);
+		}
 		break;
 	}
-}
-
-void GameManager::StartGame() {
-
-}
-void GameManager::ManageGameSchedule() {
-	int c;
-	cout << "What Would you like to do ? 1 - view, 2- cancel Game. \n";
-	scan<int>(&c);
-	if (c == 1)
-	{
-		if (m_gamesLength>0)
-			PrintArray<Game>(m_gamesLength, m_games);
-	}
-	if (c == 2)
+	case 2:
 	{
 		CancelGame();
+		break;
 	}
-
+	default:
+	{break; }
+	}
 }
-void GameManager::GetStats() {
+void GameManager::GetStats()
+{
 	for (int i = 0; i < m_teamsLength; i++)
 	{
-		cout << m_teams[i];
-		int wins =0;
+		std::cout << m_teams[i];
+		int wins = 0;
 		for (int num = 0; num < m_gamesLength; num++){
 			if ((m_games[i].GetWinner()) == &m_teams[i])
 				wins++;
 		}
-		cout << "Wins = " << wins << endl;
+		std::cout << "Wins = " << wins << endl;
 	}
+}
+
+
+void GameManager::TryInputMethod()
+{
+	try{ Redirect2File("in.txt"); }
+	catch (exception e){ std::cout << "unable to read from file.\n"; }
+	if (cin.bad()) { std::cout << "Bad redirect."; }
 }
