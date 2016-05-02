@@ -78,10 +78,10 @@ End
 	res.count = 0;
 	int length = 0;
 	for (int i = 0; i < m_stadiumsLength; i++) {
-		const GameList *gameList = m_stadiums[i].GetGamesByDate(d);
-		for (int j = 0; j < gameList->count; j++)
+		GameList gameList = m_stadiums[i].GetGamesByDate(d);
+		for (int j = 0; j < gameList.count; j++)
 		{
-			res.games[res.count++] = gameList->games[j];
+			res.games[res.count++] = gameList.games[j];
 			length++;
 		}
 	}

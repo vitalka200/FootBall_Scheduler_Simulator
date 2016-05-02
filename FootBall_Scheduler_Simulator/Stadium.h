@@ -77,7 +77,7 @@ public:
 	const char*    GetName()                                    const { return m_name; }
 	int            GetMaxFans()                                 const { return m_maxFans; }
 	const Game*    GetGameByTimeAndDate(const TimeAndDate& tad) const ;
-	const GameList GetGamesByDate(const Date& d)                const ;
+	GameList       GetGamesByDate(const Date& d)                const ;
 	bool           AddGame(const Game* g);
 	bool           RemoveGame(const Game* g);
 	bool           MoveGameTime(const Game* g, const TimeAndDate& newTad);

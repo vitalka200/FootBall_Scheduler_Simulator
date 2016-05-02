@@ -93,7 +93,7 @@ void GamesByTimeDateNode::SetDate(const Date* d)
 	m_date = new Date(*d);
 }
 
-const GameList& operator=(const GameList& gl)
+const GameList& GameList::operator=(const GameList& gl)
 {
 	if (this != &gl)
 	{
@@ -121,7 +121,7 @@ const Stadium& Stadium::operator=(const Stadium& s)
 
 const Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
 {
-	const GameList* glByDate = &(GetGamesByDate(tad.GetDate()));
+	GameList* glByDate = &(GetGamesByDate(tad.GetDate()));
 
 	for (int i = 0; i < glByDate->count; i++)
 	{
@@ -131,7 +131,7 @@ const Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
 	return NULL;
 }
 
-const GameList Stadium::GetGamesByDate(const Date& d) const
+GameList Stadium::GetGamesByDate(const Date& d) const
 {
 	GameList gl;
 
