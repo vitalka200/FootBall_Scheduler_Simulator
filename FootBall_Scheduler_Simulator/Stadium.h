@@ -51,7 +51,10 @@ public:
 	Game* games;
 	int   count;
 	GameList() : games(NULL), count(0) { }
-	~GameList()                        { delete []games; }
+	GameList(const GameList& gl) : games(NULL), count(0) { *this = gl; }
+	~GameList()                                          { delete []games; }
+	
+	const GameList& operator=(const GameList& gl);
 };
 
 class Stadium

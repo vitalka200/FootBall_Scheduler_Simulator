@@ -93,6 +93,18 @@ void GamesByTimeDateNode::SetDate(const Date* d)
 	m_date = new Date(*d);
 }
 
+const GameList& operator=(const GameList& gl)
+{
+	if (this != &gl)
+	{
+		count = gl.count;
+		
+		games = new Game[count];
+		for (int i= 0; i < count; i++)
+		{ games[i] = gl.games[i]; }
+	}
+	return *this;
+}
 
 const Stadium& Stadium::operator=(const Stadium& s)
 {
