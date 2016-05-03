@@ -41,7 +41,7 @@ private:
 	void SetGames(const Game* games, int count);
 
 	// Hidden default c-tor. available only for Stadium
-	GamesByTimeDateNode() : m_date(NULL),  m_games(NULL) { }
+	GamesByTimeDateNode() : m_date(NULL), m_games(NULL), m_numOfGames (0) { }
 	void SetDate(const Date* d);
 };
 

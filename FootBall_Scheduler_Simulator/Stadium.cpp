@@ -35,7 +35,7 @@ bool GamesByTimeDateNode::AddGame(const Game* g)
 		{
 			// we found not scheduled time slice. Let's make some space
 			Game* newGamesSchedule = new Game[m_numOfGames+1];
-			for (int j = 0; j < i; i++)
+			for (int j = 0; j < i; j++)
 			{ newGamesSchedule[j] = m_games[j]; }
 			newGamesSchedule[i] = *g; m_numOfGames++;
 			// Copy leftovers if any
@@ -164,7 +164,7 @@ bool Stadium::AddGame(const Game* g)
 			// This date not scheduled for any game
 			// Let's create one
 			GamesByTimeDateNode* new_gameList = new GamesByTimeDateNode[m_numOfNodes+1];
-			for (int j = 0; j < i; i++)
+			for (int j = 0; j < i; j++)
 			{ new_gameList[j] = m_gameList[j]; }
 			// insert new element
 			new_gameList[i].SetDate(&(g->GetTimeAndDate()->GetDate()));

@@ -19,7 +19,7 @@ public:
 
 	void  SetName(const char* name)    { delete []m_name;  m_name = strdup(name); }
 	void  SetFName(const char* f_name) { delete []m_fname; m_fname = strdup(f_name); }
-	void  SetId(long id)               { id = m_id; }
+	void  SetId(long id)               { m_id = id; }
 
 	// Operators
 	const Person& operator=(const Person& p);

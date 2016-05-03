@@ -269,7 +269,7 @@ void Game::StartGame()
 							// Decide on player to change
 							int playerToExchange = 0;
 
-							while ((playersMoved[teamNumThatGotCard][playerToExchange] != FREE_TO_GO ||
+							while ((playersMoved[teamNumThatGotCard][playerToExchange] != FREE_TO_GO &&
 								playersMoved[teamNumThatGotCard][playerToExchange] != CHANGED) &&
 								typeid(*p1) != typeid(Goalkeeper))
 							{ playerToExchange = rand() % teamWithCard->GetPlayerNum(); }

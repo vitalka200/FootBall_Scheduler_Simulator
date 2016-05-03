@@ -221,7 +221,7 @@ void GameManager::ManageTeams() {
 		scan<int>(numberOfTeams);//call try
 		Team* m_NewTeams = new Team[numberOfTeams + m_teamsLength];
 
-		for (int i = m_teamsLength; i < m_teamsLength; i++)
+		for (int i = 0; i < m_teamsLength; i++)
 		{
 			m_NewTeams[i] = m_teams[i];
 		}
@@ -235,7 +235,7 @@ void GameManager::ManageTeams() {
 			scan<int>(numberOfPlayers);
 			Team t = Team(name);
 
-			for (int i = 0; i < numberOfPlayers; i++)
+			for (int j = 0; j < numberOfPlayers; j++)
 			{
 				std::cout << endl << "type of Player :: 1-forwarder , 2- Defender,3-GoalKeeper\n";
 				scan<int>(type);
@@ -265,6 +265,7 @@ void GameManager::ManageTeams() {
 			t += (new Trainer(name, f_name, id));
 			m_NewTeams[i] = t;
 		}
+		delete []m_teams;
 		m_teams = m_NewTeams;
 		m_teamsLength += numberOfTeams;
 	}
@@ -347,6 +348,7 @@ void GameManager::ManageStadiums()
 			{
 				m_Newstadium[i - 1] = m_stadiums[i];
 			}
+			delete []m_stadiums;
 			m_stadiums = m_Newstadium;
 			m_stadiumsLength--;
 		}
