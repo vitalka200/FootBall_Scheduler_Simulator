@@ -6,7 +6,12 @@
 const PlayerMovement Goalkeeper::MakeMove(bool hasBall)
 {
 	srand(time(NULL));
-
+	
+	if (hasBall)
+	{
+		// If we have ball, we pass it
+		return PlayerMovement::PASS_BALL;
+	}
 	return m_allowed_moves.moves[rand() % m_allowed_moves.numberOfMoves];
 }
 

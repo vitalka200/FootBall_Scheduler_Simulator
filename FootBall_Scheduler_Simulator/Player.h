@@ -25,7 +25,8 @@ public:
 	Player(const char* name, const char* f_name, long id, Team* team, PlayerLevel pl = LOW) 
 	    : Person(name, f_name, id), m_team(NULL)                      { SetTeam(team); SetLevel(pl); m_plevel = pl; m_allowed_moves.numberOfMoves = 0; }
 	Player(const Player& p)
-		: Person(p.m_name, p.m_fname, p.m_id), m_team(NULL)           { m_allowed_moves.moves = NULL; m_plevel = p.m_plevel; Person::operator=(p); }
+		: Person(p.m_name, p.m_fname, p.m_id), m_team(NULL)           { m_allowed_moves.moves = NULL; m_allowed_moves.numberOfMoves = p.m_allowed_moves.numberOfMoves;
+	                                                                    m_plevel = p.m_plevel; Person::operator=(p); }
 	virtual ~Player()                                                 {if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves;}
 	// Methods
 	void                         SetTeam(Team* team)                  { m_team = team; }

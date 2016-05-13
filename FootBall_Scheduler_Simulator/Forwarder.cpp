@@ -6,8 +6,12 @@
 const PlayerMovement Forwarder::MakeMove(bool hasBall)
 {
 	srand(time(NULL));
-
-	return m_allowed_moves.moves[rand() % m_allowed_moves.numberOfMoves];
+	if (hasBall)
+	{
+		// When we have ball we can do anything
+		return m_allowed_moves.moves[rand() % (m_allowed_moves.numberOfMoves];
+	}
+	return m_allowed_moves.moves[rand() % (m_allowed_moves.numberOfMoves - (m_plevel + 1)*MAKE_GOAL)];
 }
 
 void Forwarder::CreateAllowedMoves()
