@@ -9,11 +9,11 @@ class  Referee;
 enum   CardType;
 class  Player;
 class  Goalkeeper;
+class Game;
 enum   PlayerMovement;
 
 class  PlayerStats
 {
-friend class Team;
 public:
 	PlayerStats(Player* pl)
 		: m_pl(NULL), m_moves(NULL)                   { m_redCards = 0; m_yellowCards = 0;
@@ -89,6 +89,8 @@ public:
 
 	void                AddPlayerStat(const Player* p, const PlayerMovement move, bool isActualGoal = false);
 
+	void                SetName(const char* name)              { delete m_name; m_name = strdup(name); }
+
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Team& t)
 	{
@@ -109,7 +111,6 @@ private:
 	bool          m_isAttacking;
 
 	// Methods
-	void SetName(const char* name)                       { delete m_name; m_name = strdup(name); }
 	void SetPlayers(Player** players, int count);
 	void SetTrainers(const Trainer* trainers, int count);
 	void SetPlayerStats(PlayerStats** ps, int count);

@@ -35,6 +35,16 @@ const Time & Time::operator-=(const Time& t)
 	return *this;
 }
 
+const Time& Time::operator=(const Time & t)
+{
+	if (*this != t)
+	{
+		m_hour = t.m_hour;
+		m_minute = t.m_minute;
+	}
+	return *this;
+}
+
 Time Time::operator++(int)
 {
 	Time t(*this);
@@ -189,8 +199,15 @@ Date Date::operator--(int)
 }
 
 
-TimeAndDate::TimeAndDate(const TimeAndDate& tad)
-{ *this = tad; }
+const TimeAndDate& TimeAndDate::operator=(const TimeAndDate& t)
+{
+	if (*this != t)
+	{
+		m_time = t.m_time;
+		m_date = t.m_date;
+	}
+	return *this;
+}
 
 bool TimeAndDate::operator>(const TimeAndDate& t) const
 {

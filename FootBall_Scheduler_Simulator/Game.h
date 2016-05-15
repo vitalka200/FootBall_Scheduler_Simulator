@@ -19,18 +19,19 @@ public:
 
 	// c-tors, d-tors
 	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0),
-		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL), m_playerStats(NULL)
-	{ m_refereesCount = 0; m_gameScore[0] = 0; m_gameScore[1] = 0; }
+		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL), m_playerStats(NULL), m_gameScore(NULL)
+	{ m_refereesCount = 0; CreateGameScore(); }
 
-	Game(const Team* teams, const TimeAndDate& tad, int maxFans)
+	Game(Team** teams, const TimeAndDate& tad, int maxFans)
 		: m_teams(NULL), m_referees(NULL), m_actualFans(0),
 		  m_maxFans(maxFans), m_timeAndDate(NULL),
-	      m_fans(NULL), m_playerStats(NULL)           { m_refereesCount = 0; SetTimeAndDate(&tad); SetTeams(teams);
-	                                                    m_gameScore[0] = 0; m_gameScore[1] = 0; }
+	      m_fans(NULL), m_playerStats(NULL), m_gameScore(NULL)
+	                                                               { m_refereesCount = 0; SetTimeAndDate(&tad); SetTeams(teams);
+	                                                                 CreateGameScore(); }
 	Game(const Game& g)
 		: m_teams(NULL), m_referees(NULL),
 		  m_timeAndDate(NULL), m_fans(NULL),
-		  m_actualFans(0), m_playerStats(NULL)        { *this = g; }
+		  m_actualFans(0), m_playerStats(NULL), m_gameScore(NULL) { *this = g; }
 	~Game();
 	// Operators
 	bool        operator==(const Game& g)     const ;
@@ -48,8 +49,8 @@ public:
 	int                 GetRefereesCount()     const { return m_refereesCount; }
 	const Referee*      GetReferees()          const { return m_referees; }
 	PlayerStats**       GetGameStats()         const { return m_playerStats; }
-	const Team*         GetTeams()             const { return m_teams; }
-	const Team*         GetWinner()            const ;
+	Team**              GetTeams()             const { return m_teams; }
+	Team*               GetWinner()            const ;
 	const TimeAndDate*  GetTimeAndDate()       const { return m_timeAndDate; }
 	const int*          GetGameScore()         const { return m_gameScore; }
 	int                 GetTotalPlayers()      const ;
@@ -65,8 +66,8 @@ public:
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Game& g);
 private:
-	int           m_gameScore[2];
-	Team*         m_teams;
+	int*          m_gameScore;
+	Team**        m_teams;
 	Referee*      m_referees;
 	int           m_refereesCount;
 	int           m_maxFans;
@@ -81,8 +82,11 @@ private:
 	void         SetPlayerStats(PlayerStats** ps, int count);
 	void         SetFans(const Fan* fans, int count);
 	void         SetReferees(const Referee* referees, int count);
-	void         SetTeams(const Team* teams);
+	void         SetTeams(Team** teams);
+	void         CreateGameScore();
+	void         SetGameScore(int* gameScore);
 	void         DeletePlayerStats(PlayerStats** pStats);
+	bool         CanStartGame();
 
 };
 

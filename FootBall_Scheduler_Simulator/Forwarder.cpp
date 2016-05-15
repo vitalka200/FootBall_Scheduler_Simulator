@@ -6,12 +6,15 @@
 const PlayerMovement Forwarder::MakeMove(bool hasBall)
 {
 	srand(time(NULL));
+	PlayerMovement pm;
 	if (hasBall)
 	{
 		// When we have ball we can do anything
-		return m_allowed_moves.moves[rand() % (m_allowed_moves.numberOfMoves];
+		pm = m_allowed_moves.moves[rand() % (m_allowed_moves.numberOfMoves)];
 	}
-	return m_allowed_moves.moves[rand() % (m_allowed_moves.numberOfMoves - (m_plevel + 1)*MAKE_GOAL)];
+	else
+	{ pm = m_allowed_moves.moves[rand() % (m_allowed_moves.numberOfMoves - (m_plevel + 1)*MAKE_GOAL)]; }
+	return pm;
 }
 
 void Forwarder::CreateAllowedMoves()
@@ -20,15 +23,15 @@ void Forwarder::CreateAllowedMoves()
 	m_allowed_moves.numberOfMoves += (m_plevel + 1)*MAKE_GOAL;
 	m_allowed_moves.moves = new PlayerMovement[m_allowed_moves.numberOfMoves];
 
-	int i = 0;
-	for (; i < (m_plevel + 1)*PASS_BALL; i++)
-	{ m_allowed_moves.moves[i] = PlayerMovement::PASS_BALL; }
-	for (; i < (m_plevel + 1)*TACKLE_BALL; i++)
-	{ m_allowed_moves.moves[i] = PlayerMovement::TACKLE_BALL; }
-	for (; i < (m_plevel + 1)*RUN_TO_OPEN_SPACE; i++)
-	{ m_allowed_moves.moves[i] = PlayerMovement::RUN_TO_OPEN_SPACE; }
-	for (; i < (m_plevel + 1)*MAKE_GOAL; i++)
-	{ m_allowed_moves.moves[i] = PlayerMovement::MAKE_GOAL; }
+	int j = 0, i;
+	for (i = 0; i < (m_plevel + 1)*PASS_BALL; i++)
+	{ m_allowed_moves.moves[j++] = PlayerMovement::PASS_BALL; }
+	for (i = 0; i < (m_plevel + 1)*TACKLE_BALL; i++)
+	{ m_allowed_moves.moves[j++] = PlayerMovement::TACKLE_BALL; }
+	for (i = 0; i < (m_plevel + 1)*RUN_TO_OPEN_SPACE; i++)
+	{ m_allowed_moves.moves[j++] = PlayerMovement::RUN_TO_OPEN_SPACE; }
+	for (i = 0; i < (m_plevel + 1)*MAKE_GOAL; i++)
+	{ m_allowed_moves.moves[j++] = PlayerMovement::MAKE_GOAL; }
 }
 
 void Forwarder::show(std::ostream & os) const

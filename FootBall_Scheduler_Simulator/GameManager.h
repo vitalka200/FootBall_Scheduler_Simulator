@@ -26,20 +26,16 @@ class GameManager
 public:
 	// c-tors, d-tors
 	GameManager()
-		: m_games(NULL), m_teams(NULL), m_stadiums(NULL), m_referees(NULL)     {
-		m_gamesLength = 0;    m_teamsLength = 0;
-		m_refereesLength = 0; m_stadiumsLength = 0;
-		TryInputMethod();
-	}
-	~GameManager()                                                             {
-		delete[]m_games;    delete[]m_teams;
-		delete[]m_stadiums; delete[]m_referees;
-	}
+		: m_games(NULL), m_teams1(NULL), m_stadiums(NULL), m_referees(NULL) { m_gamesLength = 0;    m_teamsLength = 0;
+		                                                                      m_refereesLength = 0; m_stadiumsLength = 0;
+		                                                                      TryInputMethod();	}
+	~GameManager()                                                          { delete[]m_games;    delete[]m_teams1;
+		                                                                      delete[]m_stadiums; delete[]m_referees; }
 
 	// Operators
-	const GameManager& operator+=(const Game& g)            { AddGame(g);    return *this; }
-	const GameManager& operator-=(const Game& g)            { RemoveGame(g); return *this; }
-	GameList     operator[](const Date& d)          const;
+	const GameManager& operator+=(Game& g)                                  { AddGame(&g);    return *this; }
+	const GameManager& operator-=(const Game& g)                            { RemoveGame(&g); return *this; }
+	GameList           operator[](const Date& d)          const;
 	const GameList     operator[](const TimeAndDate& tad) const;
 
 
@@ -60,17 +56,17 @@ public:
 	void SellTickets();
 	void GetStats();
 
-	void  AddGame(const Game& t);
-	void  RemoveGame(const Game& g);
+	void  AddGame(Game* g);
+	void  RemoveGame(const Game* g);
 
 private:
 	// Disable copy and assigment
 	GameManager(const GameManager& gm) { }
 	const GameManager& operator=(const GameManager& gm) { }
 
-	Game*     m_games;
+	Game**    m_games;
 	int		  m_gamesLength;
-	Team*     m_teams;
+	Team**    m_teams1;
 	int		  m_teamsLength;
 	Referee*  m_referees;
 	int		  m_refereesLength;

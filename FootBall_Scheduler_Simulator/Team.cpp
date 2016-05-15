@@ -51,6 +51,7 @@ void Team::AddPlayer(Player* p)
 	    { m_goalkeeper = newPList[i]; m_goalkeeperNum = i;}
 	}
 
+	p->SetTeam(this);
 	newPList[m_numOfPlayers] = p;
 	newPSList[m_numOfPlayers] = new PlayerStats(p);
 
@@ -69,8 +70,7 @@ void Team::RemovePlayer(const Player* p)
 	int playerPosition = -1;
 	for (int i = 0; i < m_numOfPlayers; i++)
 	{
-		if (strcmp(m_players[i]->GetName(), p->GetName()) &&
-			strcmp(m_players[i]->GetFName(), p->GetFName()))
+		if (m_players[i]->IsEqual(p))
 		{ playerPosition = i; break;}
 	}
 	if (playerPosition >= 0)
@@ -79,10 +79,13 @@ void Team::RemovePlayer(const Player* p)
 		Player** newPList       = new Player*[m_numOfPlayers-1];
 		PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers-1];
 
-		for (int i = playerPosition; i < m_numOfPlayers; i++)
-		{ newPList[i-1]  = m_players[i]; newPSList[i] = m_playerStats[i];	}
-		// Release memeory and assign new arrays
-		DeletePlayers(m_players); DeletePlayerStats(m_playerStats);
+		for (int i = playerPosition+1; i < m_numOfPlayers; i++)
+		{ 
+			newPList[i-1]  = m_players[i];
+			newPSList[i-1] = m_playerStats[i];
+		}
+		// Release memory and assign new arrays
+		//DeletePlayers(m_players); DeletePlayerStats(m_playerStats);
 		delete []m_players;       delete []m_playerStats;
 		m_players = newPList;     m_playerStats = newPSList;
 		// Decrement counter
@@ -136,7 +139,7 @@ PlayerStats* Team::GetPlayerStats(const Player* p) const
 	for (int i = 0; i < m_numOfPlayers; i++)
 	{
 		if (m_playerStats[i]->GetPlayer()->IsEqual(p))
-		{ ps = m_playerStats[i]; }
+		{ ps = m_playerStats[i]; break; }
 	}
 	return ps;
 }
@@ -163,6 +166,8 @@ void Team::SetPlayers(Player** players, int count)
 		{ m_players[i] = new Forwarder(*dynamic_cast<Forwarder*>(players[i])); }
 		else if (typeid(*players[i]) == typeid(Goalkeeper))
 		{ m_players[i] = new Goalkeeper(*dynamic_cast<Goalkeeper*>(players[i])); }
+
+		m_players[i]->SetTeam(this);
 	}
 }
 
@@ -179,9 +184,9 @@ void Team::SetTrainers(const Trainer* trainers, int count)
 void Team::SetPlayerStats(PlayerStats** ps, int count)
 {
 	DeletePlayerStats(m_playerStats); delete[]m_playerStats;
-	m_playerStats = new PlayerStats*[m_numOfPlayers];
+	m_playerStats = new PlayerStats*[count];
 
-	for (int i = 0; i < m_numOfPlayers; i++)
+	for (int i = 0; i < count; i++)
 	{ m_playerStats[i] = new PlayerStats(*(ps[i])); }
 }
 
@@ -210,6 +215,7 @@ const PlayerStats& PlayerStats::operator=(const PlayerStats& ps)
 		delete []m_moves; 
 		m_movesNumber = ps.m_movesNumber;
 		m_moves       = new PlayerMovement[m_movesNumber];
+		m_pl          = ps.m_pl;
 		for (int i = 0; i < m_movesNumber; i++)
 		{ m_moves[i] = ps.m_moves[i]; }
 	}

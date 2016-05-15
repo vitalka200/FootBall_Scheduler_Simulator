@@ -8,9 +8,9 @@ class Person
 public:
 	// c-tors, d-tors
 	Person(const char* name, const char* f_name, long id)
-		: m_name(NULL), m_fname(NULL)  { SetName(name); SetFName(f_name); SetId(id); }
+		: m_name(NULL), m_fname(NULL), m_id(id)     { SetName(name); SetFName(f_name); }
 	Person(const Person& p)
-		: m_name(NULL), m_fname(NULL)  { *this = p; }
+		: m_name(NULL), m_fname(NULL), m_id(p.m_id) { *this = p; }
 	virtual ~Person()                  { delete []m_name; delete []m_fname; }
 	// Methods
 	const char*    GetName()     const { return m_name; }
@@ -27,7 +27,7 @@ public:
 
 	// Method Overrides
 	friend std::ostream& operator<<(std::ostream& os, const Person& p)
-	{ os << "Name: " << p.GetName() << "FName: " << p.GetFName(); return os; }
+	{ os << " Name: " << p.m_name << " FName: " << p.m_fname; return os; }
 
 protected:
 	char* m_name;

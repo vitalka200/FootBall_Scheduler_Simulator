@@ -8,7 +8,7 @@ class Time
 public:
 	// c-tors, d-tors
 	Time(int hour = 0, int minute = 0)                         { SetHour(hour); SetMinute(minute); }
-	Time(const Time& t)                                { *this = t; }
+	Time(const Time& t)                                        { *this = t; }
 	// Operators
 	Time        operator+(const Time& t)         const;
 	Time        operator+(int add)               const;
@@ -16,6 +16,8 @@ public:
 	Time        operator-(int remove)            const;
 	const Time& operator+=(const Time& t);
 	const Time& operator-=(const Time& t);
+
+	const Time& operator=(const Time& t);
 	
 	const Time& operator++()    { *this = *this + 1; return *this; } // prefix
 	Time        operator++(int); // postfix
@@ -45,6 +47,10 @@ private:
 class Date
 {
 public:
+	static const int DAYS_IN_MONTH[];
+	static const int DAYS_IN_YEAR;
+	static const int MONTH_NUMBER;
+
 	// c-tors, d-tors
 	Date(int year = 0, int month = 0, int date = 0)   { SetYear(year); SetMonth(month); SetDate(date); }
 
@@ -79,9 +85,6 @@ private:
 	int m_date;
 	int m_month;
 	int m_year;
-	static const int DAYS_IN_MONTH[];
-	static const int DAYS_IN_YEAR;
-	static const int MONTH_NUMBER;
 
 	// Methods
 	void       SetYear(int year);
@@ -96,8 +99,9 @@ public:
 	TimeAndDate(const Time& t, const Date& d)
 		:m_time(t), m_date(d) { }
 
-	TimeAndDate(const TimeAndDate& tad);
+	TimeAndDate(const TimeAndDate& tad)                      { *this = tad; }
 	// Operators
+	const TimeAndDate& operator=(const TimeAndDate& t);
 	bool               operator==(const TimeAndDate& t)  const { return m_time==t.m_time && m_date==t.m_date;}
 	bool               operator!=(const TimeAndDate& t)  const { return !(*this == t);}
 	bool               operator>(const TimeAndDate& t)   const ;

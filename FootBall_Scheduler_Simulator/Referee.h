@@ -24,7 +24,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const CardType& ct)
 	{os << Referee::CardNames[ct]; return os;}
 	friend std::ostream& operator<<(std::ostream& os, const Referee& r)
-	{ os << "Referee " << (Person)r; return os; }
+	{ os << " Referee " << (Person)r; return os; }
 private:
 };
 

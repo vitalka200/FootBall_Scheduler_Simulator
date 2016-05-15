@@ -19,37 +19,38 @@ const GamesByTimeDateNode& GamesByTimeDateNode::operator=(const GamesByTimeDateN
 	return *this;
 }
 
-bool GamesByTimeDateNode::AddGame(const Game* g)
+bool GamesByTimeDateNode::AddGame(Game* g)
 {
 	// Let's check if time available
 	Time newGameTime = g->GetTimeAndDate()->GetTime();
 
 	for (int i = 0; i < m_numOfGames; i++)
 	{
-		Time existingGameTime = m_games[i].GetTimeAndDate()->GetTime();
+		Time existingGameTime = m_games[i]->GetTimeAndDate()->GetTime();
 		
 		if (existingGameTime == newGameTime || existingGameTime + g->MAX_GAME_LEN > newGameTime )
-		{ return false;	} // We found game scheduled game to the same time
+		{ return false;	} // We found game scheduled to the same time
 		else if (newGameTime < existingGameTime &&
 			newGameTime <= existingGameTime - g->MAX_GAME_LEN)
 		{
 			// we found not scheduled time slice. Let's make some space
-			Game* newGamesSchedule = new Game[m_numOfGames+1];
+			Game** newGamesSchedule = new Game*[m_numOfGames+1];
 			for (int j = 0; j < i; j++)
 			{ newGamesSchedule[j] = m_games[j]; }
-			newGamesSchedule[i] = *g; m_numOfGames++;
+			newGamesSchedule[i] = g; m_numOfGames++;
 			// Copy leftovers if any
 			for (int j = i+1; j < m_numOfGames; j++)
-			{ newGamesSchedule[j-1] = m_games[j]; }
+			{ newGamesSchedule[j] = m_games[j-1]; }
 			// Release unneeded memory and assign new shedule
 			delete []m_games; m_games = newGamesSchedule;
 			return true;
 		}
 	}
 	// We not found any time collisions. Let's add game
-	Game* newGamesSchedule = new Game[m_numOfGames+1];
+	Game** newGamesSchedule = new Game*[m_numOfGames+1];
 	for (int i = 0; i < m_numOfGames; i++)
 	{ newGamesSchedule[i] = m_games[i]; }
+	newGamesSchedule[m_numOfGames] = g;
 	m_numOfGames++;
 	// Release unneeded memory and assign new shedule
 	delete []m_games; m_games = newGamesSchedule;
@@ -61,9 +62,9 @@ bool GamesByTimeDateNode::RemoveGame(const Game* g)
 	// Let's try to find this game
 	for (int i = 0; i < m_numOfGames; i++)
 	{
-		if (m_games[i] == *g)
+		if ((*(m_games[i])) == *g)
 		{
-			Game* newGamesSchedule = new Game[m_numOfGames-1];
+			Game** newGamesSchedule = new Game*[m_numOfGames-1];
 			for (int j = 0; j < i; j++)
 			{ newGamesSchedule[j] = m_games[j]; }
 			for (int j = i+1; j < m_numOfGames; j++)
@@ -77,20 +78,20 @@ bool GamesByTimeDateNode::RemoveGame(const Game* g)
 	return false;
 }
 
-void GamesByTimeDateNode::SetGames(const Game* games, int count)
+void GamesByTimeDateNode::SetGames(Game** games, int count)
 {
 	delete []m_games;
-	m_games = new Game[count];
+	m_games = new Game*[count];
 	for (int i = 0; i < count; i++)
 	{ m_games[i] = games[i]; }
 
 	m_numOfGames = count;
 }
 
-void GamesByTimeDateNode::SetDate(const Date* d)
+void GamesByTimeDateNode::SetDate(const Date& d)
 {
 	delete m_date;
-	m_date = new Date(*d);
+	m_date = new Date(d);
 }
 
 const GameList& GameList::operator=(const GameList& gl)
@@ -99,7 +100,7 @@ const GameList& GameList::operator=(const GameList& gl)
 	{
 		count = gl.count;
 		
-		games = new Game[count];
+		games = new Game*[count];
 		for (int i= 0; i < count; i++)
 		{ games[i] = gl.games[i]; }
 	}
@@ -119,14 +120,14 @@ const Stadium& Stadium::operator=(const Stadium& s)
 	return *this;
 }
 
-const Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
+Game* Stadium::GetGameByTimeAndDate(const TimeAndDate& tad) const
 {
 	GameList* glByDate = &(GetGamesByDate(tad.GetDate()));
 
 	for (int i = 0; i < glByDate->count; i++)
 	{
-		if (*(glByDate->games[i].GetTimeAndDate()) == tad)
-		{ return &(glByDate->games[i]); }
+		if (*(glByDate->games[i]->GetTimeAndDate()) == tad)
+		{ return glByDate->games[i]; }
 	}
 	return NULL;
 }
@@ -139,7 +140,7 @@ GameList Stadium::GetGamesByDate(const Date& d) const
 	{
 		if (d == *(m_gameList[i].GetDate()))
 		{
-			gl.games = new Game[m_gameList[i].m_numOfGames];
+			gl.games = new Game*[m_gameList[i].m_numOfGames];
 			gl.count = m_gameList[i].m_numOfGames;
 
 			for (int j = 0; j < m_gameList[i].m_numOfGames; j++)
@@ -152,7 +153,7 @@ GameList Stadium::GetGamesByDate(const Date& d) const
 	return gl;
 }
 
-bool Stadium::AddGame(const Game* g)
+bool Stadium::AddGame(Game* g)
 {
 	for (int i = 0; i < m_numOfNodes; i++)
 	{
@@ -167,12 +168,15 @@ bool Stadium::AddGame(const Game* g)
 			for (int j = 0; j < i; j++)
 			{ new_gameList[j] = m_gameList[j]; }
 			// insert new element
-			new_gameList[i].SetDate(&(g->GetTimeAndDate()->GetDate()));
+			new_gameList[i].SetDate(g->GetTimeAndDate()->GetDate());
 			new_gameList[i].AddGame(g);
 			m_numOfNodes++;
+
 			// copy rest of array
 			for (int j = i+1; j < m_numOfNodes; j++)
-			{ new_gameList[j-1] = m_gameList[j]; }
+			{ new_gameList[j] = m_gameList[j-1]; }
+			
+			
 			// Assign new list and free old memory
 			delete []m_gameList; m_gameList = new_gameList;
 			return true;
@@ -182,7 +186,7 @@ bool Stadium::AddGame(const Game* g)
 	// Let's add it to end of list
 	GamesByTimeDateNode* new_gameList = new GamesByTimeDateNode[m_numOfNodes+1];
 	// insert new element
-	new_gameList[m_numOfNodes].SetDate(&(g->GetTimeAndDate()->GetDate()));
+	new_gameList[m_numOfNodes].SetDate(g->GetTimeAndDate()->GetDate());
 	new_gameList[m_numOfNodes].AddGame(g);
 	m_numOfNodes++;
 	// Free old memory and assign new one
