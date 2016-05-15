@@ -18,13 +18,13 @@ public:
 	static const Time MAX_GAME_LEN;
 
 	// c-tors, d-tors
-	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0),
+	Game() : m_teams(NULL), m_referees(NULL), m_actualFans(0), m_wasStarted(false),
 		m_maxFans(0), m_timeAndDate(NULL), m_fans(NULL), m_playerStats(NULL), m_gameScore(NULL)
 	{ m_refereesCount = 0; CreateGameScore(); }
 
 	Game(Team** teams, const TimeAndDate& tad, int maxFans)
 		: m_teams(NULL), m_referees(NULL), m_actualFans(0),
-		  m_maxFans(maxFans), m_timeAndDate(NULL),
+		  m_maxFans(maxFans), m_timeAndDate(NULL), m_wasStarted(false),
 	      m_fans(NULL), m_playerStats(NULL), m_gameScore(NULL)
 	                                                               { m_refereesCount = 0; SetTimeAndDate(&tad); SetTeams(teams);
 	                                                                 CreateGameScore(); }
@@ -67,6 +67,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Game& g);
 private:
 	int*          m_gameScore;
+	bool          m_wasStarted;
 	Team**        m_teams;
 	Referee*      m_referees;
 	int           m_refereesCount;

@@ -36,6 +36,7 @@ const Game& Game::operator=(const Game& g)
 	{
 		m_maxFans       = g.m_maxFans;
 		m_actualFans    = g.m_actualFans;
+		m_wasStarted    = g.m_wasStarted;
 
 		SetGameScore(g.m_gameScore);
 		SetTeams(g.m_teams);
@@ -171,7 +172,15 @@ bool Game::CanStartGame()
 
 void Game::StartGame()
 {
-	if (!CanStartGame()) return;
+	if (!CanStartGame())
+	{
+		std::cout << "==========================================================" << std::endl;
+		std::cout << "!!!Can't start game because start prerequisites not met!!!" << std::endl;
+		std::cout << "==========================================================" << std::endl << std::endl;
+		return;
+	}
+
+	m_wasStarted = true;
 
 	srand(time(NULL));
 
@@ -456,7 +465,7 @@ void Game::SetTime(const TimeAndDate& tad)
 
 std::ostream & operator<<(std::ostream & os, const Game & g)
 {
-	os << "Game between Team: '" << *(g.GetTeams()[0]) << "' and Team: '" << *(g.GetTeams()[1]) << "'" << std::endl;
+	os << "Game between Team: '" << g.GetTeams()[0]->GetName() << "' and Team: '" << g.GetTeams()[1]->GetName() << "'" << std::endl;
 	os << "Score: '" << g.GetGameScore()[0] << "':'" << g.GetGameScore()[0] << "' ";
 	os << "Fans comming: " << g.GetActualFans();
 	return os;
