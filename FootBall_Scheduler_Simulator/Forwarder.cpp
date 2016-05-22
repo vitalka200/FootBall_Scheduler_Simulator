@@ -2,7 +2,7 @@
 
 #include <time.h>
 #include <stdlib.h>
-#define GOAL_FACTOR 5000
+#define GOAL_FACTOR 1000
 
 const PlayerMovement Forwarder::MakeMove(bool hasBall)
 {

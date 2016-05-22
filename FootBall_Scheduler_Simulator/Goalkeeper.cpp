@@ -2,7 +2,7 @@
 
 #include <time.h>
 #include <stdlib.h>
-#define MISSING_FACTOR 400
+#define MISSING_FACTOR 1000
 
 const PlayerMovement Goalkeeper::MakeMove(bool hasBall)
 {
