@@ -36,7 +36,7 @@ tiger7
 t7
 1237
 4
-3
+2
 tiger8
 t8
 1238
@@ -51,11 +51,15 @@ tiger10
 t10
 12310
 4
-3
+1
 tiger11
 t11
 12311
 2
+GoalKeeperTigers
+tiger11
+21345
+3
 tigerTrainer
 tTrainer
 12312
@@ -98,7 +102,7 @@ panther7
 p7
 1247
 4
-3
+1
 panther8
 p8
 1248
@@ -113,14 +117,20 @@ panther10
 p10
 12410
 4
-3
+2
 panther11
 p11
 12411
 2
+GoalKeeperPanthers
+pantherGoal
+2134533
+2
 pantherTrainer
 pTrainer
 12412
+
+
 1
 Rulers
 10
@@ -159,7 +169,7 @@ ruler7
 r7
 1247
 4
-3
+2
 ruler8
 r8
 1248
@@ -174,6 +184,10 @@ ruler10
 r10
 12410
 4
+GoalKeeperRulerss
+rulerGoal
+21345333
+3
 rulerTrainer
 rTrainer
 12412
@@ -217,7 +231,7 @@ lion7
 l7
 12257
 4
-3
+1
 lion8
 l8
 12258
@@ -232,6 +246,10 @@ lion10
 l10
 122510
 4
+GoalKeeperLionss
+lionGoal
+21345343
+3
 lionTlainer
 lTrainer
 122512
@@ -294,5 +312,5 @@ Skoloka
 3
 1
 2016
-5
+6
 
