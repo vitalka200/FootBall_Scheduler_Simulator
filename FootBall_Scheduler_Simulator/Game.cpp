@@ -208,7 +208,7 @@ void Game::StartGame()
 		Team& team1 = *(m_teams[0]);
 		Team& team2 = *(m_teams[1]);
 
-		for (int i = 0; i < m_teams[0]->GetPlayerNum(); i++)
+		for (int i = 0; i < team1.GetPlayerNum(); i++)
 		{
 			
 			Player* p1 = team1[i];
@@ -339,9 +339,11 @@ void Game::StartGame()
 			}
 			else if (pm1 == PlayerMovement::MAKE_GOAL)
 			{
-				const Player* gk = team2.GetGoalkeeper();
+				Player* gk = team2.GetGoalkeeper();
+				PlayerMovement gPm = gk->MakeMove(false);
 
-				if (*p1 > *gk)
+				// if (*p1 > *gk)
+				if (gPm == PlayerMovement::MISS_BALL)
 				{
 					team2.GetPlayerStats(gk)->AddMove(PlayerMovement::MISS_BALL);
 					m_gameScore[0]++;
@@ -466,7 +468,7 @@ void Game::SetTime(const TimeAndDate& tad)
 std::ostream & operator<<(std::ostream & os, const Game & g)
 {
 	os << "Game between Team: '" << g.GetTeams()[0]->GetName() << "' and Team: '" << g.GetTeams()[1]->GetName() << "'" << std::endl;
-	os << "Score: '" << g.GetGameScore()[0] << "':'" << g.GetGameScore()[0] << "' ";
+	os << "Score: '" << g.GetGameScore()[0] << "':'" << g.GetGameScore()[1] << "' ";
 	os << "Fans comming: " << g.GetActualFans();
 	return os;
 }

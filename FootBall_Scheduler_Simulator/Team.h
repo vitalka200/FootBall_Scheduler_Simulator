@@ -81,7 +81,7 @@ public:
 	const Trainer*      GetTrainers()                    const { return m_trainers; }
 	PlayerStats**       GetStats()                       const { return m_playerStats;}
 	PlayerStats*        GetPlayerStats(const Player* p)  const ;
-	const Player*       GetGoalkeeper()                  const { return m_goalkeeper; }
+	Player*             GetGoalkeeper()                  const { return m_goalkeeper; }
 	int                 GetGoalKeeperIndex()             const { return m_goalkeeperNum; }
 	const char*         GetName()                        const { return m_name; }
 	bool                IsAttacking()                    const { return m_isAttacking; }

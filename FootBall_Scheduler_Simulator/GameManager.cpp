@@ -118,6 +118,10 @@ const GameList GameManager::operator[](const TimeAndDate& tad) const
 void GameManager::CancelGame() {
 
 	int stadiumNum, gameNum, gameDate;
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Cancel Game:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
+
 	std::cout << std::endl << "Choose a stadium -->> " << std::endl;
 	PrintArray<Stadium>(m_stadiumsLength, m_stadiums);
 	std::cout << "--> ";
@@ -169,6 +173,9 @@ void GameManager::ManageTrainers() {
 	long id;
 	int choice, teamNum;
 	bool flagOut = true;
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "ManageTrainers:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 
 	while (flagOut)
 	{
@@ -210,6 +217,9 @@ void GameManager::ManageTrainers() {
 void GameManager::ManageReferees() {
 	int  choice;
 	bool flagOut = true;
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Manage Referees:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 
 	while (flagOut)
 	{
@@ -276,6 +286,9 @@ void GameManager::ManageTeams() {
 	char name[NAME_LEN], f_name[NAME_LEN];
 	long id;
 	bool flagOut = true;
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Manage Teams:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 
 	while (flagOut)
 	{
@@ -373,7 +386,9 @@ void GameManager::ManageTeams() {
 void GameManager::ManageGames() {
 	int choice;
 	bool flagOut = true;
-
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Managing Games:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	while (flagOut)
 	{
 		std::cout << std::endl << "What would you like to do?  1-Add Game, 2-Cancel Game, else-exit." << std::endl << "--> ";
@@ -391,7 +406,9 @@ void GameManager::ManageStadiums()
 {
 	int stadiumNum, choice;
 	bool flagOut = true;
-
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Managing Stadiums:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	while (flagOut)
 	{
 		std::cout << std::endl << "What would you like to do ? 1 - Add, 2 - Delete, 3 - Update, else - exit.";
@@ -475,6 +492,9 @@ void GameManager::NewGame() {
 	Game* g = NULL;
 	Team** teams = new Team*[2];
 	int t1, t2, minutes, hours, day, month, year, maxFans;
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "New Game Creation:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "List of all teams -->> " << std::endl;
 	PrintDynamicArray(m_teamsLength, m_teams1);
 	std::cout << std::endl << "Enter Team number 1 id --> ";
@@ -552,14 +572,17 @@ void GameManager::GetMonthSummary()
 {
 	int year, month;
 	bool haveGamesFlag = false;
+	// For month summary we need all the games in all the days this month
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "The Month summary: " << std::endl;
+	std::cout << "==========================================================" << std::endl;
+
 	std::cout << std::endl << "Enter Year --> ";
 	scan<int>(year);
 
 	std::cout << std::endl << "Enter Month --> ";
 	scan<int>(month);
 
-	// For month summary we need all the games in all the days this month
-	std::cout << std::endl << "The Month summary: " << std::endl;
 	for (int day = 1; day <= Date::DAYS_IN_MONTH[month-1]; day++)
 	{
 		Date d(year, month, day);
@@ -568,26 +591,32 @@ void GameManager::GetMonthSummary()
 		if (list.count > 0)
 		{
 			haveGamesFlag = true;
-			std::cout << std::endl << "Printing Games on Date: " << d << std::endl;
-			PrintDynamicArray(list.count, list.games);
+			std::cout << std::endl << "Printing Games on Date: " << d << std::endl<< std::endl;
+
 			for (int i = 0; i < list.count; i++)
 			{
-				std::cout << std::endl << *(list.games[i]) << std::endl << "Winner : ";
+				std::cout << "====== Game #" << i+1 << " ======" << std::endl;
+				std::cout << *(list.games[i]) << std::endl << "Winner: ";
 
 				if (list.games[i]->GetWinner())
-				{ std::cout << list.games[i]->GetWinner() << std::endl; }
+				{ std::cout << *(list.games[i]->GetWinner()) << std::endl; }
 				else
 				{ std::cout << "Not yet determined." << std::endl; }
+				std::cout << std::endl;
 			}
 		}
 	}
 	if (!haveGamesFlag)
 	{ std::cout << " There are no games planned this month." << std::endl; }
+	std::cout << std::endl;
 }
 
 void GameManager::GetTeamSummary()
 {
 	int team;
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Team Summary:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "Choose team from list -->> " << std::endl;
 	PrintDynamicArray(m_teamsLength, m_teams1);
 	std::cout << "--> ";
@@ -602,7 +631,9 @@ void GameManager::ManagePlayers()
 	int teamNum;
 	bool flagOut = true;
 
-
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Manage Players:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "Choose team from list -->>" << std::endl;
 	PrintDynamicArray(m_teamsLength, m_teams1);
 	std::cout << "--> ";
@@ -687,7 +718,9 @@ void GameManager::ManagePlayers()
 void GameManager::StartGame()
 {
 	int gameNum = 0;
-
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Start Game menu:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "Choose game from list below -->> " << std::endl;
 	PrintDynamicArray(m_gamesLength, m_games);
 	std::cout << "--> ";
@@ -703,7 +736,9 @@ void GameManager::ManageGameSchedule()
 {
 	int choice;
 	bool flagOut = true;
-
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Manage game schedule:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
 	while (flagOut)
 	{
 		std::cout << "What Would you like to do ? 1 - view, 2- cancel Game, else - exit. \n";
@@ -729,6 +764,10 @@ void GameManager::ManageGameSchedule()
 }
 void GameManager::GetStats()
 {
+	std::cout << "==========================================================" << std::endl;
+	std::cout << "Team Stats:" << std::endl;
+	std::cout << "==========================================================" << std::endl;
+
 	for (int i = 0; i < m_teamsLength; i++)
 	{
 		std::cout << *(m_teams1[i]);

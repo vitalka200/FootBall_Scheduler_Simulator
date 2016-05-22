@@ -7,8 +7,9 @@
 // Forward declaration
 class Team;
 
-enum PlayerMovement { NO_MOVE, STEAL_BALL,  TACKLE_BALL, CATCH_BALL, MISS_BALL, MAKE_GOAL, PASS_BALL, RUN_TO_OPEN_SPACE };
+enum PlayerMovement { NO_MOVE, STEAL_BALL, PASS_BALL, CATCH_BALL, MAKE_GOAL, TACKLE_BALL, RUN_TO_OPEN_SPACE, MAKE_FOUL, MISS_BALL };
 enum PlayerLevel    { LOW, MEDIUM, HIGH };
+
 
 class Player : public Person
 {

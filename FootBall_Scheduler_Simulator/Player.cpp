@@ -2,7 +2,7 @@
 #include "Team.h"
 
 const char* Player::LevelNames[] = { "Low", "Medium", "High" };
-const char* Player::MovementsNames[] = { "", "Steal Ball", "Pass Ball", "Catch Ball", "Make Goal", "Tackle ball", "Run To Open Space", "Make Foul" };
+const char* Player::MovementsNames[] = { "No Move", "Steal Ball", "Pass Ball", "Catch Ball", "Make Goal", "Tackle ball", "Run To Open Space", "Make Foul", "Miss Ball" };
 
 bool Player::IsEqual(const Player* p) const
 {
