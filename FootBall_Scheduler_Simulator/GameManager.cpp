@@ -219,10 +219,10 @@ void GameManager::ManageReferees() {
 		{
 			case 1:
 			{
-				Referee* m_newReferees = new Referee[m_refereesLength + 1];
+				Referee** m_newReferees = new Referee*[m_refereesLength + 1];
 				
 				for (int i = 0; i < m_refereesLength; i++)
-				{ m_newReferees[i] = m_referees[i];	}
+				{ m_newReferees[i] = m_referees1[i];	}
 
 				char name[NAME_LEN], f_name[NAME_LEN];
 				long id;
@@ -235,11 +235,11 @@ void GameManager::ManageReferees() {
 					scan(f_name);
 					std::cout << std::endl << "ID --> ";
 					scan<long>(id);
-					m_newReferees[i] = Referee(name, f_name, id);
+					m_newReferees[i] = new Referee(name, f_name, id);
 				}
 				
-				delete []m_referees;
-				m_referees = m_newReferees;
+				delete []m_referees1;
+				m_referees1 = m_newReferees;
 				m_refereesLength += 1;
 				break;
 			}
@@ -247,21 +247,21 @@ void GameManager::ManageReferees() {
 			{
 				int refNum;
 				std::cout << std::endl << "Choose referee from the list -->> " << std::endl;
-				PrintArray<Referee>(m_refereesLength, m_referees);
+				PrintDynamicArray<Referee>(m_refereesLength, m_referees1);
 				std::cout << "--> ";
 				scan<int>(refNum);
 				refNum--;
-				Referee* new_referee = new Referee[m_refereesLength - 1];
+				Referee** new_referee = new Referee*[m_refereesLength - 1];
 				
 				for (int i = 0; i < refNum; i++)
-				{ new_referee[i] = m_referees[i];}
+				{ new_referee[i] = m_referees1[i];}
 				
 				for (int i = refNum + 1; i < m_gamesLength; i++)
-				{ new_referee[i - 1] = m_referees[i];}
+				{ new_referee[i - 1] = m_referees1[i];}
 
 				m_refereesLength--;
-				delete []m_referees;
-				m_referees = new_referee;
+				delete []m_referees1;
+				m_referees1 = new_referee;
 				std::cout << std::endl << "Referee has been removed." << std::endl;
 				break;
 			}
@@ -324,6 +324,13 @@ void GameManager::ManageTeams() {
 						throw std::exception("\nThe values where invalid.\n");
 					}
 					(*newTeam) += newPlayer;
+
+				}
+				if (newTeam->GetGoalKeeperIndex() == 0)
+				{
+					std::cout << "Error: There must be at least one goal keeper." << std::endl << "Cancelling..." << std::endl;
+					break;
+
 				}
 				std::cout << std::endl << "Trainer Name --> ";
 				scan(name);
@@ -364,7 +371,7 @@ void GameManager::ManageTeams() {
 }
 
 void GameManager::ManageGames() {
-	int choice = 1;
+	int choice;
 	bool flagOut = true;
 
 	while (flagOut)
@@ -495,6 +502,10 @@ void GameManager::NewGame() {
 
 	TimeAndDate tad = TimeAndDate(t, d);
 	g = new Game(teams, tad, maxFans);
+	PrintDynamicArray<Referee>(m_refereesLength, m_referees1);
+	//Referee r("a", "afs", 1212);
+	g->AddReferee(*m_referees1[(int)(rand() % m_refereesLength)]);
+	//g->AddReferee(r);
 	Game** new_games = new Game*[m_gamesLength + 1];
 	for (int i = 0; i < m_gamesLength; i++)
 	{ new_games[i] = m_games[i]; }
@@ -547,7 +558,7 @@ void GameManager::GetMonthSummary()
 	std::cout << std::endl << "Enter Month --> ";
 	scan<int>(month);
 
-	// For month summary we need all the gaes in all the days this month
+	// For month summary we need all the games in all the days this month
 	std::cout << std::endl << "The Month summary: " << std::endl;
 	for (int day = 1; day <= Date::DAYS_IN_MONTH[month-1]; day++)
 	{
@@ -571,7 +582,7 @@ void GameManager::GetMonthSummary()
 		}
 	}
 	if (!haveGamesFlag)
-	{ std::cout << " There are no games plated this month." << std::endl; }
+	{ std::cout << " There are no games planned this month." << std::endl; }
 }
 
 void GameManager::GetTeamSummary()
