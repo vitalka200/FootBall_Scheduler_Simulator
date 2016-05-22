@@ -26,11 +26,11 @@ class GameManager
 public:
 	// c-tors, d-tors
 	GameManager()
-		: m_games(NULL), m_teams1(NULL), m_stadiums(NULL), m_referees(NULL) { m_gamesLength = 0;    m_teamsLength = 0;
+		: m_games(NULL), m_teams1(NULL), m_stadiums(NULL), m_referees1(NULL) { m_gamesLength = 0;    m_teamsLength = 0;
 		                                                                      m_refereesLength = 0; m_stadiumsLength = 0;
 		                                                                      TryInputMethod();	}
 	~GameManager()                                                          { delete[]m_games;    delete[]m_teams1;
-		                                                                      delete[]m_stadiums; delete[]m_referees; }
+		                                                                      delete[]m_stadiums; delete[]m_referees1; }
 
 	// Operators
 	const GameManager& operator+=(Game& g)                                  { AddGame(&g);    return *this; }
@@ -68,7 +68,7 @@ private:
 	int		  m_gamesLength;
 	Team**    m_teams1;
 	int		  m_teamsLength;
-	Referee*  m_referees;
+	Referee**  m_referees1;
 	int		  m_refereesLength;
 	Stadium*  m_stadiums;
 	int		  m_stadiumsLength;
