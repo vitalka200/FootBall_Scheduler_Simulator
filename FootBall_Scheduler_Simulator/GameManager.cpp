@@ -572,10 +572,13 @@ void GameManager::NewGame() {
 
 	TimeAndDate tad = TimeAndDate(t, d);
 	g = new Game(teams, tad, maxFans);
+	std::cout << std::endl << "=== Adding referee from a list ===" << std::endl << std::endl;
 	PrintDynamicArray<Referee>(m_refereesLength, m_referees1);
-	//Referee r("a", "afs", 1212);
-	g->AddReferee(*m_referees1[(int)(rand() % m_refereesLength)]);
-	//g->AddReferee(r);
+	
+	int refereeNum = rand() % m_refereesLength;
+	g->AddReferee(*m_referees1[refereeNum]);
+
+	std::cout << std::endl << "Chosen - " << *m_referees1[refereeNum] << std::endl;
 	Game** new_games = new Game*[m_gamesLength + 1];
 	for (int i = 0; i < m_gamesLength; i++)
 	{

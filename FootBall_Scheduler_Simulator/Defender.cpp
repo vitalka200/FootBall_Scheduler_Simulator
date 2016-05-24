@@ -5,7 +5,6 @@
 
 const PlayerMovement Defender::MakeMove(bool hasBall)
 {
-	srand(time(NULL));
 	if (hasBall)
 	{
 		// If we have ball, we pass it

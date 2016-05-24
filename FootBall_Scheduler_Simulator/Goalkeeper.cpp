@@ -2,12 +2,10 @@
 
 #include <time.h>
 #include <stdlib.h>
-#define MISSING_FACTOR 1000
+#define MISSING_FACTOR 1
 
 const PlayerMovement Goalkeeper::MakeMove(bool hasBall)
 {
-	srand(time(NULL));
-	
 	if (hasBall)
 	{
 		// If we have ball, we pass it

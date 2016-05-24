@@ -203,18 +203,24 @@ void Game::StartGame()
 	////////////////////////////////////////////////////////////////
 	//////////////// Loop for the rest of game /////////////////////
 	////////////////////////////////////////////////////////////////
+	Time halfTime  = MAX_GAME_LEN/2;
+	int firstTeam  = 0;
+	int secondTeam = 1;
+
 	for (Time i; i < MAX_GAME_LEN; i++)
 	{
-		Team& team1 = *(m_teams[0]);
-		Team& team2 = *(m_teams[1]);
+		if (i == halfTime) { firstTeam  = 1; secondTeam = 0; }
+
+		Team& team1 = *(m_teams[firstTeam]);
+		Team& team2 = *(m_teams[secondTeam]);
 
 		for (int i = 0; i < team1.GetPlayerNum(); i++)
 		{
 			
 			Player* p1 = team1[i];
-			bool p1HaveBall = playersBall[0][i];
+			bool p1HaveBall = playersBall[firstTeam][i];
 			PlayerMovement pm1 = p1->MakeMove(p1HaveBall);
-			playersMoved[0][i] = MOVED;
+			playersMoved[firstTeam][i] = MOVED;
 			PlayerStats* gameStatsPlayer1 = GetPlayerStats(p1);
 			PlayerStats* teamStatsPlayer1 = team1.GetPlayerStats(p1);
 			gameStatsPlayer1->AddMove(pm1);
@@ -230,8 +236,8 @@ void Game::StartGame()
 				teamStatsPlayer1->AddMove(PlayerMovement::PASS_BALL);
 				gameStatsPlayer1->AddMove(PlayerMovement::PASS_BALL);
 
-				playersBall[0][i] = false;
-				playersBall[0][playerNumToPass] = true;
+				playersBall[firstTeam][i] = false;
+				playersBall[firstTeam][playerNumToPass] = true;
 
 
 			}
@@ -250,10 +256,10 @@ void Game::StartGame()
 				}
 				else if (*p1 < *p2)
 				{
-					playersMoved[1][chosenPlayer2] = MOVED;
+					playersMoved[secondTeam][chosenPlayer2] = MOVED;
 					// Update Ball information
-					playersBall[1][chosenPlayer2] = true;
-					playersBall[0][i] = false;
+					playersBall[secondTeam][chosenPlayer2] = true;
+					playersBall[firstTeam][i] = false;
 					team2.SetIsAtacking(true);
 					team2.SetIsAtacking(false);
 					gameStatsPlayer2->AddMove(PlayerMovement::STEAL_BALL);
@@ -270,21 +276,21 @@ void Game::StartGame()
 					if (card == CardType::RED) // Need to remove player for the rest of game
 					{
 
-						if (teamNumThatGotCard == 0)
+						if (teamNumThatGotCard == firstTeam)
 						{ 
-							playersBall[1][chosenPlayer2] = true;
-							playersMoved[1][chosenPlayer2] = MOVED;
+							playersBall[secondTeam][chosenPlayer2] = true;
+							playersMoved[secondTeam][chosenPlayer2] = MOVED;
 							team2.SetIsAtacking(true);
 							team2.SetIsAtacking(false);
-							playersBall[0][i] = false;
-							playersMoved[0][i] = DISQUALIFY;
+							playersBall[firstTeam][i] = false;
+							playersMoved[firstTeam][i] = DISQUALIFY;
 							gameStatsPlayer1->AddCard(card);
 							teamStatsPlayer1->AddCard(card);
 						}
 						else
 						{
-							playersBall[1][chosenPlayer2] = false;
-							playersMoved[1][chosenPlayer2] = DISQUALIFY;
+							playersBall[secondTeam][chosenPlayer2] = false;
+							playersMoved[secondTeam][chosenPlayer2] = DISQUALIFY;
 							gameStatsPlayer2->AddCard(card);
 							teamStatsPlayer2->AddCard(card);
 						}
@@ -296,9 +302,9 @@ void Game::StartGame()
 						const Trainer* activeTrainer = &(trainers[rand() % m_teams[teamNumThatGotCard]->GetTrainersNum()]);
 						TrainerDecision decision = activeTrainer->MakeDecision(m_teams[teamNumThatGotCard]->IsAttacking());
 						Team* teamWithCard = m_teams[teamNumThatGotCard];
-						int playerNumThatGotCard = teamNumThatGotCard == 0 ? i : chosenPlayer2;
-						PlayerStats* teamPs = teamNumThatGotCard == 0 ? teamStatsPlayer1 : teamStatsPlayer2;
-						PlayerStats* gamePs = teamNumThatGotCard == 0 ? gameStatsPlayer1 : gameStatsPlayer2;
+						int playerNumThatGotCard = teamNumThatGotCard == firstTeam ? i : chosenPlayer2;
+						PlayerStats* teamPs = teamNumThatGotCard == firstTeam ? teamStatsPlayer1 : teamStatsPlayer2;
+						PlayerStats* gamePs = teamNumThatGotCard == firstTeam ? gameStatsPlayer1 : gameStatsPlayer2;
 						teamPs->AddCard(card);
 						gamePs->AddCard(card);
 
@@ -307,7 +313,7 @@ void Game::StartGame()
 							// We need to disqualify that player
 							playersBall[teamNumThatGotCard][playerNumThatGotCard] = false;
 							playersMoved[teamNumThatGotCard][playerNumThatGotCard] = DISQUALIFY;
-							playersBall[teamNumThatGotCard % 1][teamNumThatGotCard == 1 ? i : chosenPlayer2] = true;
+							playersBall[teamNumThatGotCard % 1][teamNumThatGotCard == secondTeam ? i : chosenPlayer2] = true;
 						}
 						else if (decision == TrainerDecision::CHANGE_PLAYER)
 						{
@@ -329,8 +335,8 @@ void Game::StartGame()
 					{ 
 						// no card given we'll generate random team that will have ball
 						int teamThatWonTackle = rand() % 2;
-						playersBall[teamThatWonTackle][teamThatWonTackle == 0 ? i : chosenPlayer2] = true;
-						playersBall[teamThatWonTackle % 1][teamThatWonTackle == 1 ? i : chosenPlayer2] = false;
+						playersBall[teamThatWonTackle][teamThatWonTackle == firstTeam ? i : chosenPlayer2] = true;
+						playersBall[teamThatWonTackle % 1][teamThatWonTackle == secondTeam ? i : chosenPlayer2] = false;
 						
 					}
 
@@ -342,11 +348,10 @@ void Game::StartGame()
 				Player* gk = team2.GetGoalkeeper();
 				PlayerMovement gPm = gk->MakeMove(false);
 
-				// if (*p1 > *gk)
-				if (gPm == PlayerMovement::MISS_BALL)
+				if (*p1 > *gk || (*p1 == *gk && gPm == PlayerMovement::MISS_BALL))
 				{
 					team2.GetPlayerStats(gk)->AddMove(PlayerMovement::MISS_BALL);
-					m_gameScore[0]++;
+					m_gameScore[firstTeam]++;
 					gameStatsPlayer1->AddGoals();
 					teamStatsPlayer1->AddGoals();
 				}
@@ -356,10 +361,10 @@ void Game::StartGame()
 					
 				}
 
-				playersBall[0][i] = false;
-				playersBall[1][team2.GetGoalKeeperIndex()] = true;
+				playersBall[firstTeam][i] = false;
+				playersBall[secondTeam][team2.GetGoalKeeperIndex()] = true;
 
-				playersMoved[0][i] = MOVED;
+				playersMoved[firstTeam][i] = MOVED;
 				
 			}
 
@@ -369,23 +374,23 @@ void Game::StartGame()
 		// Make all the rest players move
 		for (int k = 0; k < team1.GetPlayerNum(); k++)
 		{
-			if (playersMoved[0][k] == FREE_TO_GO) // player can move
+			if (playersMoved[firstTeam][k] == FREE_TO_GO) // player can move
 			{
 				GetPlayerStats(team1[k])->AddMove(PlayerMovement::RUN_TO_OPEN_SPACE);
 				team1.GetPlayerStats(team1[k])->AddMove(PlayerMovement::RUN_TO_OPEN_SPACE);
 			}
-			else if (playersMoved[0][k] == MOVED) // clean stats for next iteration
-			{ playersMoved[0][k] = FREE_TO_GO; } 
+			else if (playersMoved[firstTeam][k] == MOVED) // clean stats for next iteration
+			{ playersMoved[firstTeam][k] = FREE_TO_GO; } 
 		}
 		for (int k = 0; k < team2.GetPlayerNum(); k++)
 		{
-			if (playersMoved[1][k] == FREE_TO_GO) // player can move
+			if (playersMoved[secondTeam][k] == FREE_TO_GO) // player can move
 			{
 				GetPlayerStats(team2[k])->AddMove(PlayerMovement::RUN_TO_OPEN_SPACE);
 				team2.GetPlayerStats(team2[k])->AddMove(PlayerMovement::RUN_TO_OPEN_SPACE);
 			}
-			else if (playersMoved[1][k] == MOVED) // clean stats for next iteration
-			{ playersMoved[1][k] = FREE_TO_GO; }
+			else if (playersMoved[secondTeam][k] == MOVED) // clean stats for next iteration
+			{ playersMoved[secondTeam][k] = FREE_TO_GO; }
 		}
 
 		

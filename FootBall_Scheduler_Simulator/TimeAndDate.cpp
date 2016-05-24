@@ -59,7 +59,7 @@ Time Time::operator--(int)
 	return t;
 }
 
-Time Time::operator/(int value)
+Time Time::operator/(int value) const
 {
 	if (value == 0) { return Time(); }
 	Time newTime(m_hour/value, (m_hour%value)*60/value);
@@ -77,7 +77,7 @@ void Time::SetMinute(int minute)
 {
 	if (minute < 0)
 	{ minute = 0; }
-	else if (minute > 60)
+	else if (minute > 59)
 	{ m_hour += minute/60; minute %= 60; }
 	m_minute = minute;
 }
@@ -168,7 +168,7 @@ Date Date::operator-(int remove) const
 	return Date(this->GetYear(), this->GetMonth(), this->GetDate() - remove);
 }
 
-const Date & Date::operator+=(const Date & d)
+const Date& Date::operator+=(const Date & d)
 {
 	this->SetYear(this->GetYear()   + d.GetYear());
 	this->SetMonth(this->GetMonth() + d.GetMonth());

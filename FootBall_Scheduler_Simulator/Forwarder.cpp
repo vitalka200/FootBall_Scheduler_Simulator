@@ -2,11 +2,10 @@
 
 #include <time.h>
 #include <stdlib.h>
-#define GOAL_FACTOR 1000
+#define GOAL_FACTOR 1
 
 const PlayerMovement Forwarder::MakeMove(bool hasBall)
 {
-	srand(time(NULL));
 	PlayerMovement pm;
 	if (hasBall)
 	{
