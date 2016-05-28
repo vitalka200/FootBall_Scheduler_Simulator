@@ -19,17 +19,13 @@ template<class T>
 void PrintDynamicArray(int length, std::vector<T*> arr)
 {
 	for (int i = 0; i < length; i++)
-	{
-		std::cout << i + 1 << ") " << *(arr[i]) << std::endl;
-	}
+	{ std::cout << i + 1 << ") " << *(arr[i]) << std::endl; }
 }
 template<class T>
 void PrintArray(int length, const std::vector<T> arr)
 {
 	for (int i = 0; i < length; i++)
-	{
-		std::cout << i + 1 << ") " << arr[i] << std::endl;
-	}
+	{ std::cout << i + 1 << ") " << arr[i] << std::endl; }
 }
 
 /*
@@ -50,9 +46,7 @@ void scan(T& input) {
 	{
 		std::cin >> input;
 		if (std::cin.good())
-		{
-			std::cout << input << std::endl; break;
-		}
+		{ std::cout << input << std::endl; break; }
 		else
 		{
 			std::cout << std::endl << "Wrong input. Please reenter" << std::endl;
@@ -128,9 +122,7 @@ GameList GameManager::operator[](const Date& d) const
 		GameList gameList = m_stadiums.at(i).GetGamesByDate(d);
 
 		for (int j = 0; j < gameList.count; j++)
-		{
-			res.games[res.count++] = gameList.games[j];
-		}
+		{ res.games[res.count++] = gameList.games[j]; }
 	}
 
 	GameList newRes = res;
@@ -145,9 +137,7 @@ const GameList GameManager::operator[](const TimeAndDate& tad) const
 	for (int i = 0; i < m_stadiums.size(); i++)
 	{
 		if (m_stadiums[i].GetGameByTimeAndDate(tad))
-		{
-			res.games[res.count++] = m_stadiums[i].GetGameByTimeAndDate(tad);
-		}
+		{ res.games[res.count++] = m_stadiums[i].GetGameByTimeAndDate(tad); }
 	}
 
 	return res;
@@ -171,9 +161,7 @@ void GameManager::CancelGame() {
 		std::cout << std::endl << "Choose a Date -->> " << std::endl;
 
 		for (int i = 0; i < m_stadiums[stadiumNum].m_gameList.size(); i++)
-		{
-			std::cout << i + 1 << " - " << gamesList[i].GetDate() << std::endl;
-		}
+		{ std::cout << i + 1 << " - " << gamesList[i].GetDate() << std::endl; }
 
 		scan<int>(gameDate);
 		gameDate--;
@@ -182,23 +170,17 @@ void GameManager::CancelGame() {
 			std::cout << std::endl << "Choose a game from list -->> " << std::endl;
 
 			for (int i = 0; i < gamesList[gameDate].GetGamesCount(); i++)
-			{
-				std::cout << i + 1 << " - " << gamesList[gameDate].GetGameById(i) << std::endl;
-			}
+			{ std::cout << i + 1 << " - " << gamesList[gameDate].GetGameById(i) << std::endl; }
 
 			scan<int>(gameNum);
 			gameNum--;
 			m_stadiums[stadiumNum].RemoveGame(&(gamesList[gameDate].GetGameById(gameNum)));
 		}
 		else
-		{
-			std::cout << "There are no games in the specific date." << std::endl;
-		}
+		{ std::cout << "There are no games in the specific date." << std::endl; }
 	}
 	else
-	{
-		std::cout << "there are no games scheduled for this stadium." << std::endl;
-	}
+	{ std::cout << "there are no games scheduled for this stadium." << std::endl; }
 }
 
 void GameManager::SellTickets() {
@@ -210,9 +192,7 @@ void GameManager::SellTickets() {
 		pick = rand() % 2;
 
 		if (pick)
-		{
-			(*(m_games[m_games.size() - 1])) += Fan("name");
-		}
+		{(*(m_games[m_games.size() - 1])) += Fan("name"); }
 	}
 }
 
@@ -286,7 +266,7 @@ void GameManager::ManageReferees() {
 			scan<std::string>(f_name);
 			std::cout << std::endl << "ID --> ";
 			scan<long>(id);
-			m_Referees.push_back(new Referee(name, f_name, id));
+			m_Referees.add(new Referee(name, f_name, id));
 
 			break;
 		}
@@ -294,13 +274,11 @@ void GameManager::ManageReferees() {
 		{
 			int refNum;
 			std::cout << std::endl << "Choose referee from the list -->> " << std::endl;
-			PrintDynamicArray<Referee>(m_Referees.size(), m_Referees);
+			//PrintDynamicArray<Referee>(m_Referees.size(), m_Referees);
+			std::cout << m_Referees;
 			std::cout << "--> ";
 			scan<int>(refNum);
-			
-			if (refNum < m_Referees.size() && refNum > 0)
-			{ m_Referees.erase(m_Referees.begin() + refNum - 1); }
-
+			m_Referees.remove(refNum - 1);
 			std::cout << std::endl << "Referee has been removed." << std::endl;
 			break;
 		}
@@ -368,7 +346,7 @@ void GameManager::ManageTeams() {
 			std::cout << "--> ";
 			scan<int>(teamNum);
 			if (teamNum > 0 && teamNum < m_teams.size())
-				m_teams.erase(m_teams.begin() + teamNum - 1);
+			{ m_teams.erase(m_teams.begin() + teamNum - 1); }
 			break;
 		}
 		default: { flagOut = false; break; }
@@ -388,9 +366,9 @@ void GameManager::ManageGames() {
 		scan<int>(choice);
 		switch (choice)
 		{
-		case 1: { NewGame();			break; }
-		case 2: { CancelGame();		break; }
-		default: { flagOut = false;		break; }
+			case 1: { NewGame();			break; }
+			case 2: { CancelGame();		break; }
+			default: { flagOut = false;		break; }
 		}
 	}
 }
@@ -498,12 +476,12 @@ void GameManager::NewGame() {
 	TimeAndDate tad = TimeAndDate(t, d);
 	g = new Game(teams, tad, maxFans);
 	std::cout << std::endl << "=== Adding referee from a list ===" << std::endl << std::endl;
-	PrintDynamicArray<Referee>(m_Referees.size(), m_Referees);
-	//cout << m_Referees;
+	//PrintDynamicArray<Referee>(m_Referees.size(), m_Referees.getList());
+	cout << m_Referees;
 	int refereeNum = rand() % m_Referees.size();
-	g->AddReferee(*m_Referees[refereeNum]);
+	g->AddReferee(*m_Referees.get(refereeNum));
 
-	std::cout << std::endl << "Chosen - " << *m_Referees[refereeNum] << std::endl;
+	std::cout << std::endl << "Chosen - " << *m_Referees.get(refereeNum) << std::endl;
 
 	m_games.push_back(g);
 	//delete[]teams;
@@ -514,12 +492,7 @@ void GameManager::NewGame() {
 void GameManager::AddGame(Game* g)
 {
 	for (int i = 0; i<m_stadiums.size(); i++)
-	{
-		if (m_stadiums[i].AddGame(g))
-		{
-			break;
-		}
-	}
+	{ if (m_stadiums[i].AddGame(g))	{ break; }}
 }
 
 
@@ -528,21 +501,14 @@ void GameManager::AddGame(Game* g)
 void GameManager::RemoveGame(const Game* g)
 {
 	for (int i = 0; i<m_stadiums.size(); i++)
-	{
-		if (m_stadiums[i].RemoveGame(g))
-		{
-			break;
-		}
-	}
+	{ if (m_stadiums[i].RemoveGame(g)) { break; } }
 }
 
 
 void GameManager::GetGameLog()
 {
 	for (int i = 0; i < m_games.size(); i++)
-	{
-		std::cout << *(m_games[i]) << std::endl;
-	}
+	{ std::cout << *(m_games[i]) << std::endl; }
 }
 
 
@@ -577,21 +543,16 @@ void GameManager::GetMonthSummary()
 				std::cout << *(list.games[i]) << std::endl << "Winner: ";
 
 				if (list.games[i]->GetWinner())
-				{
-					std::cout << *(list.games[i]->GetWinner()) << std::endl;
-				}
+				{ std::cout << *(list.games[i]->GetWinner()) << std::endl; }
 				else
-				{
-					std::cout << "Not yet determined." << std::endl;
-				}
+				{ std::cout << "Not yet determined." << std::endl; }
+
 				std::cout << std::endl;
 			}
 		}
 	}
 	if (!haveGamesFlag)
-	{
-		std::cout << " There are no games planned this month." << std::endl;
-	}
+	{ std::cout << " There are no games planned this month." << std::endl; }
 	std::cout << std::endl;
 }
 
@@ -706,9 +667,7 @@ void GameManager::ManageGameSchedule()
 		case 1:
 		{
 			if (m_games.size()> 0)
-			{
-				PrintDynamicArray(m_games.size(), m_games);
-			}
+			{ PrintDynamicArray(m_games.size(), m_games); }
 			break;
 		}
 

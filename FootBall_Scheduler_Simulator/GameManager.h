@@ -4,7 +4,6 @@
 // System includes
 #include <iostream>
 #include <vector>
-#include <string>
 // Person includes
 #include "Person.h"
 #include "Fan.h"
@@ -21,6 +20,7 @@
 #include "Stadium.h"
 // Other includes
 #include "TimeAndDate.h"
+#include "LinkedList.h"
 using namespace std;
 
 class GameManager
@@ -64,7 +64,7 @@ private:
 
 	std::vector<Game*> m_games;
 	std::vector<Team*> m_teams;
-	std::vector<Referee*> m_Referees;
+	LinkedList<Referee*> m_Referees;
 	std::vector<Stadium> m_stadiums;
 
 

@@ -98,7 +98,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Goalkeeper.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />
