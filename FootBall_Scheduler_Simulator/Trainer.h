@@ -2,6 +2,8 @@
 #define __TRAINER_H
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Person.h"
 
 enum TrainerDecision { NO_DECISION, CHANGE_PLAYER };
@@ -9,9 +11,9 @@ enum TrainerDecision { NO_DECISION, CHANGE_PLAYER };
 class Trainer: public Person
 {
 public:
-	static const char* TrainerDecisionNames[];
+	static const std::string TrainerDecisionNames[];
 	// c-tors, d-tors
-	Trainer(const char* name = " ", const char* f_name = " ", long id = -1) 
+	Trainer(const std::string name = " ", const std::string f_name = " ", long id = -1) 
 		: Person(name, f_name, id) { }
 	
 	// Operators

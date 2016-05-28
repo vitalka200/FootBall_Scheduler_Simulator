@@ -5,6 +5,8 @@
 #include "Defender.h"
 #include "Forwarder.h"
 #include "Goalkeeper.h"
+#include <string>
+#include <vector>
 #include <typeinfo.h>
 
 
@@ -12,14 +14,12 @@ const Team& Team::operator=(const Team& t)
 {
 	if (this != &t)
 	{
-		m_numOfPlayers  = t.m_numOfPlayers;
-		m_numOfTrainers = t.m_numOfTrainers;
 		m_isAttacking   = t.m_isAttacking;
 		m_goalkeeperNum = t.m_goalkeeperNum;
 		SetName(t.m_name);
-		SetPlayers(t.m_players, m_numOfPlayers);
-		SetTrainers(t.m_trainers, m_numOfTrainers);
-		SetPlayerStats(t.m_playerStats, m_numOfPlayers);
+		SetPlayers(t.m_players);
+		SetTrainers(t.m_trainers);
+		SetPlayerStats(t.m_playerStats);
 		if (m_goalkeeperNum >= 0 )
 		{ m_goalkeeper = m_players[m_goalkeeperNum]; }
 	}
@@ -28,9 +28,7 @@ const Team& Team::operator=(const Team& t)
 
 Team::~Team()
 {
-	delete []m_name;          delete []m_trainers;
 	DeletePlayers(m_players); DeletePlayerStats(m_playerStats);
-	delete []m_players;       delete []m_playerStats;
 }
 
 Player* Team::operator[](int index)
@@ -40,57 +38,68 @@ Player* Team::operator[](int index)
 
 void Team::AddPlayer(Player* p)
 {
-	Player** newPList       = new Player*[m_numOfPlayers+1];
-	PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers+1];
-
-	for (int i = 0; i < m_numOfPlayers; i++)
-	{ 
-		newPList[i] = m_players[i];
-		newPSList[i] = m_playerStats[i];
-	    if (typeid(*(newPSList[i])) == typeid(Goalkeeper))
-	    { m_goalkeeper = newPList[i]; m_goalkeeperNum = i;}
-	}
-
 	p->SetTeam(this);
-	newPList[m_numOfPlayers] = p;
-	newPSList[m_numOfPlayers] = new PlayerStats(p);
-
+	m_players.push_back(p);
+	m_playerStats.push_back(new PlayerStats(p));
 	if (typeid(*p) == typeid(Goalkeeper))
-	{ m_goalkeeper = p; m_goalkeeperNum = m_numOfPlayers;}
+	{ m_goalkeeper = p; m_goalkeeperNum = m_players.size() - 1; }
+	//Player** newPList       = new Player*[m_numOfPlayers+1];
+	//PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers+1];
 
-	delete []m_players; delete []m_playerStats;
-	m_players = newPList;
-	m_playerStats = newPSList;
+	//for (int i = 0; i < m_numOfPlayers; i++)
+	//{ 
+	//	newPList[i] = m_players[i];
+	//	newPSList[i] = m_playerStats[i];
+	//    if (typeid(*(newPSList[i])) == typeid(Goalkeeper))
+	//    { m_goalkeeper = newPList[i]; m_goalkeeperNum = i;}
+	//}
 
-	m_numOfPlayers++;
+	//p->SetTeam(this);
+	//newPList[m_numOfPlayers] = p;
+	//newPSList[m_numOfPlayers] = new PlayerStats(p);
+
+	//if (typeid(*p) == typeid(Goalkeeper))
+	//{ m_goalkeeper = p; m_goalkeeperNum = m_numOfPlayers;}
+
+	//delete []m_players; delete []m_playerStats;
+	//m_players = newPList;
+	//m_playerStats = newPSList;
+
+	//m_numOfPlayers++;
 }
 
 void Team::RemovePlayer(const Player* p)
 {
+	
 	int playerPosition = -1;
-	for (int i = 0; i < m_numOfPlayers; i++)
+	for (int i = 0; i < m_players.size(); i++)
 	{
 		if (m_players[i]->IsEqual(p))
 		{ playerPosition = i; break;}
 	}
-	if (playerPosition >= 0)
+	if (playerPosition > -1)
 	{
-		Player* playerToRemove  = m_players[playerPosition];
-		Player** newPList       = new Player*[m_numOfPlayers-1];
-		PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers-1];
-
-		for (int i = playerPosition+1; i < m_numOfPlayers; i++)
-		{ 
-			newPList[i-1]  = m_players[i];
-			newPSList[i-1] = m_playerStats[i];
-		}
-		// Release memory and assign new arrays
-		//DeletePlayers(m_players); DeletePlayerStats(m_playerStats);
-		delete []m_players;       delete []m_playerStats;
-		m_players = newPList;     m_playerStats = newPSList;
-		// Decrement counter
-		m_numOfPlayers--;
+		m_players.erase(m_players.begin() + playerPosition);
+		m_playerStats.erase(m_playerStats.begin() + playerPosition);
 	}
+	//if (playerPosition >= 0)
+	//{
+	//	Player* playerToRemove  = m_players[playerPosition];
+	//	Player** newPList       = new Player*[m_numOfPlayers-1];
+	//	PlayerStats** newPSList = new PlayerStats*[m_numOfPlayers-1];
+
+	//	for (int i = playerPosition+1; i < m_numOfPlayers; i++)
+	//	{ 
+	//		newPList[i-1]  = m_players[i];
+	//		newPSList[i-1] = m_playerStats[i];
+	//	}
+	//	// Release memory and assign new arrays
+	//	//DeletePlayers(m_players); DeletePlayerStats(m_playerStats);
+	//	delete []m_players;       delete []m_playerStats;
+	//	m_players = newPList;     m_playerStats = newPSList;
+	//	// Decrement counter
+	//	m_numOfPlayers--;
+	//}
 
 	if (typeid(*p) == typeid(Goalkeeper))
 	{
@@ -101,42 +110,47 @@ void Team::RemovePlayer(const Player* p)
 
 void Team::AddTrainer(Trainer* t)
 {
-	Trainer* newList = new Trainer[m_numOfTrainers+1];
-	for (int i = 0; i < m_numOfTrainers; i++)
-	{
-		newList[i] = Trainer(m_trainers[i]);
-	}
-	newList[m_numOfTrainers]        = Trainer(*t);
-	delete []m_trainers; m_trainers = newList;
-	m_numOfTrainers++;
+	//Trainer* newList = new Trainer[m_numOfTrainers+1];
+	//for (int i = 0; i < m_numOfTrainers; i++)
+	//{
+	//	newList[i] = Trainer(m_trainers[i]);
+	//}
+	//newList[m_numOfTrainers]        = Trainer(*t);
+	//delete []m_trainers; m_trainers = newList;
+	//m_numOfTrainers++;
+	m_trainers.push_back(*t);
 }
 
 void Team::RemoveTrainer(const Trainer* t)
 {
-	Trainer* newList = new Trainer[m_numOfTrainers-1];
+	//Trainer* newList = new Trainer[m_numOfTrainers-1];
 	int idxToRemove = -1;
-	for (int i = 0; i < m_numOfTrainers; i++)
+	for (int i = 0; i < m_trainers.size(); i++)
 	{
 		if (m_trainers[i] == (*(t)))
 		{ idxToRemove = i; }
 	}
-	if (idxToRemove >= 0)
-	{
-		for (int i = 0; i < idxToRemove; i++)
-		{ newList[i] = Trainer(m_trainers[i]);}
-		for (int i = idxToRemove+1; i < m_numOfTrainers; i++)
-		{ newList[i-1] = Trainer(m_trainers[i]); }
-		delete []m_trainers; m_trainers = newList;
-		m_numOfTrainers--;
-	}
-	else 
-	{ delete []newList; }
+	if (idxToRemove > -1)
+	{ m_trainers.erase(m_trainers.begin() + idxToRemove); }
+
+	//if (idxToRemove >= 0)
+	//{
+	//	for (int i = 0; i < idxToRemove; i++)
+	//	{ newList[i] = Trainer(m_trainers[i]);}
+	//	for (int i = idxToRemove+1; i < m_numOfTrainers; i++)
+	//	{ newList[i-1] = Trainer(m_trainers[i]); }
+	//	delete []m_trainers; m_trainers = newList;
+	//	m_numOfTrainers--;
+	//}
+	//else 
+	//{ delete []newList; }
 }
 
 PlayerStats* Team::GetPlayerStats(const Player* p) const
 {
+
 	PlayerStats* ps = NULL;
-	for (int i = 0; i < m_numOfPlayers; i++)
+	for (int i = 0; i < m_playerStats.size(); i++)
 	{
 		if (m_playerStats[i]->GetPlayer()->IsEqual(p))
 		{ ps = m_playerStats[i]; break; }
@@ -152,87 +166,95 @@ void Team::AddPlayerStat(const Player* p, const PlayerMovement move, bool isActu
 	{ ps->AddGoals(); }
 }
 
-void Team::SetPlayers(Player** players, int count)
+void Team::SetPlayers(std::vector<Player*> players)
 {
-	DeletePlayers(m_players); delete []m_players;
-	m_numOfPlayers = count;
-	m_players = new Player*[m_numOfPlayers];
+	DeletePlayers(m_players); //delete []m_players;
+	m_players.clear();
+	//m_numOfPlayers = count;
+	//m_players = new Player*[m_numOfPlayers];
 
-	for (int i = 0; i < count; i++)
+	//for (int i = 0; i < count; i++)
+	//{
+	//	if (typeid(*players[i]) == typeid(Defender))
+	//	{ m_players[i] = new Defender(*dynamic_cast<Defender*>(players[i])); }
+	//	else if (typeid(*players[i]) == typeid(Forwarder))
+	//	{ m_players[i] = new Forwarder(*dynamic_cast<Forwarder*>(players[i])); }
+	//	else if (typeid(*players[i]) == typeid(Goalkeeper))
+	//	{ m_players[i] = new Goalkeeper(*dynamic_cast<Goalkeeper*>(players[i])); }
+
+	//	m_players[i]->SetTeam(this);
+	//}
+	for (int i = 0; i < players.size(); i++)
 	{
-		if (typeid(*players[i]) == typeid(Defender))
-		{ m_players[i] = new Defender(*dynamic_cast<Defender*>(players[i])); }
-		else if (typeid(*players[i]) == typeid(Forwarder))
-		{ m_players[i] = new Forwarder(*dynamic_cast<Forwarder*>(players[i])); }
-		else if (typeid(*players[i]) == typeid(Goalkeeper))
-		{ m_players[i] = new Goalkeeper(*dynamic_cast<Goalkeeper*>(players[i])); }
-
+		m_players.push_back(players[i]);
 		m_players[i]->SetTeam(this);
 	}
 }
 
-void Team::SetTrainers(const Trainer* trainers, int count)
+void Team::SetTrainers(std::vector<Trainer> trainers)
 {
-	delete []m_trainers;
-	m_numOfTrainers = count;
-	m_trainers = new Trainer[m_numOfTrainers];
-	
-	for (int i = 0; i < m_numOfTrainers; i++)
-	{ m_trainers[i] = Trainer(trainers[i]); }
+	//delete []m_trainers;
+	//m_numOfTrainers = count;
+	//m_trainers = new Trainer[m_numOfTrainers];
+	//
+	//for (int i = 0; i < m_numOfTrainers; i++)
+	//{ m_trainers[i] = Trainer(trainers[i]); }
+	m_trainers.clear();
+	m_trainers = trainers;
+
 }
 
-void Team::SetPlayerStats(PlayerStats** ps, int count)
+void Team::SetPlayerStats(std::vector<PlayerStats*> ps)
 {
-	DeletePlayerStats(m_playerStats); delete[]m_playerStats;
-	m_playerStats = new PlayerStats*[count];
+	DeletePlayerStats(m_playerStats); //delete[]m_playerStats;
+	m_playerStats.clear();
+	m_playerStats = ps;
+	//m_playerStats = new PlayerStats*[count];
 
-	for (int i = 0; i < count; i++)
-	{ m_playerStats[i] = new PlayerStats(*(ps[i])); }
+	//for (int i = 0; i < count; i++)
+	//{ m_playerStats[i] = new PlayerStats(*(ps[i])); }
 }
 
-void Team::DeletePlayers(Player** players)
+void Team::DeletePlayers(std::vector<Player*> players)
 {
-	if (players)
-	{
-		for (int i = 0; i < m_numOfPlayers; i++)
+	//if (players)
+	//{
+		for (int i = 0; i < players.size(); i++)
 		{ delete players[i]; }
-	}
+	//}
 }
 
-void Team::DeletePlayerStats(PlayerStats** pStats)
+void Team::DeletePlayerStats(std::vector<PlayerStats*> pStats)
 {
-	if (pStats)
-	{
-		for (int i = 0; i < m_numOfPlayers; i++)
+	//if (pStats)
+	//{
+		for (int i = 0; i < pStats.size(); i++)
 		{ delete pStats[i]; }
-	}
+	//}
 }
 
 const PlayerStats& PlayerStats::operator=(const PlayerStats& ps)
 {
 	if (this != &ps)
 	{
-		delete []m_moves; 
-		m_movesNumber = ps.m_movesNumber;
-		m_moves       = new PlayerMovement[m_movesNumber];
+		m_moves       = ps.m_moves;
 		m_pl          = ps.m_pl;
-		for (int i = 0; i < m_movesNumber; i++)
-		{ m_moves[i] = ps.m_moves[i]; }
 	}
 	return *this;
 }
 
 void PlayerStats::AddMove(const PlayerMovement move)
 {
-	PlayerMovement* newList = new PlayerMovement[m_movesNumber+1];
+	//PlayerMovement* newList = new PlayerMovement[m_movesNumber+1];
 
-	for (int i = 0; i < m_movesNumber; i++)
-	{ newList[i] = m_moves[i]; }
+	//for (int i = 0; i < m_movesNumber; i++)
+	//{ newList[i] = m_moves[i]; }
 
-	newList[m_movesNumber] = move;
+	//newList[m_movesNumber] = move;
 
-	delete []m_moves; m_moves = newList;
-	m_movesNumber++;
+	//delete []m_moves; m_moves = newList;
+	//m_movesNumber++;
+	m_moves.push_back(move);
 }
 
 void PlayerStats::AddCard(const CardType card)

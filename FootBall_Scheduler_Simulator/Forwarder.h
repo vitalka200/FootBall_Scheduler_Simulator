@@ -2,13 +2,15 @@
 #define __FORWARDER_H
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Player.h"
 
 class Forwarder : public Player
 {
 public:
 	// c-tors, d-tors
-	Forwarder(const char* name, const char* f_name, long id, Team* team, PlayerLevel pl = LOW) 
+	Forwarder(const std::string name, const std::string f_name, long id, Team* team, PlayerLevel pl = LOW) 
 		: Player(name, f_name, id,  team, pl) { CreateAllowedMoves(); }
 	// Operators
 

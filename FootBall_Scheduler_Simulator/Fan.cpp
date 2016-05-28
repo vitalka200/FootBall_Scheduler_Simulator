@@ -1,5 +1,7 @@
 #include "Fan.h"
 #include "Team.h"
+#include <string>
+#include <vector>
 
 void Fan::Cheer()
 {

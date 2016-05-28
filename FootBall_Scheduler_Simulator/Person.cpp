@@ -1,4 +1,6 @@
 #include "Person.h"
+#include <string>
+#include <vector>
 
 const Person& Person::operator=(const Person& p)
 {
@@ -15,7 +17,7 @@ bool Person::operator==(const Person& p) const
 {
 	return (
 		this->GetId() == p.GetId() &&
-		strcmp(this->GetName(), p.GetName()) == 0 &&
-		strcmp(this->GetFName(), p.GetFName()) == 0
+		this->GetName() == p.GetName() &&
+		this->GetFName() == p.GetFName()
 		);
 }

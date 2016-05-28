@@ -2,6 +2,8 @@
 #define __REFEREE_H
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Person.h"
 
 enum CardType { NO_CARD, YELLOW, RED };
@@ -9,10 +11,10 @@ enum CardType { NO_CARD, YELLOW, RED };
 class Referee : public Person
 {
 public:
-	static const char* CardNames[];
+	static const std::string CardNames[];
 	// c-tors, d-tors
 	
-	Referee(const char* name = " ", const char* f_name = " ", long id = -1) 
+	Referee(const std::string name = " ", const std::string f_name = " ", long id = -1) 
 		: Person(name, f_name, id) { }
 	
 	// Operators

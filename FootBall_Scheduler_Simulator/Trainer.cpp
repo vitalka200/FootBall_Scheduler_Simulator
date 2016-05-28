@@ -1,9 +1,10 @@
 #include "Trainer.h"
 #include <stdlib.h>
 #include <time.h>
+#include <string>
 
 
-const char* Trainer::TrainerDecisionNames[] = { "No Decision", "Change Player" };
+const std::string Trainer::TrainerDecisionNames[] = { "No Decision", "Change Player" };
 
 TrainerDecision Trainer::MakeDecision(bool isTeamAttacking) const
 {

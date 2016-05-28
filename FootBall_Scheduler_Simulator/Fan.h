@@ -2,6 +2,8 @@
 #define __FAN_H
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Person.h"
 
 // Forward declaration
@@ -11,7 +13,7 @@ class Fan : public Person
 {
 public:
 	// c-tors, d-tors
-	Fan(const char* name = " ", const char* f_name = " ", long id = -1, Team* team = NULL) 
+	Fan(const std::string name = " ", const std::string f_name = " ", long id = -1, Team* team = NULL) 
 	    : Person(name, f_name, id), m_team(NULL) {SetTeam(team);}
 	// Operators
 

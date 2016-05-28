@@ -2,7 +2,10 @@
 #define __PLAYER_H
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Person.h"
+
 
 // Forward declaration
 class Team;
@@ -16,18 +19,18 @@ class Player : public Person
 friend class Team;
 public:
 	// Structs
-	static const char* MovementsNames[];
+	static const std::string MovementsNames[];
 
-	static const char* LevelNames[];
+	static const std::string LevelNames[];
 
-	struct AllowedMoves { PlayerMovement* moves; int numberOfMoves; };
+	struct AllowedMoves { std::vector<PlayerMovement> moves; int numberOfMoves; };
 
 	// c-tors, d-tors
-	Player(const char* name, const char* f_name, long id, Team* team, PlayerLevel pl = LOW) 
-	    : Person(name, f_name, id), m_team(NULL)                      { SetTeam(team); SetLevel(pl); m_allowed_moves.numberOfMoves = 0; }
+	Player(const std::string name, const std::string f_name, long id, Team* team, PlayerLevel pl = LOW)
+	    : Person(name, f_name, id), m_team(NULL)                      { SetTeam(team); SetLevel(pl); }
 	Player(const Player& p)
 		: Person(p.m_name, p.m_fname, p.m_id), m_team(NULL)           { *this = p; }
-	virtual ~Player()                                                 { if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves; }
+	virtual ~Player() {}                                            //{ if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves; }
 	// Methods
 	void                         SetTeam(Team* team)                  { m_team = team; }
 	void                         SetLevel(PlayerLevel pl);
@@ -55,12 +58,13 @@ public:
 protected:
 	Team*        m_team;
 	PlayerLevel  m_plevel; // Player Level
-	AllowedMoves m_allowed_moves;
+	std::vector<PlayerMovement> m_allowed_moves;
+	//AllowedMoves m_allowed_moves;
 
 	// Methods
 	virtual void CreateAllowedMoves()                      =0;
 	virtual void show(std::ostream& os)              const =0;
-	void         SetAllowedMoves(AllowedMoves allowedMoves);
+	//void         SetAllowedMoves(AllowedMoves allowedMoves);
 
 };
 

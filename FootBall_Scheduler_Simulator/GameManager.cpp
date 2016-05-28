@@ -1,11 +1,13 @@
 
 #include "GameManager.h"
+#include "LinkedList.h"
 #include <iostream>
 #include <fstream>
 #include <ostream>
 #include <time.h>
 #include <stdlib.h>
-
+#include <string>
+#include <vector>
 #define NAME_LEN 20
 
 std::ifstream in("");
@@ -14,7 +16,7 @@ std::ifstream in("");
 *	Print the array given.
 */
 template<class T>
-void PrintDynamicArray(int length, T** arr)
+void PrintDynamicArray(int length, std::vector<T*> arr)
 {
 	for (int i = 0; i < length; i++)
 	{
@@ -22,7 +24,7 @@ void PrintDynamicArray(int length, T** arr)
 	}
 }
 template<class T>
-void PrintArray(int length, const T* arr)
+void PrintArray(int length, const std::vector<T> arr)
 {
 	for (int i = 0; i < length; i++)
 	{
@@ -65,7 +67,7 @@ void scan(T& input) {
 /*
 *	Redirect the std::cin and std::cout to external file.
 */
-void GameManager::Redirect2File(char* inFileName)
+void GameManager::Redirect2File(std::string inFileName)
 {
 	in = std::ifstream(inFileName);
 	if (!in.good()) throw std::exception();
@@ -86,16 +88,15 @@ void GameManager::Redirect2ios()
 }
 
 
-Player* GetPlayer(Team* t){
+Player* GetPlayer(Team* t) {
 	int type, id, level;
-	int pnum;
-	char name[NAME_LEN], f_name[NAME_LEN];
+	std::string name, f_name;
 	std::cout << std::endl << "Type of Player : 1-forwarder, 2- Defender :  ";
 	scan<int>(type);
 	std::cout << std::endl << "Player name --> ";
-	scan(name);
+	scan<std::string>(name);
 	std::cout << std::endl << "Player first name --> ";
-	scan(f_name);
+	scan<std::string>(f_name);
 	std::cout << std::endl << "Player id --> ";
 	scan<int>(id);
 	std::cout << std::endl << "Player Level 0-3, 0 if Default --> ";
@@ -120,11 +121,11 @@ Player* GetPlayer(Team* t){
 GameList GameManager::operator[](const Date& d) const
 {
 	GameList res;
-	res.games = new Game*[m_gamesLength];
+	res.games = new Game*[m_games.size()];
 
-	for (int i = 0; i < m_stadiumsLength; i++)
+	for (int i = 0; i < m_stadiums.size(); i++)
 	{
-		GameList gameList = m_stadiums[i].GetGamesByDate(d);
+		GameList gameList = m_stadiums.at(i).GetGamesByDate(d);
 
 		for (int j = 0; j < gameList.count; j++)
 		{
@@ -139,9 +140,9 @@ GameList GameManager::operator[](const Date& d) const
 const GameList GameManager::operator[](const TimeAndDate& tad) const
 {
 	GameList res;
-	res.games = new Game*[m_gamesLength];
+	res.games = new Game*[m_games.size()];
 
-	for (int i = 0; i < m_stadiumsLength; i++)
+	for (int i = 0; i < m_stadiums.size(); i++)
 	{
 		if (m_stadiums[i].GetGameByTimeAndDate(tad))
 		{
@@ -160,16 +161,16 @@ void GameManager::CancelGame() {
 	std::cout << "==========================================================" << std::endl;
 
 	std::cout << std::endl << "Choose a stadium -->> " << std::endl;
-	PrintArray<Stadium>(m_stadiumsLength, m_stadiums);
+	PrintArray<Stadium>(m_stadiums.size(), m_stadiums);
 	std::cout << "--> ";
 	scan<int>(stadiumNum);
 	stadiumNum--;
-	GamesByTimeDateNode* gamesList = m_stadiums[stadiumNum].m_gameList;
-	if (m_stadiums[stadiumNum].m_numOfNodes > 0)
+	std::vector<GamesByTimeDateNode> gamesList = m_stadiums[stadiumNum].m_gameList;
+	if (m_stadiums[stadiumNum].m_gameList.size() > 0)
 	{
 		std::cout << std::endl << "Choose a Date -->> " << std::endl;
 
-		for (int i = 0; i < m_stadiums[stadiumNum].m_numOfNodes; i++)
+		for (int i = 0; i < m_stadiums[stadiumNum].m_gameList.size(); i++)
 		{
 			std::cout << i + 1 << " - " << gamesList[i].GetDate() << std::endl;
 		}
@@ -204,19 +205,19 @@ void GameManager::SellTickets() {
 	int sold = 0, pick;
 	srand(time(NULL));
 
-	for (int i = 0; i < m_games[m_gamesLength - 1]->GetMaxFans(); i++)
+	for (int i = 0; i < m_games[m_games.size() - 1]->GetMaxFans(); i++)
 	{
 		pick = rand() % 2;
 
 		if (pick)
 		{
-			(*(m_games[m_gamesLength - 1])) += Fan("name");
+			(*(m_games[m_games.size() - 1])) += Fan("name");
 		}
 	}
 }
 
 void GameManager::ManageTrainers() {
-	char name[NAME_LEN], f_name[NAME_LEN];
+	std::string  name, f_name;
 	long id;
 	int choice, teamNum;
 	bool flagOut = true;
@@ -229,7 +230,7 @@ void GameManager::ManageTrainers() {
 		std::cout << std::endl << "Would you like to add or remove Trainer?  1 - Add, 2- Remove.  else - exit." << std::endl;
 		scan<int>(choice);
 		std::cout << std::endl << "Enter team number from list -->> " << std::endl;
-		PrintDynamicArray(m_teamsLength, m_teams1);
+		PrintDynamicArray(m_teams.size(), m_teams);
 		std::cout << "--> ";
 		scan<int>(teamNum);
 		switch (choice)
@@ -237,25 +238,25 @@ void GameManager::ManageTrainers() {
 		case 1:
 		{
 			std::cout << std::endl << "Team number : " << teamNum << std::endl << "Name --> ";
-			scan(name);
+			scan<std::string>(name);
 			std::cout << std::endl << "First Name --> ";
-			scan(f_name);
+			scan<std::string>(f_name);
 			std::cout << std::endl << "ID --> ";
 			scan<long>(id);
-			*(m_teams1[teamNum - 1]) += (new Trainer(name, f_name, id));
+			*(m_teams[teamNum - 1]) += (new Trainer(name, f_name, id));
 			break;
 		}
 		case 2:
 		{
 			int trainerNum;
 			std::cout << std::endl << "Choose trainer from list -->> " << std::endl;
-			PrintArray<Trainer>(m_teams1[teamNum - 1]->GetTrainersNum(), m_teams1[teamNum - 1]->GetTrainers());
+			//PrintArray<Trainer>(m_teams[teamNum - 1]->GetTrainersNum(), m_teams[teamNum - 1]->GetTrainers());//needs the vector from the teams
 			std::cout << "--> ";
 			scan<int>(trainerNum);
-			*(m_teams1[trainerNum]) -= &(m_teams1[teamNum - 1]->GetTrainers()[trainerNum]);
+			*(m_teams[trainerNum]) -= &(m_teams[teamNum - 1]->GetTrainers()[trainerNum]);
 			break;
 		}
-		default:{flagOut = false;  break; }
+		default: {flagOut = false;  break; }
 		}
 	}
 
@@ -276,55 +277,30 @@ void GameManager::ManageReferees() {
 		{
 		case 1:
 		{
-			Referee** m_newReferees = new Referee*[m_refereesLength + 1];
-
-			for (int i = 0; i < m_refereesLength; i++)
-			{
-				m_newReferees[i] = m_referees1[i];
-			}
-
-			char name[NAME_LEN], f_name[NAME_LEN];
+			std::string name, f_name;
 			long id;
 
-			for (int i = m_refereesLength; i < 1 + m_refereesLength; i++)
-			{
-				std::cout << std::endl << "Name --> ";
-				scan(name);
-				std::cout << std::endl << "First name --> ";
-				scan(f_name);
-				std::cout << std::endl << "ID --> ";
-				scan<long>(id);
-				m_newReferees[i] = new Referee(name, f_name, id);
-			}
+			std::cout << std::endl << "Name --> ";
+			scan<std::string>(name);
+			std::cout << std::endl << "First name --> ";
+			scan<std::string>(f_name);
+			std::cout << std::endl << "ID --> ";
+			scan<long>(id);
+			m_Referees.push_back(new Referee(name, f_name, id));
 
-			delete[]m_referees1;
-			m_referees1 = m_newReferees;
-			m_refereesLength += 1;
 			break;
 		}
 		case 2:
 		{
 			int refNum;
 			std::cout << std::endl << "Choose referee from the list -->> " << std::endl;
-			PrintDynamicArray<Referee>(m_refereesLength, m_referees1);
+			PrintDynamicArray<Referee>(m_Referees.size(), m_Referees);
 			std::cout << "--> ";
 			scan<int>(refNum);
-			refNum--;
-			Referee** new_referee = new Referee*[m_refereesLength - 1];
+			
+			if (refNum < m_Referees.size() && refNum > 0)
+			{ m_Referees.erase(m_Referees.begin() + refNum - 1); }
 
-			for (int i = 0; i < refNum; i++)
-			{
-				new_referee[i] = m_referees1[i];
-			}
-
-			for (int i = refNum + 1; i < m_gamesLength; i++)
-			{
-				new_referee[i - 1] = m_referees1[i];
-			}
-
-			m_refereesLength--;
-			delete[]m_referees1;
-			m_referees1 = new_referee;
 			std::cout << std::endl << "Referee has been removed." << std::endl;
 			break;
 		}
@@ -336,7 +312,7 @@ void GameManager::ManageReferees() {
 
 void GameManager::ManageTeams() {
 	int  numberOfPlayers, level, choice, type;
-	char name[NAME_LEN], f_name[NAME_LEN];
+	std::string name, f_name;
 	long id;
 	bool flagOut = true;
 	std::cout << "==========================================================" << std::endl;
@@ -351,22 +327,11 @@ void GameManager::ManageTeams() {
 		{
 		case 1:
 		{
-			int i;
-			Team** m_NewTeams = new Team*[1 + m_teamsLength];
-
-			for (i = 0; i < m_teamsLength; i++)
-			{
-				m_NewTeams[i] = m_teams1[i];
-			}
-
 			std::cout << std::endl << "Name --> ";
-			scan(name);
+			scan<std::string>(name);
 			std::cout << std::endl << "Number of Players in the team --> ";
 			scan<int>(numberOfPlayers);
-
 			Team* newTeam = new Team(name);
-			m_NewTeams[i] = newTeam;
-
 
 			for (int j = 0; j < numberOfPlayers; j++)
 			{
@@ -376,9 +341,9 @@ void GameManager::ManageTeams() {
 			}
 
 			std::cout << std::endl << "Goalkeeper Name --> ";
-			scan(name);
+			scan<std::string>(name);
 			std::cout << std::endl << "Gaolkeeper first Name --> ";
-			scan(f_name);
+			scan<std::string>(f_name);
 			std::cout << std::endl << "Goalkeeper ID --> ";
 			scan<long>(id);
 			std::cout << std::endl << "Goalkeeper Level 0-3, 0 if Default --> ";
@@ -386,43 +351,27 @@ void GameManager::ManageTeams() {
 			(*newTeam) += new Goalkeeper(name, f_name, id, newTeam, (PlayerLevel)level);
 
 			std::cout << std::endl << "Trainer Name --> ";
-			scan(name);
+			scan<std::string>(name);
 			std::cout << std::endl << "Trainer first Name --> ";
-			scan(f_name);
+			scan<std::string>(f_name);
 			std::cout << std::endl << "Trainer ID --> ";
 			scan<long>(id);
 			(*newTeam) += new Trainer(name, f_name, id);
-			delete[]m_teams1;
-			m_teams1 = m_NewTeams;
-			m_teamsLength++;
+			m_teams.push_back(newTeam);
 			break;
 		}
 		case 2:
 		{
 			int teamNum;
 			std::cout << "Choose a Team -->>" << std::endl;
-			PrintDynamicArray(m_teamsLength, m_teams1);
+			PrintDynamicArray(m_teams.size(), m_teams);
 			std::cout << "--> ";
 			scan<int>(teamNum);
-			teamNum--;
-			Team** new_teams = new Team*[m_teamsLength - 1];
-
-			for (int i = 0; i < teamNum; i++)
-			{
-				new_teams[i] = m_teams1[i];
-			}
-
-			for (int i = teamNum + 1; i < m_teamsLength; i++)
-			{
-				new_teams[i - 1] = m_teams1[i];
-			}
-
-			delete[]m_teams1;
-			m_teams1 = new_teams;
-			m_teamsLength--;
+			if (teamNum > 0 && teamNum < m_teams.size())
+				m_teams.erase(m_teams.begin() + teamNum - 1);
 			break;
 		}
-		default:{ flagOut = false; break; }
+		default: { flagOut = false; break; }
 		}
 	}
 }
@@ -439,8 +388,8 @@ void GameManager::ManageGames() {
 		scan<int>(choice);
 		switch (choice)
 		{
-		case 1:	 { NewGame();			break; }
-		case 2:	 { CancelGame();		break; }
+		case 1: { NewGame();			break; }
+		case 2: { CancelGame();		break; }
 		default: { flagOut = false;		break; }
 		}
 	}
@@ -462,65 +411,41 @@ void GameManager::ManageStadiums()
 		{
 		case 1:
 		{
-			char name[NAME_LEN];
+			std::string name;
 			int Maxfans;
-			Stadium* newM_Stadium = new Stadium[m_stadiumsLength + 1];
 			std::cout << std::endl << "Enter stadium Name --> ";
-			scan(name);
+			scan<std::string>(name);
 			std::cout << std::endl << "Enter max fans --> ";
 			scan<int>(Maxfans);
 			Stadium s = Stadium(name, Maxfans);
-
-			for (int i = 0; i < m_stadiumsLength; i++)
-			{
-				newM_Stadium[i] = m_stadiums[i];
-			}
-
-			newM_Stadium[m_stadiumsLength] = s;
-			delete[]m_stadiums;
-			m_stadiums = newM_Stadium;
-			m_stadiumsLength++;
+			m_stadiums.push_back(s);
 			break;
 		}
 		case 2:
 		{
 			std::cout << std::endl << "Choose stadium number from list -->> " << std::endl;
-			PrintArray<Stadium>(m_stadiumsLength, m_stadiums);
+			PrintArray<Stadium>(m_stadiums.size(), m_stadiums);
 			std::cout << "--> ";
 			scan<int>(stadiumNum);
-			stadiumNum--;
-			Stadium* m_Newstadium = new Stadium[m_stadiumsLength - 1];
-
-			for (int i = 0; i < stadiumNum; i++)
-			{
-				m_Newstadium[i] = m_stadiums[i];
-			}
-			for (int i = stadiumNum + 1; i < m_stadiumsLength; i++)
-			{
-				m_Newstadium[i - 1] = m_stadiums[i];
-			}
-
-			delete[]m_stadiums;
-			m_stadiums = m_Newstadium;
-			m_stadiumsLength--;
+			if (stadiumNum > 0 && stadiumNum < m_stadiums.size())
+				m_stadiums.erase(m_stadiums.begin() + stadiumNum - 1);
 			break;
 		}
 		case 3:
 		{
 			std::cout << std::endl << "Enter stadium number from list -->> " << std::endl;
-			PrintArray<Stadium>(m_stadiumsLength, m_stadiums);
+			PrintArray<Stadium>(m_stadiums.size(), m_stadiums);
 			std::cout << "--> ";
 			scan<int>(stadiumNum);
 			stadiumNum--;
-			Stadium* m_Newstadium = new Stadium[m_stadiumsLength - 1];
 			int updatedVal;
 			std::cout << std::endl << "Choose value to be updated :  1- Name, 2- Max fans. " << std::endl;
 			scan<int>(updatedVal);
 			std::cout << std::endl << "Enter new value --> ";
 			if (updatedVal == 1)
 			{
-				char val[NAME_LEN];
-				scan(val);
+				std::string val;
+				scan<std::string>(val);
 				m_stadiums[stadiumNum].SetName(val);
 			}
 			if (updatedVal == 2)
@@ -540,21 +465,21 @@ void GameManager::ManageStadiums()
 
 void GameManager::NewGame() {
 	Game* g = NULL;
-	Team** teams = new Team*[2];
+	std::vector<Team*> teams = std::vector<Team*>(2);
 	int t1, t2, minutes, hours, day, month, year, maxFans;
 	std::cout << "==========================================================" << std::endl;
 	std::cout << "New Game Creation:" << std::endl;
 	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "List of all teams -->> " << std::endl;
-	PrintDynamicArray(m_teamsLength, m_teams1);
+	PrintDynamicArray(m_teams.size(), m_teams);
 	std::cout << std::endl << "Enter Team number 1 id --> ";
 	scan<int>(t1);
 	t1--;
 	std::cout << std::endl << "Enter Team number 2 id --> ";
 	scan<int>(t2);
 	t2--;
-	teams[0] = m_teams1[t1];
-	teams[1] = m_teams1[t2];
+	teams[0] = m_teams[t1];
+	teams[1] = m_teams[t2];
 	std::cout << std::endl << "Date -->> " << std::endl << "Day --> ";
 	scan<int>(day);
 	std::cout << std::endl << "Month --> ";
@@ -573,30 +498,22 @@ void GameManager::NewGame() {
 	TimeAndDate tad = TimeAndDate(t, d);
 	g = new Game(teams, tad, maxFans);
 	std::cout << std::endl << "=== Adding referee from a list ===" << std::endl << std::endl;
-	PrintDynamicArray<Referee>(m_refereesLength, m_referees1);
-	
-	int refereeNum = rand() % m_refereesLength;
-	g->AddReferee(*m_referees1[refereeNum]);
+	PrintDynamicArray<Referee>(m_Referees.size(), m_Referees);
+	//cout << m_Referees;
+	int refereeNum = rand() % m_Referees.size();
+	g->AddReferee(*m_Referees[refereeNum]);
 
-	std::cout << std::endl << "Chosen - " << *m_referees1[refereeNum] << std::endl;
-	Game** new_games = new Game*[m_gamesLength + 1];
-	for (int i = 0; i < m_gamesLength; i++)
-	{
-		new_games[i] = m_games[i];
-	}
+	std::cout << std::endl << "Chosen - " << *m_Referees[refereeNum] << std::endl;
 
-	new_games[m_gamesLength] = g;
-	delete[]m_games;
-	m_games = new_games;
-	m_gamesLength++;
-	delete[]teams;
+	m_games.push_back(g);
+	//delete[]teams;
 	AddGame(g);
 }
 
 
 void GameManager::AddGame(Game* g)
 {
-	for (int i = 0; i<m_stadiumsLength; i++)
+	for (int i = 0; i<m_stadiums.size(); i++)
 	{
 		if (m_stadiums[i].AddGame(g))
 		{
@@ -610,7 +527,7 @@ void GameManager::AddGame(Game* g)
 
 void GameManager::RemoveGame(const Game* g)
 {
-	for (int i = 0; i<m_stadiumsLength; i++)
+	for (int i = 0; i<m_stadiums.size(); i++)
 	{
 		if (m_stadiums[i].RemoveGame(g))
 		{
@@ -622,7 +539,7 @@ void GameManager::RemoveGame(const Game* g)
 
 void GameManager::GetGameLog()
 {
-	for (int i = 0; i < m_gamesLength; i++)
+	for (int i = 0; i < m_games.size(); i++)
 	{
 		std::cout << *(m_games[i]) << std::endl;
 	}
@@ -685,11 +602,11 @@ void GameManager::GetTeamSummary()
 	std::cout << "Team Summary:" << std::endl;
 	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "Choose team from list -->> " << std::endl;
-	PrintDynamicArray(m_teamsLength, m_teams1);
+	PrintDynamicArray(m_teams.size(), m_teams);
 	std::cout << "--> ";
 	scan<int>(team);
 	team--;
-	std::cout << *(m_teams1[team]) << std::endl;
+	std::cout << *(m_teams[team]) << std::endl;
 }
 
 void GameManager::ManagePlayers()
@@ -702,20 +619,20 @@ void GameManager::ManagePlayers()
 	std::cout << "Manage Players:" << std::endl;
 	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "Choose team from list -->>" << std::endl;
-	PrintDynamicArray(m_teamsLength, m_teams1);
+	PrintDynamicArray(m_teams.size(), m_teams);
 	std::cout << "--> ";
 	scan<int>(teamNum);
 	teamNum--;
 
-	while (flagOut){
-		std::cout << *(m_teams1[teamNum]) << std::endl;
+	while (flagOut) {
+		std::cout << *(m_teams[teamNum]) << std::endl;
 		std::cout << "What would you like to do ? 1-Add Player, 2- Delete Player, 3-Update Player, else - exit. " << std::endl;
 		scan<int>(choice);
 		switch (choice)
 		{
 		case 1:
 		{
-			Team* chosenTeam = m_teams1[teamNum];
+			Team* chosenTeam = m_teams[teamNum];
 			Player* newPlayer = GetPlayer(chosenTeam);
 			(*chosenTeam) += newPlayer;
 			break;
@@ -724,7 +641,7 @@ void GameManager::ManagePlayers()
 		{
 			std::cout << std::endl << "Player number in the Team --> ";
 			scan<int>(playerNum);
-			*(m_teams1[teamNum]) -= (*(m_teams1[teamNum]))[playerNum];
+			*(m_teams[teamNum]) -= (*(m_teams[teamNum]))[playerNum];
 			break;
 
 		}
@@ -737,17 +654,17 @@ void GameManager::ManagePlayers()
 			scan<int>(choice2);
 			if (choice2 == 1)
 			{
-				char name[NAME_LEN];
+				std::string name;
 				std::cout << std::endl << "Enter new value --> ";
-				scan(name);
-				(*(m_teams1[teamNum]))[playerNum]->SetName(name);
+				scan<std::string>(name);
+				(*(m_teams[teamNum]))[playerNum]->SetName(name);
 			}
 			if (choice2 == 2)
 			{
 				int S;
 				std::cout << std::endl << "Enter new value --> ";
 				scan<int>(S);
-				(*(m_teams1[teamNum]))[playerNum]->SetLevel((PlayerLevel)S);
+				(*(m_teams[teamNum]))[playerNum]->SetLevel((PlayerLevel)S);
 			}
 			break;
 		}
@@ -763,11 +680,11 @@ void GameManager::StartGame()
 	std::cout << "Start Game menu:" << std::endl;
 	std::cout << "==========================================================" << std::endl;
 	std::cout << std::endl << "Choose game from list below -->> " << std::endl;
-	PrintDynamicArray(m_gamesLength, m_games);
+	PrintDynamicArray(m_games.size(), m_games);
 	std::cout << "--> ";
 	scan<int>(gameNum);
 	gameNum--;
-	if (gameNum < m_gamesLength && gameNum >= 0)
+	if (gameNum < m_games.size() && gameNum >= 0)
 	{
 		std::cout << std::endl << "Starting game..." << std::endl;
 		m_games[gameNum]->StartGame();
@@ -788,9 +705,9 @@ void GameManager::ManageGameSchedule()
 		{
 		case 1:
 		{
-			if (m_gamesLength > 0)
+			if (m_games.size()> 0)
 			{
-				PrintDynamicArray(m_gamesLength, m_games);
+				PrintDynamicArray(m_games.size(), m_games);
 			}
 			break;
 		}
@@ -811,14 +728,14 @@ void GameManager::GetStats()
 	std::cout << "Team Stats:" << std::endl;
 	std::cout << "==========================================================" << std::endl;
 
-	for (int i = 0; i < m_teamsLength; i++)
+	for (int i = 0; i < m_teams.size(); i++)
 	{
-		std::cout << *(m_teams1[i]);
+		std::cout << *(m_teams[i]);
 		int wins = 0;
-		for (int j = 0; j < m_gamesLength; j++)
+		for (int j = 0; j < m_games.size(); j++)
 		{
 			Team* winner = m_games[j]->GetWinner();
-			Team* teamForStats = m_teams1[i];
+			Team* teamForStats = m_teams[i];
 
 			if (winner && *winner == *teamForStats) { wins++; }
 		}
@@ -830,7 +747,7 @@ void GameManager::GetStats()
 void GameManager::TryInputMethod()
 {
 	try { Redirect2File("in.txt"); }
-	catch (std::exception e){ std::cout << "unable to read from file." << std::endl; }
+	catch (std::exception e) { std::cout << "unable to read from file." << std::endl; }
 
 	if (std::cin.bad()) { std::cout << "Bad redirect."; }
 }

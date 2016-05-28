@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <typeinfo.h>
+#include <string>
+#include <vector>
 
 #define DISQUALIFY -2
 #define CHANGED -1
@@ -20,8 +22,8 @@ const Time Game::MAX_GAME_LEN = Time(2, 0);
 
 Game::~Game()
 {
-	delete []m_fans; delete m_timeAndDate; delete []m_referees; delete []m_gameScore;
-	DeletePlayerStats(m_playerStats); delete []m_playerStats;  delete []m_teams;
+	delete m_timeAndDate; delete []m_gameScore;
+	DeletePlayerStats(m_playerStats);
 }
 
 bool Game::operator==(const Game& g) const
@@ -35,15 +37,14 @@ const Game& Game::operator=(const Game& g)
 	if (this != &g)
 	{
 		m_maxFans       = g.m_maxFans;
-		m_actualFans    = g.m_actualFans;
 		m_wasStarted    = g.m_wasStarted;
 
 		SetGameScore(g.m_gameScore);
 		SetTeams(g.m_teams);
-		SetReferees(g.m_referees, g.m_refereesCount);
+		SetReferees(g.m_referees);
 		SetTimeAndDate(g.GetTimeAndDate());
 		SetPlayerStats(g.GetGameStats(), g.GetTotalPlayers());
-		SetFans(g.GetFans(), g.m_actualFans);
+		SetFans(g.GetFans());
 	}
 	return *this;
 }
@@ -66,46 +67,54 @@ void Game::SetTimeAndDate(const TimeAndDate* tad)
 	m_timeAndDate = new TimeAndDate(*tad);
 }
 
-void Game::SetPlayerStats(PlayerStats** ps, int count)
+void Game::SetPlayerStats(std::vector<PlayerStats*> ps, int count)
 {
-	DeletePlayerStats(m_playerStats); delete[]m_playerStats;
+	DeletePlayerStats(m_playerStats);
+	m_playerStats.clear();
+	m_playerStats = ps;
 
-	m_playerStats    = new PlayerStats*[count];
+	//m_playerStats    = new PlayerStats*[count];
 
-	for (int i = 0; i < count; i++)
-	{ m_playerStats[i] = ps[i]; }
+	//for (int i = 0; i < count; i++)
+	//{ m_playerStats[i] = ps[i]; }
 }
 
-void Game::SetFans(const Fan* fans, int count)
+void Game::SetFans(std::vector<Fan> fans)
 {
-	delete []m_fans;
-	m_actualFans = count;
-	m_fans       = new Fan[m_actualFans];
-	for (int i = 0; i < m_actualFans; i++)
-	{ m_fans[i] = fans[i]; }
+	//delete []m_fans;
+	//m_actualFans = count;
+	//m_fans       = new Fan[m_actualFans];
+	//for (int i = 0; i < m_actualFans; i++)
+	//{ m_fans[i] = fans[i]; }
+	m_fans.clear();
+	m_fans = fans;
 }
 
-void Game::SetReferees(const Referee* referees, int count)
+void Game::SetReferees(std::vector<Referee> referees)
 {
-	delete []m_referees;
-	m_referees      = new Referee[count];
-	m_refereesCount = count;
-	for (int i = 0; i < count; i++)
-	{ m_referees[i] = referees[i]; }
+	//delete []m_referees;
+	//m_referees      = new Referee[count];
+	//m_refereesCount = count;
+	//for (int i = 0; i < count; i++)
+	//{ m_referees[i] = referees[i]; }
+	m_referees.clear();
+	m_referees = referees;
 }
 
-void Game::SetTeams(Team** teams)
+void Game::SetTeams(std::vector<Team*> teams)
 {
-	delete []m_teams;
-	m_teams = new Team*[2];
-	m_teams[0] = teams[0];
-	m_teams[1] = teams[1];
+	//delete []m_teams;
+	//m_teams = new Team*[2];
+	//m_teams[0] = teams[0];
+	//m_teams[1] = teams[1];
 	
-	delete []m_playerStats;
+	//delete []m_playerStats;
+	m_teams = teams;
 	
 	int totalPlayers = m_teams[0]->GetPlayerNum() + m_teams[1]->GetPlayerNum();
 	int counter;
-	m_playerStats = new PlayerStats*[totalPlayers];
+	//m_playerStats = new PlayerStats*[totalPlayers];
+	m_playerStats = std::vector<PlayerStats*>(totalPlayers);
 
 	Team& t1 = *(m_teams[0]);
 	for (counter = 0; counter < m_teams[0]->GetPlayerNum(); counter++)
@@ -130,14 +139,14 @@ void Game::SetGameScore(int* gameScore)
 	m_gameScore[1] = gameScore[1];
 }
 
-void Game::DeletePlayerStats(PlayerStats** pStats)
+void Game::DeletePlayerStats(std::vector<PlayerStats*> pStats)
 {
-	if (pStats)
-	{
+	//if (pStats)
+	//{
 		int totalPlayers = GetTotalPlayers();
 		for (int i = 0; i < totalPlayers; i++)
 		{ delete pStats[i]; }
-	}
+	//}
 }
 
 Team* Game::GetWinner() const
@@ -166,7 +175,7 @@ bool Game::CanStartGame()
 		m_teams[0]->GetTrainersNum() > 0 &&
 		m_teams[1]->GetTrainersNum() > 0 &&
 		// Can't start game without referee
-		m_refereesCount > 0
+		m_referees.size() > 0
 		);
 }
 
@@ -269,7 +278,7 @@ void Game::StartGame()
 				{
 					// Players have same level. Tackle can be with Referee's cards
 					// and change players by one of the trainers
-					Referee* activeReferee = &(m_referees[rand() % m_refereesCount]);
+					Referee* activeReferee = &(m_referees[rand() % m_referees.size()]);
 					CardType card = activeReferee->MakeDecision();
 					int teamNumThatGotCard = rand() % 2;
 
@@ -298,7 +307,7 @@ void Game::StartGame()
 					}
 					else if (card == CardType::YELLOW) // Trainer Decision needed
 					{
-						const Trainer* trainers = m_teams[teamNumThatGotCard]->GetTrainers();
+						const std::vector<Trainer> trainers = m_teams[teamNumThatGotCard]->GetTrainers();
 						const Trainer* activeTrainer = &(trainers[rand() % m_teams[teamNumThatGotCard]->GetTrainersNum()]);
 						TrainerDecision decision = activeTrainer->MakeDecision(m_teams[teamNumThatGotCard]->IsAttacking());
 						Team* teamWithCard = m_teams[teamNumThatGotCard];
@@ -402,66 +411,72 @@ void Game::StartGame()
 
 void Game::AddReferee(const Referee& ref)
 {
-	Referee* newList = new Referee[m_refereesCount + 1];
-	for (int i = 0; i < m_refereesCount; i++)
-	{ newList[i] = m_referees[i]; }
-	newList[m_refereesCount] = ref;
-	delete []m_referees; m_referees = newList;
-	m_refereesCount++;
+	//Referee* newList = new Referee[m_refereesCount + 1];
+	//for (int i = 0; i < m_refereesCount; i++)
+	//{ newList[i] = m_referees[i]; }
+	//newList[m_refereesCount] = ref;
+	//delete []m_referees; m_referees = newList;
+	//m_refereesCount++;
+	m_referees.push_back(ref);
 }
 
 void Game::RemoveReferee(const Referee& ref)
 {
-	Referee* newList = new Referee[m_refereesCount-1];
+	//Referee* newList = new Referee[m_refereesCount-1];
 	int idxToRemove = -1;
-	for (int i = 0; i < m_refereesCount; i++)
+	for (int i = 0; i < m_referees.size(); i++)
 	{
 		if (m_referees[i] == ref)
 		{ idxToRemove = i; }
 	}
-	if (idxToRemove >= 0)
-	{
-		for (int i = 0; i < idxToRemove; i++)
-		{ newList[i] = m_referees[i];}
-		for (int i = idxToRemove+1; i < m_refereesCount; i++)
-		{ newList[i-1] = m_referees[i]; }
-		delete []m_referees; m_referees = newList;
-		m_refereesCount--;
-	}
-	else 
-	{ delete []newList; }
+	if (idxToRemove > -1)
+	{ m_referees.erase(m_referees.begin() + idxToRemove); }
+	//if (idxToRemove >= 0)
+	//{
+	//	for (int i = 0; i < idxToRemove; i++)
+	//	{ newList[i] = m_referees[i];}
+	//	for (int i = idxToRemove+1; i < m_refereesCount; i++)
+	//	{ newList[i-1] = m_referees[i]; }
+	//	delete []m_referees; m_referees = newList;
+	//	m_refereesCount--;
+	//}
+	//else 
+	//{ delete []newList; }
 }
 
 void Game::AddFan(const Fan& fan)
 {
-	Fan* newList = new Fan[m_actualFans+1];
-	for (int i = 0; i < m_actualFans; i++)
-	{ newList[i] = m_fans[i]; }
-	newList[m_actualFans] = fan;
-	delete []m_fans; m_fans = newList;
-	m_actualFans++;
+	//Fan* newList = new Fan[m_actualFans+1];
+	//for (int i = 0; i < m_actualFans; i++)
+	//{ newList[i] = m_fans[i]; }
+	//newList[m_actualFans] = fan;
+	//delete []m_fans; m_fans = newList;
+	//m_actualFans++;
+	m_fans.push_back(fan);
 }
 
 void Game::RemoveFan(const Fan& fan)
 {
-	Fan* newList = new Fan[m_actualFans-1];
+	//Fan* newList = new Fan[m_actualFans-1];
 	int idxToRemove = -1;
-	for (int i = 0; i < m_actualFans; i++)
+	for (int i = 0; i < m_fans.size(); i++)
 	{
 		if (m_fans[i] == fan)
 		{ idxToRemove = i; }
 	}
-	if (idxToRemove >= 0)
-	{
-		for (int i = 0; i < idxToRemove; i++)
-		{ newList[i] = m_fans[i];}
-		for (int i = idxToRemove+1; i < m_actualFans; i++)
-		{ newList[i-1] = m_fans[i]; }
-		delete []m_fans; m_fans = newList;
-		m_actualFans--;
-	}
-	else 
-	{ delete []newList; }
+	if (idxToRemove > -1)
+	{ m_fans.erase(m_fans.begin() + idxToRemove); }
+	//if (idxToRemove >= 0)
+	//{
+	//	for (int i = 0; i < idxToRemove; i++)
+	//	{ newList[i] = m_fans[i];}
+	//	for (int i = idxToRemove+1; i < m_actualFans; i++)
+	//	{ newList[i-1] = m_fans[i]; }
+	//	delete []m_fans; m_fans = newList;
+	//	m_actualFans--;
+	//}
+	//else 
+	//{ delete []newList; }
 }
 
 void Game::SetTime(const TimeAndDate& tad)

@@ -82,6 +82,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Goalkeeper.h" />
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Referee.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Goalkeeper.cpp" />
+    <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />

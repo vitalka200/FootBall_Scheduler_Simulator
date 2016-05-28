@@ -3,6 +3,8 @@
 
 // System includes
 #include <iostream>
+#include <vector>
+#include <string>
 // Person includes
 #include "Person.h"
 #include "Fan.h"
@@ -19,22 +21,18 @@
 #include "Stadium.h"
 // Other includes
 #include "TimeAndDate.h"
-
+using namespace std;
 
 class GameManager
 {
 public:
 	// c-tors, d-tors
-	GameManager()
-		: m_games(NULL), m_teams1(NULL), m_stadiums(NULL), m_referees1(NULL) { m_gamesLength = 0;    m_teamsLength = 0;
-		                                                                      m_refereesLength = 0; m_stadiumsLength = 0;
-		                                                                      TryInputMethod();	}
-	~GameManager()                                                          { delete[]m_games;    delete[]m_teams1;
-		                                                                      delete[]m_stadiums; delete[]m_referees1; }
+	GameManager() { TryInputMethod(); }
+	~GameManager() {  }
 
 	// Operators
-	const GameManager& operator+=(Game& g)                                  { AddGame(&g);    return *this; }
-	const GameManager& operator-=(const Game& g)                            { RemoveGame(&g); return *this; }
+	const GameManager& operator+=(Game& g) { AddGame(&g);    return *this; }
+	const GameManager& operator-=(const Game& g) { RemoveGame(&g); return *this; }
 	GameList           operator[](const Date& d)          const;
 	const GameList     operator[](const TimeAndDate& tad) const;
 
@@ -64,18 +62,15 @@ private:
 	GameManager(const GameManager& gm) { }
 	const GameManager& operator=(const GameManager& gm) { }
 
-	Game**    m_games;
-	int		  m_gamesLength;
-	Team**    m_teams1;
-	int		  m_teamsLength;
-	Referee**  m_referees1;
-	int		  m_refereesLength;
-	Stadium*  m_stadiums;
-	int		  m_stadiumsLength;
+	std::vector<Game*> m_games;
+	std::vector<Team*> m_teams;
+	std::vector<Referee*> m_Referees;
+	std::vector<Stadium> m_stadiums;
+
 
 	// Methods
 	void SellTickets(const Game* game, Fan* fan);
-	void Redirect2File(char* inFileName);
+	void Redirect2File(std::string inFileName);
 	void Redirect2ios();
 	void TryInputMethod();
 
