@@ -22,7 +22,7 @@ void PrintDynamicArray(int length, std::vector<T*> arr)
 	{ std::cout << i + 1 << ") " << *(arr[i]) << std::endl; }
 }
 template<class T>
-void PrintArray(int length, const std::vector<T> arr)
+void PrintArray(int length, const std::vector<T>& arr)
 {
 	for (int i = 0; i < length; i++)
 	{ std::cout << i + 1 << ") " << arr[i] << std::endl; }
@@ -61,7 +61,7 @@ void scan(T& input) {
 /*
 *	Redirect the std::cin and std::cout to external file.
 */
-void GameManager::Redirect2File(std::string inFileName)
+void GameManager::Redirect2File(const std::string& inFileName)
 {
 	in = std::ifstream(inFileName);
 	if (!in.good()) throw std::exception();
@@ -230,7 +230,6 @@ void GameManager::ManageTrainers() {
 		{
 			int trainerNum;
 			std::cout << std::endl << "Choose trainer from list -->> " << std::endl;
-			//PrintArray<Trainer>(m_teams[teamNum - 1]->GetTrainersNum(), m_teams[teamNum - 1]->GetTrainers());//needs the vector from the teams
 			std::cout << "--> ";
 			scan<int>(trainerNum);
 			*(m_teams[trainerNum]) -= &(m_teams[teamNum - 1]->GetTrainers()[trainerNum]);
@@ -274,7 +273,6 @@ void GameManager::ManageReferees() {
 		{
 			int refNum;
 			std::cout << std::endl << "Choose referee from the list -->> " << std::endl;
-			//PrintDynamicArray<Referee>(m_Referees.size(), m_Referees);
 			std::cout << m_Referees;
 			std::cout << "--> ";
 			scan<int>(refNum);
@@ -476,15 +474,13 @@ void GameManager::NewGame() {
 	TimeAndDate tad = TimeAndDate(t, d);
 	g = new Game(teams, tad, maxFans);
 	std::cout << std::endl << "=== Adding referee from a list ===" << std::endl << std::endl;
-	//PrintDynamicArray<Referee>(m_Referees.size(), m_Referees.getList());
-	cout << m_Referees;
+	std::cout << m_Referees;
 	int refereeNum = rand() % m_Referees.size();
 	g->AddReferee(*m_Referees.get(refereeNum));
 
 	std::cout << std::endl << "Chosen - " << *m_Referees.get(refereeNum) << std::endl;
 
 	m_games.push_back(g);
-	//delete[]teams;
 	AddGame(g);
 }
 

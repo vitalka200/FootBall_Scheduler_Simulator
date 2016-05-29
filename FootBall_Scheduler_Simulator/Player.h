@@ -26,11 +26,11 @@ public:
 	struct AllowedMoves { std::vector<PlayerMovement> moves; int numberOfMoves; };
 
 	// c-tors, d-tors
-	Player(const std::string name, const std::string f_name, long id, Team* team, PlayerLevel pl = LOW)
+	Player(const std::string& name, const std::string& f_name, long id, Team* team, PlayerLevel pl = LOW)
 	    : Person(name, f_name, id), m_team(NULL)                      { SetTeam(team); SetLevel(pl); }
 	Player(const Player& p)
 		: Person(p.m_name, p.m_fname, p.m_id), m_team(NULL)           { *this = p; }
-	virtual ~Player() {}                                            //{ if (m_allowed_moves.numberOfMoves) delete []m_allowed_moves.moves; }
+	virtual ~Player() {}
 	// Methods
 	void                         SetTeam(Team* team)                  { m_team = team; }
 	void                         SetLevel(PlayerLevel pl);
@@ -59,12 +59,10 @@ protected:
 	Team*        m_team;
 	PlayerLevel  m_plevel; // Player Level
 	std::vector<PlayerMovement> m_allowed_moves;
-	//AllowedMoves m_allowed_moves;
 
 	// Methods
 	virtual void CreateAllowedMoves()                      =0;
 	virtual void show(std::ostream& os)              const =0;
-	//void         SetAllowedMoves(AllowedMoves allowedMoves);
 
 };
 

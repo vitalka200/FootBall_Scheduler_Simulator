@@ -63,22 +63,22 @@ class Stadium
 friend class GameManager;
 public:
 	// c-tors, d-tors
-	Stadium(const std::string name = " ", int maxFans = 0)
+	Stadium(const std::string& name = " ", int maxFans = 0)
 		: m_maxFans(maxFans)                   { SetName(name); };
 	Stadium(const Stadium& s)                  { *this = s; }
 	~Stadium()                                 { }
 	// Operators
 	const Stadium& operator=(const Stadium& s);
 	// Methods
-	void           SetName(const std::string name)                          { m_name = name; }
-	void           SetMaxFans(int maxFans)                            { m_maxFans = maxFans; }
+	void                 SetName(const std::string& name)                          { m_name = name; }
+	void                 SetMaxFans(int maxFans)                            { m_maxFans = maxFans; }
 	const std::string    GetName()                                    const { return m_name; }
-	int            GetMaxFans()                                 const { return m_maxFans; }
-	Game*          GetGameByTimeAndDate(const TimeAndDate& tad) const ;
-	GameList       GetGamesByDate(const Date& d)                const ;
-	bool           AddGame(Game* g);
-	bool           RemoveGame(const Game* g);
-	bool           MoveGameTime(const Game* g, const TimeAndDate& newTad);
+	int                  GetMaxFans()                                 const { return m_maxFans; }
+	Game*                GetGameByTimeAndDate(const TimeAndDate& tad) const ;
+	GameList             GetGamesByDate(const Date& d)                const ;
+	bool                 AddGame(Game* g);
+	bool                 RemoveGame(const Game* g);
+	bool                 MoveGameTime(const Game* g, const TimeAndDate& newTad);
 	
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Stadium& s)
@@ -87,9 +87,8 @@ public:
 		return os;
 	}
 private:
-	std::string m_name;
-	int         m_maxFans;
-	
+	std::string                      m_name;
+	int                              m_maxFans;
 	std::vector<GamesByTimeDateNode> m_gameList;
 
 	// Methods

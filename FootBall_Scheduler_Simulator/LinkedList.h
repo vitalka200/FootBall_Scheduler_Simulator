@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <list>
 using namespace std;
 
 template<class T>
@@ -42,7 +41,7 @@ private:
 
 public:
 	// c-tors, d-tors
-	LinkedList() { head = new Node<T>(); tail = new Node<T>(); head = tail; mySize = 0; }
+	LinkedList() { tail = new Node<T>(); head = tail; mySize = 0; }
 	~LinkedList() { }
 	
 	// Methods

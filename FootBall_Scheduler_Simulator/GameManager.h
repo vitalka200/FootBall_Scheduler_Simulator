@@ -70,7 +70,7 @@ private:
 
 	// Methods
 	void SellTickets(const Game* game, Fan* fan);
-	void Redirect2File(std::string inFileName);
+	void Redirect2File(const std::string& inFileName);
 	void Redirect2ios();
 	void TryInputMethod();
 

@@ -11,11 +11,7 @@
 #include "Fan.h"
 // Forward declaration
 class Team;
-//class Referee;
-//class Player;
 class PlayerStats;
-//class Trainer;
-//class Fan;
 
 class Game
 {
@@ -80,9 +76,9 @@ private:
 	// Methods
 	PlayerStats* GetPlayerStats(const Player* p);
 	void         SetTimeAndDate(const TimeAndDate* tad);
-	void         SetPlayerStats(std::vector<PlayerStats*> ps, int count);
-	void         SetFans(std::vector<Fan> fans);
-	void         SetReferees(std::vector<Referee> referees);
+	void         SetPlayerStats(const std::vector<PlayerStats*>& ps);
+	void         SetFans(const std::vector<Fan>& fans);
+	void         SetReferees(const std::vector<Referee>& referees);
 	void         SetTeams(std::vector<Team*> teams);
 	void         CreateGameScore();
 	void         SetGameScore(int* gameScore);

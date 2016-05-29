@@ -8,8 +8,6 @@
 #include "Trainer.h"
 #include "Referee.h"
 // Forward declaration
-//class  Trainer;
-//class  Referee;
 enum   CardType;
 class  Player;
 class  Goalkeeper;
@@ -50,7 +48,7 @@ class Team
 {
 public:
 	// c-tors, d-tors
-	Team(const std::string name = " ")
+	Team(const std::string& name = " ")
 		: m_goalkeeper(NULL), m_name(name)     { SetName(name); m_goalkeeperNum = -1;
 	                                             m_isAttacking = false; }
 	// Disable Copy and assigment
@@ -70,24 +68,24 @@ public:
 
 	Player*       operator[](int index);
 	// Methods
-	void                AddPlayer(Player* p);
-	void                RemovePlayer(const Player* p);
-	int                 GetPlayerNum()                   const { return m_players.size(); }
-	void                AddTrainer(Trainer* t);
-	void                RemoveTrainer(const Trainer* t);
-	int                 GetTrainersNum()                 const { return m_trainers.size(); }
-	const std::vector<Trainer>      GetTrainers()                    const { return m_trainers; }
-	std::vector<PlayerStats*>       GetStats()                       const { return m_playerStats;}
-	PlayerStats*         GetPlayerStats(const Player* p)  const ;
-	Player*             GetGoalkeeper()                  const { return m_goalkeeper; }
-	int                 GetGoalKeeperIndex()             const { return m_goalkeeperNum; }
-	const std::string         GetName()                        const { return m_name; }
-	bool                IsAttacking()                    const { return m_isAttacking; }
-	void                SetIsAtacking(bool isAtacking)         { m_isAttacking = isAtacking; }
+	void                        AddPlayer(Player* p);
+	void                        RemovePlayer(const Player* p);
+	int                         GetPlayerNum()                   const { return m_players.size(); }
+	void                        AddTrainer(Trainer* t);
+	void                        RemoveTrainer(const Trainer* t);
+	int                         GetTrainersNum()                 const { return m_trainers.size(); }
+	const std::vector<Trainer>  GetTrainers()                    const { return m_trainers; }
+	std::vector<PlayerStats*>   GetStats()                       const { return m_playerStats;}
+	PlayerStats*                GetPlayerStats(const Player* p)  const ;
+	Player*                     GetGoalkeeper()                  const { return m_goalkeeper; }
+	int                         GetGoalKeeperIndex()             const { return m_goalkeeperNum; }
+	const std::string           GetName()                        const { return m_name; }
+	bool                        IsAttacking()                    const { return m_isAttacking; }
+	void                        SetIsAtacking(bool isAtacking)         { m_isAttacking = isAtacking; }
 
-	void                AddPlayerStat(const Player* p, const PlayerMovement move, bool isActualGoal = false);
+	void                        AddPlayerStat(const Player* p, const PlayerMovement move, bool isActualGoal = false);
 
-	void                SetName(const std::string name)              { m_name = name; }
+	void                        SetName(const std::string& name)              { m_name = name; }
 
 	// Method overrides
 	friend std::ostream& operator<<(std::ostream& os, const Team& t)

@@ -27,7 +27,6 @@ void Forwarder::CreateAllowedMoves()
 {
 	int numberOfMoves = (m_plevel + 1)*PASS_BALL + (m_plevel + 1)*TACKLE_BALL + (m_plevel + 1)*RUN_TO_OPEN_SPACE;
 	numberOfMoves += (m_plevel*GOAL_FACTOR+ GOAL_FACTOR)*MAKE_GOAL;
-	//m_allowed_moves.moves = new PlayerMovement[m_allowed_moves.numberOfMoves];
 	m_allowed_moves = std::vector<PlayerMovement>(numberOfMoves);
 
 	int j = 0, i;

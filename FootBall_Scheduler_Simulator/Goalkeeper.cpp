@@ -22,7 +22,6 @@ void Goalkeeper::CreateAllowedMoves()
 {
 	int numberOfMoves =  (m_plevel + 1)*CATCH_BALL + (m_plevel*MISSING_FACTOR+ MISSING_FACTOR)*MISS_BALL;
 	numberOfMoves += (m_plevel + 1)*PASS_BALL  + (m_plevel + 1)*TACKLE_BALL;
-	//m_allowed_moves.moves = new PlayerMovement[m_allowed_moves.numberOfMoves];
 	m_allowed_moves = std::vector<PlayerMovement>(numberOfMoves);
 
 	int i = 0;

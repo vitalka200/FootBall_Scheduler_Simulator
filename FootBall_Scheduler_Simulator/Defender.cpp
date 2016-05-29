@@ -18,7 +18,6 @@ const PlayerMovement Defender::MakeMove(bool hasBall)
 void Defender::CreateAllowedMoves()
 {
 	int numberOfMoves = (m_plevel+1)*PASS_BALL + (m_plevel+1)*TACKLE_BALL + (m_plevel+1)*RUN_TO_OPEN_SPACE;
-	//m_allowed_moves.moves = new PlayerMovement[m_allowed_moves.numberOfMoves];
 	m_allowed_moves = std::vector<PlayerMovement>(numberOfMoves);
 
 	int i = 0;

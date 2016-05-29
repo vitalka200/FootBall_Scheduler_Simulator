@@ -33,28 +33,11 @@ bool GamesByTimeDateNode::AddGame(Game* g)
 		else if (newGameTime < existingGameTime && newGameTime <= existingGameTime - g->MAX_GAME_LEN)
 		{
 			// we found not scheduled time slice. Let's make some space
-			//Game** newGamesSchedule = new Game*[m_numOfGames+1];
-			//for (int j = 0; j < i; j++)
-			//{ newGamesSchedule[j] = m_games[j]; }
-			//newGamesSchedule[i] = g; m_numOfGames++;
-			//// Copy leftovers if any
-			//for (int j = i+1; j < m_numOfGames; j++)
-			//{ newGamesSchedule[j] = m_games[j-1]; }
-			//// Release unneeded memory and assign new shedule
-			//delete []m_games; m_games = newGamesSchedule;
-			m_games.insert(m_games.begin() + i, g);
-			return true;
+			m_games.insert(m_games.begin() + i, g);	return true;
 		}
 	}
 	// We not found any time collisions. Let's add game
 	m_games.push_back(g);
-	//Game** newGamesSchedule = new Game*[m_numOfGames+1];
-	//for (int i = 0; i < m_numOfGames; i++)
-	//{ newGamesSchedule[i] = m_games[i]; }
-	//newGamesSchedule[m_numOfGames] = g;
-	//m_numOfGames++;
-	//// Release unneeded memory and assign new shedule
-	//delete []m_games; m_games = newGamesSchedule;
 	return true;
 }
 
@@ -64,30 +47,13 @@ bool GamesByTimeDateNode::RemoveGame(const Game* g)
 	for (int i = 0; i < m_games.size(); i++)
 	{
 		if ((*(m_games[i])) == *g)
-		{
-			//Game** newGamesSchedule = new Game*[m_numOfGames-1];
-			//for (int j = 0; j < i; j++)
-			//{ newGamesSchedule[j] = m_games[j]; }
-			//for (int j = i+1; j < m_numOfGames; j++)
-			//{ newGamesSchedule[j-1] = m_games[j]; }
-			//m_numOfGames--;
-			//// Release unneeded memory and assign new shedule
-			//delete []m_games; m_games = newGamesSchedule;
-			m_games.erase(m_games.begin() + i);
-			return true;
-		}
+		{ m_games.erase(m_games.begin() + i); return true; }
 	}
 	return false;
 }
 
 void GamesByTimeDateNode::SetGames(std::vector<Game*> games)
 {
-	//delete []m_games;
-	//m_games = new Game*[count];
-	//for (int i = 0; i < count; i++)
-	//{ m_games[i] = games[i]; }
-
-	//m_numOfGames = count;
 	m_games.clear();
 	m_games = games;
 }
@@ -170,34 +136,11 @@ bool Stadium::AddGame(Game* g)
 			node.AddGame(g);
 			m_gameList.insert(m_gameList.begin() + i, node);
 
-			//GamesByTimeDateNode* new_gameList = new GamesByTimeDateNode[m_numOfNodes+1];
-			//for (int j = 0; j < i; j++)
-			//{ new_gameList[j] = m_gameList[j]; }
-			// insert new element
-			//m_gameList[i].SetDate(g->GetTimeAndDate()->GetDate());
-			//m_gameList[i].AddGame(g);
-			//m_numOfNodes++;
-
-			// copy rest of array
-			//for (int j = i+1; j < m_numOfNodes; j++)
-			//{ new_gameList[j] = m_gameList[j-1]; }
-			//
-			//
-			//// Assign new list and free old memory
-			//delete []m_gameList; m_gameList = new_gameList;
 			return true;
 		}
 	}
 	// We reached end of list but not found where to add new game
 	// Let's add it to end of list
-	//GamesByTimeDateNode* new_gameList = new GamesByTimeDateNode[m_numOfNodes+1];
-	//// insert new element
-	//new_gameList[m_numOfNodes].SetDate(g->GetTimeAndDate()->GetDate());
-	//new_gameList[m_numOfNodes].AddGame(g);
-	//m_numOfNodes++;
-	//// Free old memory and assign new one
-	//delete[]m_gameList;
-	//m_gameList = new_gameList;
 	GamesByTimeDateNode node = GamesByTimeDateNode(g->GetTimeAndDate()->GetDate());
 	node.AddGame(g);
 	m_gameList.push_back(node);
@@ -231,13 +174,7 @@ bool Stadium::MoveGameTime(const Game* g, const TimeAndDate& newTad)
 }
 
 void Stadium::SetGameList(const std::vector<GamesByTimeDateNode> list)
-{
-	//delete []m_gameList;
-	//m_gameList = new GamesByTimeDateNode[m_numOfNodes];
-	//for (int i = 0; i < count; i++)
-	//{ m_gameList[i] = list[i]; }
-	m_gameList = list;
-}
+{ m_gameList = list; }
 
 std::ostream & operator<<(std::ostream& os, const GamesByTimeDateNode & node)
 {

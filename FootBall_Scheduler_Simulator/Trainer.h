@@ -13,7 +13,7 @@ class Trainer: public Person
 public:
 	static const std::string TrainerDecisionNames[];
 	// c-tors, d-tors
-	Trainer(const std::string name = " ", const std::string f_name = " ", long id = -1) 
+	Trainer(const std::string& name = " ", const std::string& f_name = " ", long id = -1) 
 		: Person(name, f_name, id) { }
 	
 	// Operators

@@ -34,18 +34,6 @@ void Player::SetLevel(PlayerLevel pl)
 	{ m_plevel = pl; }
 }
 
-//void Player::SetAllowedMoves(AllowedMoves allowedMoves)
-//{
-//	//if (m_allowed_moves.numberOfMoves > 0) 
-//	//{ delete[] m_allowed_moves.moves; }
-//	m_allowed_moves.moves = std::vector<PlayerMovement>(allowedMoves.numberOfMoves);
-//	m_allowed_moves.moves = new PlayerMovement[allowedMoves.numberOfMoves];
-//	m_allowed_moves.numberOfMoves = allowedMoves.numberOfMoves;
-//
-//	for (int i = 0; i < allowedMoves.numberOfMoves; i++)
-//	{ m_allowed_moves.moves[i] = allowedMoves.moves[i]; }
-//}
-
 std::ostream & operator<<(std::ostream& os, const Player& p)
 {
 	os << (Person)p;

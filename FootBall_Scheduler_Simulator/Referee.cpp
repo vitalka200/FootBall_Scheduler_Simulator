@@ -7,6 +7,4 @@
 const std::string Referee::CardNames[] = { "No Card", "Yellow", "Red" };
 
 CardType Referee::MakeDecision()
-{
-	return (CardType)(rand() % 3);
-}
+{ return (CardType)(rand() % 3); }

@@ -14,7 +14,7 @@ public:
 	static const std::string CardNames[];
 	// c-tors, d-tors
 	
-	Referee(const std::string name = " ", const std::string f_name = " ", long id = -1) 
+	Referee(const std::string& name = " ", const std::string& f_name = " ", long id = -1) 
 		: Person(name, f_name, id) { }
 	
 	// Operators
